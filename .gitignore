@@ -1,0 +1,37 @@
+# File di sistema macOS
+.DS_Store
+
+# Cartelle di ambiente virtuale (modifica se usi un nome diverso)
+venv/
+env/
+.env/
+
+# File di cache Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# File di test e copertura
+.pytest_cache/
+.coverage
+
+# Cartella instance di Flask (spesso contiene configurazioni locali e segrete)
+instance/
+
+# File di log
+*.log
+
+# File di database SQLite (se usi SQLite)
+*.db
+*.sqlite3
+
+# Configurazioni locali e file temporanei
+*.env
+*.local
+*.swp
+*.swo
+*.bak
+
+# Cartelle di build o distribuzione (se presenti)
+build/
+dist/
