@@ -1,0 +1,154 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Home - StudyHub{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <h1 class="display-4 fw-bold mb-4">Your Ultimate Study Companion</h1>
+        <p class="lead mb-4">Access thousands of study materials, share your notes, and collaborate with students from around the world. Study smarter, not harder.</p>
+        <div class="d-flex gap-3">
+          <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">Get Started</a>
+          <a href="#features" class="btn btn-outline-primary btn-lg">Learn More</a>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <img src="{{ url_for('static', filename='images/hero-illustration.svg') }}" alt="Study Illustration" class="img-fluid">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="py-5 bg-light">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">Why Choose StudyHub?</h2>
+      <p class="lead text-muted">Everything you need to ace your studies in one place</p>
+    </div>
+    
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body text-center p-4">
+            <div class="feature-icon mb-3">
+              <i class="fas fa-book-open fa-3x text-primary"></i>
+            </div>
+            <h4 class="h5 mb-3">Extensive Library</h4>
+            <p class="text-muted">Access thousands of study materials across various subjects and universities.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body text-center p-4">
+            <div class="feature-icon mb-3">
+              <i class="fas fa-users fa-3x text-primary"></i>
+            </div>
+            <h4 class="h5 mb-3">Collaborate</h4>
+            <p class="text-muted">Connect with peers, share notes, and study together in real-time.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body text-center p-4">
+            <div class="feature-icon mb-3">
+              <i class="fas fa-search fa-3x text-primary"></i>
+            </div>
+            <h4 class="h5 mb-3">Smart Search</h4>
+            <p class="text-muted">Find exactly what you need with our powerful search and filter system.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-primary text-white">
+  <div class="container text-center">
+    <h2 class="fw-bold mb-4">Ready to boost your study game?</h2>
+    <p class="lead mb-4">Join thousands of students already using StudyHub to enhance their learning experience.</p>
+    <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg px-4">Sign Up for Free</a>
+  </div>
+</section>
+
+<!-- Recent Uploads Section -->
+<section class="py-5">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="fw-bold mb-0">Recently Added</h2>
+      <a href="{{ url_for('view.search') }}" class="btn btn-outline-primary">View All</a>
+    </div>
+    
+    <div class="row g-4" id="recent-uploads">
+      <!-- Will be populated by JavaScript -->
+      <div class="col-12 text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+  // Example of loading recent uploads via AJAX
+  document.addEventListener('DOMContentLoaded', function() {
+    // This would be an actual API call in production
+    setTimeout(function() {
+      const recentUploads = [
+        {
+          title: 'Introduction to Computer Science',
+          course: 'CS101',
+          university: 'University of Example',
+          date: '2 hours ago',
+          type: 'Lecture Notes'
+        },
+        {
+          title: 'Advanced Calculus',
+          course: 'MATH201',
+          university: 'Technical University',
+          date: '5 hours ago',
+          type: 'Practice Problems'
+        },
+        {
+          title: 'World History',
+          course: 'HIST105',
+          university: 'State College',
+          date: '1 day ago',
+          type: 'Study Guide'
+        }
+      ];
+      
+      const container = document.getElementById('recent-uploads');
+      container.innerHTML = recentUploads.map(item => `
+        <div class="col-md-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <span class="badge bg-primary">${item.type}</span>
+                <small class="text-muted">${item.date}</small>
+              </div>
+              <h5 class="card-title">${item.title}</h5>
+              <p class="card-text text-muted">${item.course} • ${item.university}</p>
+            </div>
+            <div class="card-footer bg-transparent">
+              <a href="#" class="btn btn-sm btn-outline-primary">View Details</a>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }, 1000);
+  });
+</script>
+{% endblock %}

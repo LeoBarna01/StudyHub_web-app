@@ -1,0 +1,287 @@
+/**
+ * StudyHub - Custom CSS
+ * Custom styles that extend or override the main stylesheet
+ */
+
+/* Back to Top Button */
+.back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s ease-in-out;
+    z-index: 999;
+    border: none;
+    cursor: pointer;
+}
+
+.back-to-top:hover {
+    background-color: var(--primary-600);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.back-to-top.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Custom Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 20px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* Custom Components */
+/* Add your custom component styles here */
+
+/* Custom Utilities */
+/* Add your custom utility classes here */
+
+/* Dark Mode Overrides */
+[data-bs-theme="dark"] .card {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .card-header,
+[data-bs-theme="dark"] .card-footer {
+    background-color: var(--gray-700);
+    border-color: var(--gray-600);
+}
+
+/* Print Styles */
+@media print {
+    .no-print,
+    .back-to-top,
+    .navbar,
+    .footer {
+        display: none !important;
+    }
+    
+    body {
+        padding: 1rem;
+    }
+    
+    a[href^="http"]::after {
+        content: " (" attr(href) ")";
+        font-size: 0.8em;
+        font-weight: normal;
+        color: var(--gray-600);
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--gray-100);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gray-300);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-400);
+}
+
+[data-bs-theme="dark"] ::-webkit-scrollbar-track {
+    background: var(--gray-800);
+}
+
+[data-bs-theme="dark"] ::-webkit-scrollbar-thumb {
+    background: var(--gray-600);
+}
+
+[data-bs-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-500);
+}
+
+/* Custom Form Styling */
+.form-floating > label {
+    color: var(--gray-600);
+}
+
+[data-bs-theme="dark"] .form-floating > label {
+    color: var(--gray-400);
+}
+
+/* Custom Button Styles */
+.btn-outline-light:hover {
+    color: var(--gray-900);
+}
+
+/* Custom Card Styles */
+.card-hover {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Custom Alert Styles */
+.alert-dismissible .btn-close {
+    padding: 1rem;
+}
+
+/* Custom Table Styles */
+.table-hover > tbody > tr {
+    transition: background-color 0.2s ease-in-out;
+}
+
+/* Custom Navbar Styles */
+.navbar {
+    transition: all 0.3s ease-in-out;
+}
+
+.navbar.scrolled {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+[data-bs-theme="dark"] .navbar.scrolled {
+    background-color: rgba(33, 37, 41, 0.95) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Custom Footer Styles */
+.footer {
+    background-color: var(--gray-100);
+    padding: 3rem 0;
+    margin-top: auto;
+}
+
+[data-bs-theme="dark"] .footer {
+    background-color: var(--gray-900);
+}
+
+/* Custom Badge Styles */
+.badge {
+    font-weight: 500;
+    padding: 0.4em 0.8em;
+}
+
+/* Custom Modal Styles */
+.modal-content {
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+[data-bs-theme="dark"] .modal-content {
+    background-color: var(--gray-800);
+}
+
+/* Custom Tooltip Styles */
+.tooltip {
+    --bs-tooltip-bg: var(--gray-800);
+    --bs-tooltip-color: #fff;
+}
+
+/* Custom Popover Styles */
+.popover {
+    border: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+[data-bs-theme="dark"] .popover {
+    background-color: var(--gray-800);
+}
+
+[data-bs-theme="dark"] .popover-header {
+    background-color: var(--gray-700);
+    border-bottom-color: var(--gray-600);
+}
+
+[data-bs-theme="dark"] .popover-body {
+    color: var(--gray-300);
+}
+
+/* Custom Spinner Styles */
+.spinner-border {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-width: 0.2em;
+}
+
+/* Custom Toast Styles */
+.toast {
+    border: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+[data-bs-theme="dark"] .toast {
+    background-color: var(--gray-800);
+}
+
+[data-bs-theme="dark"] .toast-header {
+    background-color: var(--gray-700);
+    border-bottom-color: var(--gray-600);
+}
+
+[data-bs-theme="dark"] .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Default Avatar */
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #6c757d;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.avatar-fallback {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #6c757d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}

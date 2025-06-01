@@ -1,0 +1,80 @@
+{% extends 'main/base.html' %}
+{% block title %}Profile – StudyHub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <!-- Profile Edit Card -->
+  <div class="row justify-content-center mb-5">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h2 class="card-title mb-4 text-center">
+            Edit Your Profile
+          </h2>
+          <form method="post" action="{{ url_for('auth.profile') }}">
+            {{ form.hidden_tag() }}
+
+            {% for field in [form.first_name, form.last_name, form.institute, form.course, form.year] %}
+              <div class="mb-3">
+                {{ field.label(class="form-label") }}
+                {{ field(class="form-control", class= field.errors and 'is-invalid' or '') }}
+                {% for err in field.errors %}
+                  <div class="invalid-feedback">{{ err }}</div>
+                {% endfor %}
+              </div>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-primary w-100">
+              Save Changes
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Uploaded Documents -->
+  <h3>My Uploaded Documents</h3>
+  {% if my_uploads %}
+    <ul class="list-group mb-4">
+      {% for doc in my_uploads %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <strong>{{ doc.title }}</strong><br>
+            <small class="text-muted">
+              {{ doc.course }} – {{ doc.institute }}
+              {% if doc.category %} ({{ doc.category.name }}){% endif %}
+            </small>
+          </div>
+          <a href="{{ url_for('view.download', doc_id=doc.id) }}"
+             class="btn btn-sm btn-outline-primary">
+            Download
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="text-muted">You haven’t uploaded any documents yet.</p>
+  {% endif %}
+
+  <!-- Favorite Documents -->
+  <h3 class="mt-4">My Favorites</h3>
+  {% if favorites %}
+    <ul class="list-group">
+      {% for doc in favorites %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ doc.title }}
+          <a href="{{ url_for('view.download', doc_id=doc.id) }}"
+             class="btn btn-sm btn-outline-secondary">
+            Download
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="text-muted">No favorite documents yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

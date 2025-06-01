@@ -1,0 +1,120 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+  <div class="container">
+    <!-- Brand / Logo -->
+    <a class="navbar-brand" href="{{ url_for('main.index') }}">
+      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="StudyHub Logo" height="40" class="d-inline-block align-text-top">
+    </a>
+    
+    <!-- Mobile menu button -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <!-- Navigation Links -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link {{ 'active' if request.endpoint == 'main.index' }}" href="{{ url_for('main.index') }}">
+            <i class="fas fa-home me-1"></i> Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{ 'active' if request.endpoint == 'upload.upload_document' }}" href="{{ url_for('upload.upload_document') }}">
+            <i class="fas fa-upload me-1"></i> Upload
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{ 'active' if request.endpoint == 'view.search' }}" href="{{ url_for('view.search') }}">
+            <i class="fas fa-search me-1"></i> Browse
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{ 'active' if request.endpoint == 'form.ask_question' }}" href="{{ url_for('form.ask_question') }}">
+            <i class="fas fa-comments me-1"></i> Forum & Questions
+          </a>
+        </li>
+      </ul>
+      
+      <!-- User Actions -->
+      <ul class="navbar-nav ms-auto">
+        {% if current_user.is_authenticated %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" 
+               role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {% if current_user.avatar_url %}
+                <img src="{{ current_user.avatar_url }}" 
+                     class="avatar-img me-2" width="32" height="32" alt="Profile"
+                     onerror="handleAvatarError(this)">
+                <div class="avatar-fallback d-none">
+                  {{ current_user.username[0]|upper }}
+                </div>
+              {% else %}
+                <div class="avatar me-2">
+                  {{ current_user.username[0]|upper }}
+                </div>
+              {% endif %}
+              <span class="d-none d-md-inline">{{ current_user.username }}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" href="{{ url_for('auth.profile') }}">
+                <i class="fas fa-user-circle me-2"></i>Profile
+              </a></li>
+              <li><a class="dropdown-item" href="#">
+                <i class="fas fa-bookmark me-2"></i>Saved Items
+              </a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}">
+                <i class="fas fa-sign-out-alt me-2"></i>Logout
+              </a></li>
+            </ul>
+          </li>
+          <li class="nav-item d-flex align-items-center ms-2">
+            <a href="{{ url_for('upload.upload_document') }}" class="btn btn-primary btn-sm rounded-pill px-3">
+              <i class="fas fa-plus me-1"></i> New
+            </a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link {{ 'active' if request.endpoint == 'auth.login' }}" href="{{ url_for('auth.login') }}">
+              <i class="fas fa-sign-in-alt me-1"></i> Login
+            </a>
+          </li>
+          <li class="nav-item d-flex align-items-center ms-2">
+            <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-sm rounded-pill px-3">
+              Sign Up
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Add padding to body to account for fixed navbar -->
+<style>
+  body {
+    padding-top: 76px;
+  }
+  @media (max-width: 991.98px) {
+    body {
+      padding-top: 56px;
+    }
+  }
+</style>
+
+<!-- Auto-close mobile menu on click -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Close mobile menu when a nav link is clicked
+  document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      const navbarCollapse = document.querySelector('.navbar-collapse');
+      if (navbarCollapse.classList.contains('show')) {
+        const bsCollapse = new bootstrap.Collapse(navbarCollapse, {toggle: false});
+        bsCollapse.hide();
+      }
+    });
+  });
+});
+</script>

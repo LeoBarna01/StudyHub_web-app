@@ -1,0 +1,59 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Ask a Question – StudyHub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h2 class="card-title text-center mb-4">Have a Question?</h2>
+          <p class="text-center mb-4">
+            Please fill out the form below and our team will get back to you shortly.
+          </p>
+          
+          <form method="post" action="{{ url_for('form.ask_question') }}">
+            {{ form.hidden_tag() }}
+
+            <div class="mb-3">
+              {{ form.subject.label(class="form-label") }}
+              {{ form.subject(
+                  class="form-select" ~ (form.subject.errors and ' is-invalid' or '')
+                ) }}
+              {% for err in form.subject.errors %}
+                <div class="invalid-feedback">{{ err }}</div>
+              {% endfor %}
+            </div>
+
+            <div class="mb-3">
+              {{ form.email.label(class="form-label") }}
+              {{ form.email(
+                  class="form-control" ~ (form.email.errors and ' is-invalid' or '')
+                ) }}
+              {% for err in form.email.errors %}
+                <div class="invalid-feedback">{{ err }}</div>
+              {% endfor %}
+            </div>
+
+            <div class="mb-3">
+              {{ form.body.label(class="form-label") }}
+              {{ form.body(
+                  class="form-control" ~ (form.body.errors and ' is-invalid' or ''),
+                  rows=5
+                ) }}
+              {% for err in form.body.errors %}
+                <div class="invalid-feedback">{{ err }}</div>
+              {% endfor %}
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+              Send Request
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
