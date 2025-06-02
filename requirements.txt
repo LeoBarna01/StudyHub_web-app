@@ -1,1 +1,10 @@
-Flask
+Flask==3.1.1                    # Framework web principale per costruire l'applicazione
+Flask-SQLAlchemy==3.1.1        # Estensione per integrare SQLAlchemy con Flask per la gestione del database
+Flask-Login==0.6.3             # Gestisce l'autenticazione degli utenti e le sessioni
+Flask-WTF==1.2.2               # Integrazione di WTForms con Flask per la gestione e validazione dei form
+Werkzeug==3.1.3                # Libreria di utility per WSGI, usata da Flask per funzionalità di base
+SQLAlchemy==2.0.41             # ORM (Object-Relational Mapping) per interagire con il database
+WTForms==3.2.1                 # Libreria per la creazione e validazione dei form web
+email-validator==2.1.0         # Validatore per indirizzi email nei form di registrazione
+python-dotenv==1.0.1           # Carica variabili d'ambiente da file .env per la configurazione
+Pillow==10.2.0                 # Libreria per la manipolazione delle immagini (usata per le foto profilo)

@@ -1,0 +1,110 @@
+{% extends 'main/base.html' %}
+{% block title %}Upload Document - StudyHub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Upload New Document</h2>
+
+                    <!-- INTRO with brief description -->
+                    <p class="lead text-center mb-4">Share your study materials with the community!</p>
+
+                    <!-- Guidelines -->
+                    <div class="mb-4">
+                        <h5>Guidelines for Uploading:</h5>
+                        <ul>
+                            <li>Ensure your document is in an allowed format (PDF, DOC, DOCX, PPT, PPTX).</li>
+                            <li>Provide a clear and descriptive title.</li>
+                            <li>Include relevant information like academic institute, course, and subject.</li>
+                            <li>Add tags to help others find your document easily.</li>
+                        </ul>
+                         <p class="text-muted">By uploading, you agree to our terms of service.</p>
+                    </div>
+
+                    <!-- Upload Form -->
+                    <form method="post" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+
+                        <div class="mb-3">
+                            {{ form.title.label(class="form-label") }}
+                            {{ form.title(class="form-control", required=true) }}
+                             {% for error in form.title.errors %}
+                                <span class="text-danger">[{{ error }}]</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.institute.label(class="form-label") }}
+                            {{ form.institute(class="form-control") }}
+                             {% for error in form.institute.errors %}
+                                <span class="text-danger">[{{ error }}]</span>
+                            {% endfor %}
+                        </div>
+
+                         <div class="mb-3">
+                            {{ form.year.label(class="form-label") }}
+                            {{ form.year(class="form-control") }}
+                             {% for error in form.year.errors %}
+                                <span class="text-danger">[{{ error }}]</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.course.label(class="form-label") }}
+                            {{ form.course(class="form-control") }}
+                             {% for error in form.course.errors %}
+                                <span class="text-danger">[{{ error }}]</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.subject.label(class="form-label") }}
+                            {{ form.subject(class="form-control") }}
+                             {% for error in form.subject.errors %}
+                                <span class="text-danger">[{{ error }}]</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.description.label(class="form-label") }}
+                            {{ form.description(class="form-control", rows="3") }}
+                             {% for error in form.description.errors %}
+                                <span class="text-danger">[{{ error }}]</span>
+                            {% endfor %}
+                        </div>
+
+                         <div class="mb-3">
+                            {{ form.category.label(class="form-label") }}
+                            {{ form.category(class="form-control") }}
+                             {% for error in form.category.errors %}
+                                <span class="text-danger">[{{ error }}]</span>
+                            {% endfor %}
+                        </div>
+
+                         <div class="mb-3">
+                            {{ form.tags.label(class="form-label") }}
+                            {{ form.tags(class="form-control") }}
+                             {% for error in form.tags.errors %}
+                                <span class="text-danger">[{{ error }}]</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.file.label(class="form-label") }}
+                            {{ form.file(class="form-control", required=true) }}
+                             {% for error in form.file.errors %}
+                                <span class="text-danger">[{{ error }}]</span>
+                            {% endfor %}
+                        </div>
+
+                        {{ form.submit(class="btn btn-primary w-100") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

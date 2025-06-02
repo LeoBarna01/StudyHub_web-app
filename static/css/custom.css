@@ -248,10 +248,6 @@
     border-bottom-color: var(--gray-600);
 }
 
-[data-bs-theme="dark"] .btn-close {
-    filter: invert(1) grayscale(100%) brightness(200%);
-}
-
 /* Default Avatar */
 .avatar {
     width: 32px;
@@ -284,4 +280,48 @@
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
+}
+
+/* Custom rule for About StudyHub text to prevent wrapping */
+.about-text {
+    white-space: nowrap;
+}
+
+/* Profile Page Styling */
+.col-md-8.d-flex.flex-column > .card.flex-fill {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.col-md-8.d-flex.flex-column > .card.flex-fill > .card-body {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+/* Profile Image Frame and Centering */
+.profile-image-frame {
+    width: 150px; /* Set a fixed width */
+    height: 150px; /* Set a fixed height to make it square */
+    overflow: hidden; /* Hide parts of the image outside the frame */
+    border-radius: 50%; /* Make it round */
+    border: 3px solid var(--primary); /* Add a border */
+    display: flex; /* Use flexbox to center the image */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
+.profile-image-frame img {
+    display: block; /* Ensure the image behaves as a block element */
+    width: 100%; /* Make the image take the full width of the frame */
+    height: 100%; /* Make the image take the full height of the frame */
+    object-fit: cover; /* Crop the image to fit the frame while maintaining aspect ratio */
+}
+
+/* Profile Page Styling */
+.col-md-4 .card-body label[for="profile_image"] {
+    display: block; /* Ensure the label is on its own line */
+    text-align: center; /* Center the text */
+    margin-bottom: 10px; /* Add some space below the label */
+    font-weight: bold; /* Make the text bold */
 }

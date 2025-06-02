@@ -1,6 +1,6 @@
 {% extends 'main/base.html' %}
 
-{% block title %}Ask a Question – StudyHub{% endblock %}
+{% block title %}Form – StudyHub{% endblock %}
 
 {% block content %}
 <div class="container py-5">
@@ -8,9 +8,9 @@
     <div class="col-md-8 col-lg-6">
       <div class="card shadow-sm">
         <div class="card-body">
-          <h2 class="card-title text-center mb-4">Have a Question?</h2>
+          <h2 class="card-title text-center mb-4">Submit a Request</h2>
           <p class="text-center mb-4">
-            Please fill out the form below and our team will get back to you shortly.
+            Please fill out the form below with your questions, doubts, or problems.
           </p>
           
           <form method="post" action="{{ url_for('form.ask_question') }}">

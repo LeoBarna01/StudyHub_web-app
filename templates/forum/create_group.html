@@ -1,0 +1,51 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Create Group – StudyHub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+          <h2 class="card-title text-center mb-4">Create Study Group</h2>
+          
+          <form method="post" action="{{ url_for('forum.create_group') }}">
+            {{ form.hidden_tag() }}
+
+            <div class="mb-3">
+              {{ form.name.label(class="form-label") }}
+              {{ form.name(class="form-control" ~ (form.name.errors and ' is-invalid' or '')) }}
+              {% for err in form.name.errors %}
+                <div class="invalid-feedback">{{ err }}</div>
+              {% endfor %}
+            </div>
+
+            <div class="mb-3">
+              {{ form.description.label(class="form-label") }}
+              {{ form.description(class="form-control" ~ (form.description.errors and ' is-invalid' or ''), rows=4) }}
+              {% for err in form.description.errors %}
+                <div class="invalid-feedback">{{ err }}</div>
+              {% endfor %}
+            </div>
+
+            <div class="mb-4">
+              <div class="form-check">
+                {{ form.is_private(class="form-check-input") }}
+                {{ form.is_private.label(class="form-check-label") }}
+              </div>
+              <small class="text-muted">
+                Private groups are only visible to members. Public groups can be joined by any user.
+              </small>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+              Create Group
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} 

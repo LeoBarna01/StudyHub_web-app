@@ -13,6 +13,7 @@ from app import db
 from . import bp
 from app.upload.utils import allowed_file
 from app.models import Document, Category, Tag
+from app.upload.forms import UploadDocumentForm
 
 @bp.route('/', methods=['GET', 'POST'])
 @login_required
@@ -23,20 +24,24 @@ def upload_document():
     GET:  Render the upload form with instructions.
     POST: Validate and save the uploaded file, then create a Document record.
     """
-    if request.method == 'POST':
-        # Extract form fields
-        title = request.form.get('title')
-        description = request.form.get('description')
-        institute = request.form.get('institute')
-        course = request.form.get('course')
-        subject = request.form.get('subject')
-        # File upload
-        file = request.files.get('file')
+    form = UploadDocumentForm()
+    if form.validate_on_submit():
+        # Extract form fields from form object
+        title = form.title.data
+        description = form.description.data
+        institute = form.institute.data
+        course = form.course.data
+        subject = form.subject.data
+        category_name = form.category.data
+        tags_string = form.tags.data
+        file = form.file.data
 
-        # Validate the uploaded file
+        # Validate the uploaded file (still need allowed_file utility)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             upload_folder = current_app.config.get('UPLOAD_FOLDER', 'uploads')
+            # Ensure the upload folder exists
+            os.makedirs(os.path.join(current_app.root_path, upload_folder), exist_ok=True)
             file_path = os.path.join(current_app.root_path, upload_folder, filename)
             file.save(file_path)
 
@@ -48,11 +53,11 @@ def upload_document():
                 course=course,
                 subject=subject,
                 filename=filename,
-                author=current_user
+                author=current_user,
+                # category and tags handled below
             )
 
             # Handle optional category
-            category_name = request.form.get('category')
             if category_name:
                 category = Category.query.filter_by(name=category_name).first()
                 if not category:
@@ -61,9 +66,8 @@ def upload_document():
                 doc.category = category
 
             # Handle tags (comma-separated)
-            tags = request.form.get('tags')
-            if tags:
-                for tag_name in tags.split(','):
+            if tags_string:
+                for tag_name in tags_string.split(','):
                     tag_name = tag_name.strip()
                     if not tag_name:
                         continue
@@ -78,9 +82,11 @@ def upload_document():
             db.session.commit()
 
             flash('Document uploaded successfully!', 'success')
-            return redirect(url_for('upload.upload_document'))
+            # Redirect after successful upload
+            return redirect(url_for('upload.upload_document')) # or redirect to profile/view page
         else:
+            # Flash message for invalid file type is already in the template logic
             flash('Invalid file format. Allowed: PDF, DOC, DOCX, PPT, PPTX.', 'danger')
 
-    # Render the upload page on GET or after failure
-    return render_template('upload/upload.html')
+    # Render the upload page on GET or after form validation failure
+    return render_template('upload/upload.html', form=form)

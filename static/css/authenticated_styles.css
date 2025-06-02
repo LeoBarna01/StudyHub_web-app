@@ -1,0 +1,124 @@
+/* Styles to revert to original color scheme for authenticated users */
+body.authenticated-user {
+    --background: #FFFFFF; /* White */
+    --text: #212529; /* Bootstrap default dark text color */
+    --text-light: #6c757d; /* Bootstrap default muted text color */
+    --border: #dee2e6; /* Bootstrap default border color */
+    --card-bg: #FFFFFF; /* White */
+    
+    /* Revert Neutral Colors */
+    --gray-50: #f8f9fa;
+    --gray-100: #e9ecef;
+    --gray-200: #dee2e6;
+    --gray-300: #ced4da;
+    --gray-400: #adb5bd;
+    --gray-500: #6c757d;
+    --gray-600: #495057;
+    --gray-700: #343a40;
+    --gray-800: #212529;
+    --gray-900: #000000; /* Black */
+}
+
+/* Revert specific element colors if needed within authenticated section */
+body.authenticated-user h1, 
+body.authenticated-user h2, 
+body.authenticated-user h3, 
+body.authenticated-user h4, 
+body.authenticated-user h5, 
+body.authenticated-user h6 {
+    color: var(--gray-900);
+}
+
+body.authenticated-user p {
+    color: var(--text);
+}
+
+body.authenticated-user .card-title {
+    color: var(--gray-900);
+}
+
+body.authenticated-user .card-text {
+    color: var(--text-light);
+}
+
+body.authenticated-user .card-footer {
+    background-color: var(--gray-50);
+}
+
+body.authenticated-user .navbar {
+    background-color: #FFFFFF; /* White */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+body.authenticated-user .navbar.scrolled {
+    background-color: #FFFFFF; /* White */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+body.authenticated-user .nav-link {
+    color: var(--gray-700) !important;
+}
+
+body.authenticated-user .nav-link:hover,
+body.authenticated-user .nav-link:focus,
+body.authenticated-user .nav-link.active {
+    color: var(--gray-900) !important;
+    background-color: var(--gray-100);
+}
+
+body.authenticated-user .dropdown-menu {
+     border: 1px solid var(--border);
+     box-shadow: var(--shadow-lg);
+}
+
+body.authenticated-user .dropdown-item {
+    color: var(--gray-700);
+}
+
+body.authenticated-user .dropdown-item:hover,
+body.authenticated-user .dropdown-item:focus {
+    background-color: var(--gray-50);
+    color: var(--primary);
+}
+
+body.authenticated-user .dropdown-divider {
+    border-top-color: var(--border);
+}
+
+body.authenticated-user .footer {
+    background-color: var(--gray-100);
+    color: var(--gray-600);
+}
+
+body.authenticated-user .footer-section h3 {
+     color: var(--gray-900);
+}
+
+body.authenticated-user .footer-about p {
+     color: var(--gray-700);
+}
+
+body.authenticated-user .footer-links a,
+body.authenticated-user .contact-info li,
+body.authenticated-user .footer-bottom p,
+body.authenticated-user .footer-bottom a {
+    color: var(--gray-700) !important;
+}
+
+body.authenticated-user .footer-links a:hover,
+body.authenticated-user .footer-bottom a:hover {
+    color: var(--gray-900) !important;
+}
+
+body.authenticated-user .footer-bottom {
+     border-top-color: #dee2e6 !important;
+}
+
+body.authenticated-user .form-label {
+    color: var(--text);
+}
+
+/* Revert specific background colors if needed within authenticated section */
+body.authenticated-user .bg-primary {
+    background-color: var(--primary) !important;
+}

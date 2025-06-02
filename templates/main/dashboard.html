@@ -1,0 +1,240 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Dashboard - StudyHub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <!-- Welcome Section -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <h1 class="display-4 fw-bold mb-3">Welcome to StudyHub, {{ current_user.first_name }}!</h1>
+      <p class="lead text-muted">Your personal study companion. Here's how to make the most of StudyHub:</p>
+    </div>
+  </div>
+
+  <!-- Navigation Guide -->
+  <div class="row g-4">
+    <!-- Upload Section -->
+    <div class="col-md-6">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center mb-3">
+            <i class="fas fa-upload fa-2x text-primary me-3"></i>
+            <h3 class="h4 mb-0">Upload</h3>
+          </div>
+          <p class="text-muted mb-3">Share your study materials with the community:</p>
+          <ul class="list-unstyled">
+            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Upload lecture notes, summaries, and study guides</li>
+            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Add detailed descriptions and tags</li>
+            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Organize by course and subject</li>
+          </ul>
+          <a href="{{ url_for('upload.upload_document') }}" class="btn btn-primary mt-3">Start Uploading</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Browse Section -->
+    <div class="col-md-6">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center mb-3">
+            <i class="fas fa-search fa-2x text-primary me-3"></i>
+            <h3 class="h4 mb-0">Browse</h3>
+          </div>
+          <p class="text-muted mb-3">Discover study materials from other students:</p>
+          <ul class="list-unstyled">
+            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Search by subject, course, or keywords</li>
+            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Filter by document type and rating</li>
+            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Save your favorite materials</li>
+          </ul>
+          <a href="{{ url_for('view.search') }}" class="btn btn-primary mt-3">Start Browsing</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Section -->
+    <div class="col-md-6">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center mb-3">
+            <i class="fas fa-comments fa-2x text-primary me-3"></i>
+            <h3 class="h4 mb-0">Form</h3>
+          </div>
+          <p class="text-muted mb-3">Ask questions and get help from the community:</p>
+          <ul class="list-unstyled">
+            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Post questions about your studies</li>
+            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Get answers from peers and experts</li>
+            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Participate in discussions</li>
+          </ul>
+          <a href="{{ url_for('form.ask_question') }}" class="btn btn-primary mt-3">Ask a Question</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Section -->
+    <div class="col-md-6">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center mb-3">
+            <i class="fas fa-user-circle fa-2x text-primary me-3"></i>
+            <h3 class="h4 mb-0">Profile</h3>
+          </div>
+          <p class="text-muted mb-3">Manage your StudyHub account:</p>
+          <ul class="list-unstyled">
+            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>View your uploaded documents</li>
+            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Access saved materials</li>
+            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Update your profile information</li>
+          </ul>
+          <a href="{{ url_for('auth.profile') }}" class="btn btn-primary mt-3">View Profile</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Stats -->
+
+  <!-- Effective Study Methodologies Section -->
+  <div class="row mt-5">
+    <div class="col-12">
+      <div class="card shadow-sm bg-warning text-white">
+        <div class="card-body">
+          <h3 class="card-title mb-4 text-white">Effective Study Methodologies</h3>
+          <p class="card-text text-white mb-4">Discover proven study techniques that can help you learn more effectively and retain information better.</p>
+          
+          <div class="row g-4">
+            <!-- Pomodoro Technique -->
+            <div class="col-md-6">
+              <div class="card h-100 border-0 shadow-sm bg-warning text-white">
+                <div class="card-body">
+                  <h4 class="card-title h5 mb-3 text-white">
+                    <i class="fas fa-clock text-dark me-2"></i>
+                    Pomodoro Technique
+                  </h4>
+                  <p class="card-text text-white">A time management method that uses focused work intervals followed by short breaks:</p>
+                  <ul class="list-unstyled text-white">
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>25 minutes of focused study</li>
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>5-minute break</li>
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>After 4 cycles, take a longer break (15-30 minutes)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Active Recall -->
+            <div class="col-md-6">
+              <div class="card h-100 border-0 shadow-sm bg-warning text-white">
+                <div class="card-body">
+                  <h4 class="card-title h5 mb-3 text-white">
+                    <i class="fas fa-brain text-dark me-2"></i>
+                    Active Recall
+                  </h4>
+                  <p class="card-text text-white">A powerful learning technique that involves actively retrieving information from memory:</p>
+                  <ul class="list-unstyled text-white">
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Test yourself without looking at notes</li>
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Create practice questions</li>
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Use flashcards for key concepts</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Spaced Repetition -->
+            <div class="col-md-6">
+              <div class="card h-100 border-0 shadow-sm bg-warning text-white">
+                <div class="card-body">
+                  <h4 class="card-title h5 mb-3 text-white">
+                    <i class="fas fa-calendar-alt text-dark me-2"></i>
+                    Spaced Repetition
+                  </h4>
+                  <p class="card-text text-white">Review material at increasing intervals to strengthen long-term memory:</p>
+                  <ul class="list-unstyled text-white">
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Review after 1 day</li>
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Then after 3 days</li>
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Then after 1 week</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Blurting Method -->
+            <div class="col-md-6">
+              <div class="card h-100 border-0 shadow-sm bg-warning text-white">
+                <div class="card-body">
+                  <h4 class="card-title h5 mb-3 text-white">
+                    <i class="fas fa-pen-fancy text-dark me-2"></i>
+                    Blurting Method
+                  </h4>
+                  <p class="card-text text-white">Write down everything you know about a topic without referring to notes:</p>
+                  <ul class="list-unstyled text-white">
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Write continuously for 5-10 minutes</li>
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Compare with your notes</li>
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Identify knowledge gaps</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Teaching Others -->
+            <div class="col-md-6">
+              <div class="card h-100 border-0 shadow-sm bg-warning text-white">
+                <div class="card-body">
+                  <h4 class="card-title h5 mb-3 text-white">
+                    <i class="fas fa-chalkboard-teacher text-dark me-2"></i>
+                    Teaching Others
+                  </h4>
+                  <p class="card-text text-white">Explain concepts to others to deepen your understanding:</p>
+                  <ul class="list-unstyled text-white">
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Teach concepts to peers</li>
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Create study groups</li>
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Record video explanations</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mind Mapping -->
+            <div class="col-md-6">
+              <div class="card h-100 border-0 shadow-sm bg-warning text-white">
+                <div class="card-body">
+                  <h4 class="card-title h5 mb-3 text-white">
+                    <i class="fas fa-project-diagram text-dark me-2"></i>
+                    Mind Mapping
+                  </h4>
+                  <p class="card-text text-white">Create visual representations of concepts and their relationships:</p>
+                  <ul class="list-unstyled text-white">
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Start with main concept in center</li>
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Add branches for related ideas</li>
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Use colors and images</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Memory Palace (Method of Loci) -->
+            <div class="col-md-6">
+              <div class="card h-100 border-0 shadow-sm bg-warning text-white">
+                <div class="card-body">
+                  <h4 class="card-title h5 mb-3 text-white">
+                    <i class="fas fa-landmark text-dark me-2"></i>
+                    Memory Palace (Method of Loci)
+                  </h4>
+                  <p class="card-text text-white">An ancient mnemonic technique that uses spatial memory to organize and recall information:</p>
+                  <ul class="list-unstyled text-white">
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Choose a familiar place (your home, school, etc.)</li>
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Associate information with specific locations</li>
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Create vivid mental images for each item</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 text-center">
+            <p class="text-white small">Try different methods and find what works best for your learning style!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} 

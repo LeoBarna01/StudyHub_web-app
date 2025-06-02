@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+<nav class="navbar navbar-expand-lg navbar-light shadow-sm fixed-top">
   <div class="container">
     <!-- Brand / Logo -->
     <a class="navbar-brand" href="{{ url_for('main.index') }}">
@@ -15,10 +15,11 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link {{ 'active' if request.endpoint == 'main.index' }}" href="{{ url_for('main.index') }}">
+          <a class="nav-link {{ 'active' if request.endpoint == 'main.index' or request.endpoint == 'main.dashboard' }}" href="{{ url_for('main.index') }}">
             <i class="fas fa-home me-1"></i> Home
           </a>
         </li>
+        {% if current_user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link {{ 'active' if request.endpoint == 'upload.upload_document' }}" href="{{ url_for('upload.upload_document') }}">
             <i class="fas fa-upload me-1"></i> Upload
@@ -31,30 +32,59 @@
         </li>
         <li class="nav-item">
           <a class="nav-link {{ 'active' if request.endpoint == 'form.ask_question' }}" href="{{ url_for('form.ask_question') }}">
-            <i class="fas fa-comments me-1"></i> Forum & Questions
+            <i class="fas fa-comments me-1"></i> Form
           </a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link {{ 'active' if request.endpoint.startswith('forum.') }}" href="{{ url_for('forum.index') }}">
+            <i class="fas fa-users me-1"></i> Forum
+          </a>
+        </li>
+        {% endif %}
       </ul>
       
       <!-- User Actions -->
       <ul class="navbar-nav ms-auto">
         {% if current_user.is_authenticated %}
+          <!-- Notification Bell -->
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" 
+            <a class="nav-link position-relative" href="{{ url_for('main.notifications') }}" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-bell"></i>
+                {% set unread_notifications = current_user.notifications|selectattr('is_read', 'equalto', false)|list %}
+                {% if unread_notifications|length > 0 %}
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {{ unread_notifications|length }}
+                    <span class="visually-hidden">unread notifications</span>
+                </span>
+                {% endif %}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
+                <li><h6 class="dropdown-header">Notifications</h6></li>
+                {% if unread_notifications|length > 0 %}
+                    <li><a class="dropdown-item" href="{{ url_for('main.notifications') }}">View all notifications ({{ unread_notifications|length }} unread)</a></li>
+                {% else %}
+                    <li><a class="dropdown-item text-center" href="{{ url_for('main.notifications') }}">No new notifications</a></li>
+                {% endif %}
+                <li><hr class="dropdown-divider"></li>
+                 <li><a class="dropdown-item" href="{{ url_for('main.notifications') }}">View all notifications</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="{{ url_for('auth.profile') }}" id="userDropdown" 
                role="button" data-bs-toggle="dropdown" aria-expanded="false">
               {% if current_user.avatar_url %}
                 <img src="{{ current_user.avatar_url }}" 
                      class="avatar-img me-2" width="32" height="32" alt="Profile"
                      onerror="handleAvatarError(this)">
                 <div class="avatar-fallback d-none">
-                  {{ current_user.username[0]|upper }}
+                  {{ current_user.first_name[0]|upper }}{{ current_user.last_name[0]|upper }}
                 </div>
               {% else %}
                 <div class="avatar me-2">
-                  {{ current_user.username[0]|upper }}
+                  {{ current_user.first_name[0]|upper }}{{ current_user.last_name[0]|upper }}
                 </div>
               {% endif %}
-              <span class="d-none d-md-inline">{{ current_user.username }}</span>
+              <span class="d-none d-md-inline">{{ current_user.first_name }}</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
               <li><a class="dropdown-item" href="{{ url_for('auth.profile') }}">
@@ -68,11 +98,6 @@
                 <i class="fas fa-sign-out-alt me-2"></i>Logout
               </a></li>
             </ul>
-          </li>
-          <li class="nav-item d-flex align-items-center ms-2">
-            <a href="{{ url_for('upload.upload_document') }}" class="btn btn-primary btn-sm rounded-pill px-3">
-              <i class="fas fa-plus me-1"></i> New
-            </a>
           </li>
         {% else %}
           <li class="nav-item">

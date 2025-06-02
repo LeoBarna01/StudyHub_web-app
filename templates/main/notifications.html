@@ -1,0 +1,131 @@
+{% extends "main/base.html" %}
+
+{% block title %}Notifications - StudyHub{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">
+                <i class="fas fa-bell me-2"></i>Notifications
+            </h1>
+            
+            <!-- Notification Filters -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-outline-primary active">All</button>
+                            <button type="button" class="btn btn-outline-primary">Unread</button>
+                            <button type="button" class="btn btn-outline-primary">Read</button>
+                        </div>
+                        <button class="btn btn-outline-secondary">
+                            <i class="fas fa-check-double me-1"></i>Mark all as read
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications List -->
+            <div class="notifications-list">
+                {% for notification in notifications %}
+                <div class="card mb-3 notification-item {% if not notification.is_read %}unread{% endif %}">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="notification-icon me-3">
+                                {% if notification.type == 'new_reply' %}
+                                    <i class="fas fa-reply text-primary"></i>
+                                {% elif notification.type == 'group_invitation' %}
+                                    <i class="fas fa-user-plus text-info"></i>
+                                {% elif notification.type == 'system' %}
+                                    <i class="fas fa-info-circle text-secondary"></i>
+                                {% else %}
+                                    <i class="fas fa-bell text-secondary"></i>{# Default icon #}
+                                {% endif %}
+                            </div>
+                            <div class="notification-content flex-grow-1">
+                                <p class="mb-1">
+                                    {# Display title based on type or use a default #}
+                                    {% if notification.type == 'new_reply' %}
+                                        <strong>New Reply</strong>
+                                    {% elif notification.type == 'group_invitation' %}
+                                        <strong>Group Invitation</strong>
+                                    {% elif notification.type == 'system' %}
+                                        <strong>System Notification</strong>
+                                    {% else %}
+                                        <strong>Notification</strong>{# Default title #}
+                                    {% endif %}
+                                </p>
+                                <p class="mb-1 text-muted">
+                                    {{ notification.message }}
+                                </p>
+                                <small class="text-muted">{{ notification.timestamp.strftime('%Y-%m-%d %H:%M') }}</small>{# Format timestamp #}
+                            </div>
+                            <div class="notification-actions">
+                                {# Display actions based on type and related resource #}
+                                {% if notification.type == 'new_reply' and notification.related_resource_type == 'GroupPost' %}
+                                    <a href="{{ url_for('forum.view_group', group_id=notification.related_resource_id) }}#post-{{ notification.related_resource_id }}" class="btn btn-sm btn-outline-primary me-2">View Post</a>
+                                {% elif notification.type == 'group_invitation' %}
+                                    {# TODO: Implement accept/decline group invitation actions #}
+                                    <button class="btn btn-sm btn-outline-primary me-2" disabled>Accept</button>
+                                    <button class="btn btn-sm btn-outline-secondary me-2" disabled>Decline</button>
+                                {% elif notification.type == 'system' %}
+                                    {# TODO: Implement learn more action for system notifications #}
+                                    <button class="btn btn-sm btn-outline-primary" disabled>Learn More</button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="card mb-3">
+                    <div class="card-body text-center text-muted">
+                        No notifications yet.
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Load More Button -->
+            <div class="text-center mt-4">
+                <button class="btn btn-outline-primary" disabled>
+                    <i class="fas fa-sync-alt me-1"></i>Load More
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.notification-item {
+    transition: all 0.3s ease;
+}
+
+.notification-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.notification-item.unread {
+    border-left: 4px solid var(--primary);
+}
+
+.notification-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: rgba(0,0,0,0.05);
+}
+
+.notification-content {
+    min-width: 0;
+}
+
+.notification-actions {
+    white-space: nowrap;
+}
+</style>
+{% endblock %} 
