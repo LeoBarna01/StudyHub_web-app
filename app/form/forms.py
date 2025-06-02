@@ -10,16 +10,7 @@ class QuestionForm(FlaskForm):
       - email: requester's email
       - body: detailed question or message
     """
-    subject = SelectField(
-        'Reference Subject',
-        choices=[
-            ('General', 'General'),
-            ('Math', 'Math'),
-            ('Physics', 'Physics'),
-            ('Other', 'Other')
-        ],
-        validators=[DataRequired()]
-    )
+    subject = StringField('Reference Subject', validators=[DataRequired(), Length(max=100)])
     email = StringField('Email', validators=[DataRequired(), Email(), Length(max=120)])
     body = TextAreaField('Your Question', validators=[DataRequired(), Length(max=2000)])
     submit = SubmitField('Send Request')

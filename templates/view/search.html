@@ -4,117 +4,414 @@
 
 {% block content %}
 <div class="container py-5">
-  <h2 class="mb-4">Search Study Notes</h2>
+  <h2 class="mb-4 text-center">Search study notes</h2>
 
   <!-- INTRO with brief description -->
   <p class="lead text-center mb-4">Find the study materials you need by searching and filtering documents uploaded by the community.</p>
 
   <form method="get" action="{{ url_for('view.search') }}" class="row g-2 mb-5">
-    <!-- Category dropdown -->
-    <div class="col-md-2">
-      <select name="category" class="form-select">
-        <option value="">All Categories</option>
-        {% for cat in categories %}
-          <option value="{{ cat.id }}" {% if filters.category == cat.id %}selected{% endif %}>
-            {{ cat.name }}
-          </option>
-        {% endfor %}
-      </select>
-    </div>
-    <!-- Other filters -->
-    <div class="col-md-2">
-      <input type="text" name="institute" class="form-control"
-             placeholder="Institute" value="{{ filters.institute or '' }}">
-    </div>
-    <div class="col-md-2">
-      <input type="text" name="course" class="form-control"
-             placeholder="Course" value="{{ filters.course or '' }}">
-    </div>
-    <div class="col-md-2">
-      <input type="text" name="subject" class="form-control"
-             placeholder="Subject" value="{{ filters.subject or '' }}">
-    </div>
-    <div class="col-md-2">
-      <input type="text" name="author" class="form-control"
-             placeholder="Author" value="{{ filters.author or '' }}">
-    </div>
-    <!-- Minimum Rating Filter -->
-     <div class="col-md-2">
-        <input type="number" name="min_rating" class="form-control" 
-               placeholder="Min Rating" value="{{ filters.min_rating or '' }}" 
-               min="0" max="5" step="0.1">
+    <!-- Search Bar and Button Row -->
+    <div class="col-md-12 mb-3">
+      <div class="row g-2 form-row">
+        <!-- Title Search Bar -->
+        <div class="col-md">
+          <input type="text" name="title" class="form-control form-control-lg" placeholder="Search by Title" value="{{ filters.title or '' }}">
+        </div>
+        <!-- Search Button -->
+        <div class="col-md-auto">
+          <button type="submit" class="btn btn-primary btn-lg">Search</button>
+        </div>
       </div>
-    <div class="col-md-2">
-      <button type="submit" class="btn btn-primary w-100">Search</button>
+    </div>
+
+    <!-- Filters Row -->
+    <div class="col-md-12">
+      <div class="row g-2 align-items-center">
+        <!-- Filters Label -->
+        <div class="col-md-auto">
+          <span class="fw-bold">Filters:</span>
+        </div>
+        
+        <!-- Other filters -->
+        <div class="col-md-2">
+          <input type="text" name="institute" class="form-control"
+                 placeholder="Institute" value="{{ filters.institute or '' }}">
+        </div>
+        <div class="col-md-2">
+          <input type="text" name="course" class="form-control"
+                 placeholder="Course" value="{{ filters.course or '' }}">
+        </div>
+        <div class="col-md-2">
+          <input type="text" name="subject" class="form-control"
+                 placeholder="Subject" value="{{ filters.subject or '' }}">
+        </div>
+        <div class="col-md-2">
+          <input type="text" name="author" class="form-control"
+                 placeholder="Author" value="{{ filters.author or '' }}">
+        </div>
+      </div>
     </div>
   </form>
 
-  {% if documents %}
+  {# Determine if a search has been performed by checking if any filter has a value #}
+  {% set search_performed = (filters.title is not none and filters.title != '') or (filters.institute is not none and filters.institute != '') or (filters.course is not none and filters.course != '') or (filters.subject is not none and filters.subject != '') or (filters.author is not none and filters.author != '') %}
+
+  {% if documents and search_performed %}
     <h4>Search Results</h4>
-    <ul class="list-group mb-5">
+    <div class="row g-4"> {# Use row and gutter for the grid #}
       {% for doc in documents %}
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          <div>
-            <strong>{{ doc.title }}</strong><br>
-            <small class="text-muted">
-              {{ doc.course }}{% if doc.institute %}, {{ doc.institute }}{% endif %}{% if doc.year %}, {{ doc.year }}{% endif %}
-              {% if doc.subject %} • {{ doc.subject }}{% endif %}
-              {% if doc.author %} • Uploaded by {{ doc.author.first_name }} {{ doc.author.last_name }}{% endif %}
-              {% if doc.category %} • {{ doc.category.name }}{% endif %}
-              • Rating: {{ doc.rating }}
-            </small>
-            {% if doc.description %}
-              <p class="mb-1">{{ doc.description | truncate(150) }}</p>
-            {% endif %}
-          </div>
-          <a href="{{ url_for('view.download', doc_id=doc.id) }}"
-             class="btn btn-sm btn-outline-primary">
-            Download
-          </a>
-        </li>
+        <div class="col-md-6"> {# Each document result will be in a column #}
+          <div class="card h-100"> {# Optional: Wrap each result in a card for better visual separation #}
+            <div class="card-body"> {# Add card body padding #}
+              <div class="row"> {# Internal row for document info and buttons #}
+                {# Left Column: Document Info #}
+                <div class="col-md-8">
+                  <strong>{{ doc.title }}</strong><br>
+                  <small class="text-muted">
+                    {{ doc.course }}{% if doc.institute %} @ {{ doc.institute }}{% endif %}{% if doc.year %}, {{ doc.year }}{% endif %}
+                    {% if doc.subject %} • {{ doc.subject }}{% endif %}
+                    {% if doc.author %} • Uploaded by {{ doc.author.first_name }} {{ doc.author.last_name }}{% endif %}
+                  </small>
+                  {% if doc.description %}
+                    <p class="mb-1">{{ doc.description | truncate(150) }}</p>
+                  {% endif %}
+                </div>
+                {# Right Column: Buttons #}
+                <div class="col-md-4 d-flex flex-column align-items-end justify-content-center">
+                  <div class="d-flex gap-2 mt-2 mt-md-0"> {# Add margin top for small screens #}
+                    {# Preview button #}
+                    <button class="btn btn-sm btn-outline-secondary preview-button" data-doc-id="{{ doc.id }}">
+                      Preview
+                    </button>
+                    {% if current_user.is_authenticated %}
+                      {% if doc in user_favorites_docs %}
+                        {# Show filled star if already favorited #}
+                        <button class="btn btn-sm btn-outline-secondary favorite-button favorited" 
+                                data-doc-id="{{ doc.id }}"
+                                title="Remove from favorites">
+                          <i class="fas fa-star"></i>
+                        </button>
+                      {% else %}
+                        {# Show 'Add to Favorites' button if not favorited #}
+                        <button class="btn btn-sm btn-outline-primary add-to-favorites-button" 
+                                data-doc-id="{{ doc.id }}"
+                                title="Add to favorites">
+                          Add to Favorites
+                        </button>
+                      {% endif %}
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>{# Close card-body #}
+          </div>{# Close card #}
+        </div>{# Close col-md-6 #}
       {% endfor %}
-    </ul>
+    </div>{# Close row g-4 #}
   {% else %}
-    <p class="text-muted">No documents match your criteria.</p>
+    <p class="text-muted">No documents match your criteria: use the search bar and filters to find what you need.</p>
   {% endif %}
 
-  <div class="row">
-    <div class="col-md-6">
-      <h5>Recent Documents</h5>
-      <ul class="list-group">
-        {% for doc in recent_documents %}
-          <li class="list-group-item">
-             <strong>{{ doc.title }}</strong><br>
-            <small class="text-muted">
-              {{ doc.course }}{% if doc.institute %}, {{ doc.institute }}{% endif %}{% if doc.year %}, {{ doc.year }}{% endif %}
-              {% if doc.subject %} • {{ doc.subject }}{% endif %}
-              {% if doc.author %} • Uploaded by {{ doc.author.first_name }} {{ doc.author.last_name }}{% endif %}
-              {% if doc.category %} • {{ doc.category.name }}{% endif %}
-              • Uploaded on {{ doc.upload_date.strftime('%Y-%m-%d') }}
-              • Rating: {{ doc.rating }}
-            </small>
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
-    <div class="col-md-6">
-      <h5>Popular Documents</h5>
-      <ul class="list-group">
-        {% for doc in popular_documents %}
-          <li class="list-group-item">
-             <strong>{{ doc.title }}</strong><br>
-            <small class="text-muted">
-              {{ doc.course }}{% if doc.institute %}, {{ doc.institute }}{% endif %}{% if doc.year %}, {{ doc.year }}{% endif %}
-              {% if doc.subject %} • {{ doc.subject }}{% endif %}
-              {% if doc.author %} • Uploaded by {{ doc.author.first_name }} {{ doc.author.last_name }}{% endif %}
-              {% if doc.category %} • {{ doc.category.name }}{% endif %}
-              • {{ doc.downloads }} downloads
-              • Rating: {{ doc.rating }}
-            </small>
-          </li>
-        {% endfor %}
-      </ul>
+  <!-- Added mt-5 class to create more space above the favorites section -->
+  <div class="row mt-5">
+    <div class="col-md-12">
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <a href="{{ url_for('view.favorites') }}" class="text-decoration-none text-dark">
+            <h3>Your Favorites</h3>
+          </a>
+          <ul class="list-group" id="yourFavoritesList">
+            {% if user_favorites_docs %}
+              {% for doc in user_favorites_docs %}
+                <li class="list-group-item">
+                   <strong>{{ doc.title }}</strong><br>
+                  <small class="text-muted">
+                    {{ doc.course }}{% if doc.institute %}, {{ doc.institute }}{% endif %}{% if doc.year %}, {{ doc.year }}{% endif %}
+                    {% if doc.subject %} • {{ doc.subject }}{% endif %}
+                    {% if doc.author %} • Uploaded by {{ doc.author.first_name }} {{ doc.author.last_name }}{% endif %}
+                    • {{ doc.downloads }} downloads
+                  </small>
+                  {# Preview button for Favorites #}
+                  <button class="btn btn-sm btn-outline-secondary preview-button" data-doc-id="{{ doc.id }}">
+                    Preview
+                  </button>
+                  <button class="btn btn-sm btn-outline-secondary favorite-button favorited" 
+                          data-doc-id="{{ doc.id }}"
+                          title="Remove from favorites">
+                    <i class="fas fa-star"></i>
+                  </button>
+                </li>
+              {% endfor %}
+            {% else %}
+              <li class="list-group-item text-muted">
+                No favorite documents yet.
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+
+<!-- Document Preview Modal -->
+<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title w-100 text-center" id="previewModalLabel">Document Preview</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe id="documentPreviewFrame" class="embed-responsive-item" style="width: 100%; height: 500px;" src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+         <p class="text-muted mt-3 text-center">If the preview is not working, try downloading the document.</p>
+      </div>
+       <div class="modal-footer d-flex justify-content-between">
+            <div class="w-100 text-center">
+                <button type="button" class="btn btn-secondary" id="fullscreenButton">Full Screen</button>
+            </div>
+            <a href="#" id="previewDownloadButton" class="btn btn-primary position-absolute end-0 me-3">Download</a>
+        </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Select both favorite buttons (filled star) and add-to-favorites buttons
+    const favoriteButtons = document.querySelectorAll('.favorite-button');
+    const addToFavoritesButtons = document.querySelectorAll('.add-to-favorites-button');
+
+    const favoritesList = document.querySelector('#yourFavoritesList'); // Get the Your Favorites UL element
+    const noFavoritesMessage = favoritesList ? favoritesList.closest('.col-md-12').querySelector('.text-muted') : null; // Get the 'No favorites yet' message
+
+    // Combine both types of buttons for event listening
+    const allFavoriteToggleButtons = [...favoriteButtons, ...addToFavoritesButtons];
+
+    allFavoriteToggleButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const docId = this.dataset.docId;
+            const currentButton = this; // Reference to the button that was clicked
+            const listItem = this.closest('li.list-group-item'); // Get the parent list item
+
+            fetch(`/view/toggle_favorite/${docId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Find the container div for the buttons in the list item
+                    const buttonContainer = currentButton.closest('.d-flex.gap-2');
+
+                    if (data.is_favorited) {
+                        // Remove the current button
+                        currentButton.remove();
+
+                        // Create the new favorited button (filled star)
+                        const favoritedButtonHTML = `
+                            <button class="btn btn-sm btn-outline-secondary favorite-button favorited" 
+                                    data-doc-id="${docId}"
+                                    title="Remove from favorites">
+                              <i class="fas fa-star"></i>
+                            </button>
+                        `;
+                        buttonContainer.insertAdjacentHTML('beforeend', favoritedButtonHTML);
+
+                         // Re-attach event listener to the newly created button
+                         const newFavoritedButton = buttonContainer.querySelector('.favorite-button.favorited[data-doc-id="' + docId + '"]');
+                         if (newFavoritedButton) {
+                              newFavoritedButton.addEventListener('click', arguments.callee); // Re-attach the same click handler
+                         }
+
+
+                        // Add the document to the 'Your Favorites' list dynamically
+                        if (favoritesList && listItem) {
+                            const newFavoriteItem = listItem.cloneNode(true);
+                             // Ensure the button in the cloned item is the favorited version
+                            const buttonInClone = newFavoriteItem.querySelector('.add-to-favorites-button, .favorite-button');
+                            if(buttonInClone) { // Replace or update the button in the clone
+                                const newButtonHTML = `
+                                    <button class="btn btn-sm btn-outline-secondary favorite-button favorited" 
+                                            data-doc-id="${docId}"
+                                            title="Remove from favorites">
+                                      <i class="fas fa-star"></i>
+                                    </button>
+                                `;
+                                buttonInClone.outerHTML = newButtonHTML; // Replace the button HTML
+                            }
+
+                            // Ensure the event listener is attached to the new button in the cloned item
+                            const newFavButtonInClone = newFavoriteItem.querySelector('.favorite-button.favorited[data-doc-id="' + docId + '"]');
+                            if(newFavButtonInClone) {
+                                newFavButtonInClone.addEventListener('click', arguments.callee); // Re-attach handler
+                            }
+
+                            // Append the new item to the favorites list
+                            favoritesList.appendChild(newFavoriteItem);
+
+                            // Hide the 'No favorites yet' message if it's visible
+                            if (noFavoritesMessage && !noFavoritesMessage.classList.contains('d-none')) {
+                                noFavoritesMessage.classList.add('d-none');
+                            }
+                        }
+
+                    } else { // Document was removed from favorites
+                        // Remove the current button
+                        currentButton.remove();
+
+                        // Create the new add-to-favorites button
+                         const addToFavoritesButtonHTML = `
+                            <button class="btn btn-sm btn-outline-primary add-to-favorites-button" 
+                                    data-doc-id="${docId}"
+                                    title="Add to favorites">
+                              Add to Favorites
+                            </button>
+                         `;
+                         buttonContainer.insertAdjacentHTML('beforeend', addToFavoritesButtonHTML);
+
+                          // Re-attach event listener to the newly created button
+                         const newAddToFavButton = buttonContainer.querySelector('.add-to-favorites-button[data-doc-id="' + docId + '"]');
+                         if (newAddToFavButton) {
+                               newAddToFavButton.addEventListener('click', arguments.callee); // Re-attach the same click handler
+                         }
+
+
+                        // Remove the document from the 'Your Favorites' list dynamically
+                        if (favoritesList) {
+                            const favoriteItems = favoritesList.querySelectorAll('li.list-group-item');
+                            favoriteItems.forEach(item => {
+                                const favButton = item.querySelector('.favorite-button, .add-to-favorites-button'); // Find either button type
+                                if (favButton && favButton.dataset.docId === docId) {
+                                    item.remove();
+                                }
+                            });
+
+                            // Show the 'No favorites yet' message if the list is now empty
+                            if (favoritesList.querySelectorAll('li.list-group-item').length === 0) {
+                                if (noFavoritesMessage) {
+                                     noFavoritesMessage.classList.remove('d-none');
+                                }
+                            } else {
+                                // Ensure message is hidden if not empty (in case it was somehow visible)
+                                if (noFavoritesMessage && !noFavoritesMessage.classList.contains('d-none')) {
+                                     noFavoritesMessage.classList.add('d-none');
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    console.error('Error toggling favorite status:', data.message);
+                    // Optionally revert button state or show error to user
+                }
+            })
+            .catch(error => {
+                console.error('Error during fetch:', error);
+                // Optionally revert button state or show error to user
+            });
+        });
+    });
+
+     // Add an ID to the Your Favorites UL for easy selection (already done in HTML)
+    // if(favoritesList) {
+    //     favoritesList.id = 'yourFavoritesList';
+    // }
+
+    // Handle Preview Button Clicks
+    const previewButtons = document.querySelectorAll('.preview-button');
+    const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
+    const previewFrame = document.getElementById('documentPreviewFrame');
+
+    previewButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const docId = this.dataset.docId;
+            // Construct the URL for the new preview route
+            const previewUrl = `/view/preview/${docId}`;
+
+            // Set the iframe source and show the modal
+            previewFrame.src = previewUrl;
+            previewModal.show();
+        });
+    });
+
+    // Clear iframe source when modal is closed to stop media
+    document.getElementById('previewModal').addEventListener('hidden.bs.modal', function () {
+        previewFrame.src = '';
+        // Clear the download button href as well
+        document.getElementById('previewDownloadButton').href = '#';
+    });
+
+    // Update the download button href when the modal is shown
+    document.getElementById('previewModal').addEventListener('show.bs.modal', function (event) {
+        // The button that triggered the modal
+        const button = event.relatedTarget;
+        const docId = button.dataset.docId;
+        const downloadButton = document.getElementById('previewDownloadButton');
+        // Construct the download URL using the docId
+        downloadButton.href = `/view/download/${docId}`;
+    });
+
+    // Handle Full Screen button click
+    const fullscreenButton = document.getElementById('fullscreenButton');
+    const previewModalDialog = document.querySelector('#previewModal .modal-dialog');
+
+    fullscreenButton.addEventListener('click', function() {
+        // Toggle a class on the modal dialog for styling
+        previewModalDialog.classList.toggle('modal-fullscreen-mode');
+
+        // Toggle icon and text on the button
+        if (previewModalDialog.classList.contains('modal-fullscreen-mode')) {
+            this.innerHTML = '<i class="fas fa-compress me-2"></i>Exit Full Screen';
+            // You might need to adjust iframe size here if not handled purely by CSS
+        } else {
+            this.innerHTML = '<i class="fas fa-expand me-2"></i>Full Screen';
+             // Reset iframe size if necessary
+        }
+        // Optional: Adjust modal body/iframe size based on fullscreen state
+        // The CSS rules below will handle the sizing based on the class toggle
+    });
+
+    // Add CSS for fullscreen mode (can be moved to custom.css)
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .modal-fullscreen-mode {
+            width: 100vw !important;
+            max-width: 100vw !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        .modal-fullscreen-mode .modal-content {
+            height: 100vh !important;
+            border-radius: 0 !important;
+        }
+        .modal-fullscreen-mode .modal-body {
+            flex-grow: 1 !important;
+            overflow: hidden !important; /* Prevent scrollbars in modal body */
+            display: flex !important; /* Use flex to manage iframe size */
+            flex-direction: column; /* Stack children vertically */
+        }
+        .modal-fullscreen-mode .modal-body .embed-responsive {
+             flex-grow: 1 !important;
+             height: 100% !important; /* Make embed-responsive take full height */
+        }
+        .modal-fullscreen-mode .modal-body iframe {
+            width: 100% !important;
+            height: 100% !important; /* Make iframe take full height of embed-responsive */
+        }
+         .modal-fullscreen-mode .modal-header, 
+         .modal-fullscreen-mode .modal-footer {
+            flex-shrink: 0; /* Prevent header/footer from shrinking */
+         }
+    `;
+    document.head.appendChild(style);
+
+});
+</script>
 {% endblock %}

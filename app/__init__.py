@@ -17,7 +17,7 @@ def create_app(config_object='config.Config'):
     Application factory for StudyHub.
     - Creates and configures the Flask app
     - Initializes extensions (SQLAlchemy, LoginManager)
-    - Registers blueprints: main, auth, upload, view, form, forum
+    - Registers blueprints: main, auth, upload, view, form
     - Sets up context processors and error handlers
     """
     app = Flask(__name__, 
@@ -50,9 +50,6 @@ def create_app(config_object='config.Config'):
 
     from app.form import bp as form_bp
     app.register_blueprint(form_bp, url_prefix='/form')
-
-    from app.forum import bp as forum_bp
-    app.register_blueprint(forum_bp, url_prefix='/forum')
 
     # Context processor: inject current UTC year into all templates (actually we used it for the footer mainly just to add something realistic)
     @app.context_processor

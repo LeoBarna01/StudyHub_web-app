@@ -35,69 +35,27 @@
             <i class="fas fa-comments me-1"></i> Form
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link {{ 'active' if request.endpoint.startswith('forum.') }}" href="{{ url_for('forum.index') }}">
-            <i class="fas fa-users me-1"></i> Forum
-          </a>
-        </li>
         {% endif %}
       </ul>
       
       <!-- User Actions -->
       <ul class="navbar-nav ms-auto">
         {% if current_user.is_authenticated %}
-          <!-- Notification Bell -->
-          <li class="nav-item dropdown">
-            <a class="nav-link position-relative" href="{{ url_for('main.notifications') }}" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fas fa-bell"></i>
-                {% set unread_notifications = current_user.notifications|selectattr('is_read', 'equalto', false)|list %}
-                {% if unread_notifications|length > 0 %}
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                    {{ unread_notifications|length }}
-                    <span class="visually-hidden">unread notifications</span>
-                </span>
-                {% endif %}
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
-                <li><h6 class="dropdown-header">Notifications</h6></li>
-                {% if unread_notifications|length > 0 %}
-                    <li><a class="dropdown-item" href="{{ url_for('main.notifications') }}">View all notifications ({{ unread_notifications|length }} unread)</a></li>
-                {% else %}
-                    <li><a class="dropdown-item text-center" href="{{ url_for('main.notifications') }}">No new notifications</a></li>
-                {% endif %}
-                <li><hr class="dropdown-divider"></li>
-                 <li><a class="dropdown-item" href="{{ url_for('main.notifications') }}">View all notifications</a></li>
-            </ul>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle d-flex align-items-center" href="{{ url_for('auth.profile') }}" id="userDropdown" 
-               role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <li class="nav-item">
+            <a class="nav-link d-flex align-items-center" href="{{ url_for('auth.profile') }}">
               {% if current_user.avatar_url %}
-                <img src="{{ current_user.avatar_url }}" 
-                     class="avatar-img me-2" width="32" height="32" alt="Profile"
-                     onerror="handleAvatarError(this)">
-                <div class="avatar-fallback d-none">
-                  {{ current_user.first_name[0]|upper }}{{ current_user.last_name[0]|upper }}
+                <div class="avatar me-2">
+                  <img src="{{ current_user.avatar_url }}" 
+                       class="avatar-img" alt="Profile"
+                       onerror="handleAvatarError(this)">
                 </div>
               {% else %}
                 <div class="avatar me-2">
                   {{ current_user.first_name[0]|upper }}{{ current_user.last_name[0]|upper }}
                 </div>
               {% endif %}
-              <span class="d-none d-md-inline">{{ current_user.first_name }}</span>
+              <span class="d-md-inline">Profile</span>
             </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-              <li><a class="dropdown-item" href="{{ url_for('auth.profile') }}">
-                <i class="fas fa-user-circle me-2"></i>Profile
-              </a></li>
-              <li><a class="dropdown-item" href="#">
-                <i class="fas fa-bookmark me-2"></i>Saved Items
-              </a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}">
-                <i class="fas fa-sign-out-alt me-2"></i>Logout
-              </a></li>
-            </ul>
           </li>
         {% else %}
           <li class="nav-item">

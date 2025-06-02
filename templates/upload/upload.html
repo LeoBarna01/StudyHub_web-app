@@ -7,21 +7,21 @@
         <div class="col-md-8 col-lg-6">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h2 class="card-title text-center mb-4">Upload New Document</h2>
+                    <h2 class="card-title text-center mb-4">Upload new document</h2>
 
                     <!-- INTRO with brief description -->
                     <p class="lead text-center mb-4">Share your study materials with the community!</p>
 
                     <!-- Guidelines -->
-                    <div class="mb-4">
-                        <h5>Guidelines for Uploading:</h5>
-                        <ul>
+                    <div class="mb-4 bg-warning p-4 rounded">
+                        <h5 class="text-white">Guidelines for uploading:</h5>
+                        <ul class="text-white">
                             <li>Ensure your document is in an allowed format (PDF, DOC, DOCX, PPT, PPTX).</li>
                             <li>Provide a clear and descriptive title.</li>
                             <li>Include relevant information like academic institute, course, and subject.</li>
                             <li>Add tags to help others find your document easily.</li>
                         </ul>
-                         <p class="text-muted">By uploading, you agree to our terms of service.</p>
+                         <p class="text-white">By uploading, you agree to our <a href="{{ url_for('main.errore') }}" class="text-white fw-bold text-decoration-none">terms of service</a>.</p>
                     </div>
 
                     <!-- Upload Form -->
@@ -77,22 +77,6 @@
                         </div>
 
                          <div class="mb-3">
-                            {{ form.category.label(class="form-label") }}
-                            {{ form.category(class="form-control") }}
-                             {% for error in form.category.errors %}
-                                <span class="text-danger">[{{ error }}]</span>
-                            {% endfor %}
-                        </div>
-
-                         <div class="mb-3">
-                            {{ form.tags.label(class="form-label") }}
-                            {{ form.tags(class="form-control") }}
-                             {% for error in form.tags.errors %}
-                                <span class="text-danger">[{{ error }}]</span>
-                            {% endfor %}
-                        </div>
-
-                        <div class="mb-3">
                             {{ form.file.label(class="form-label") }}
                             {{ form.file(class="form-control", required=true) }}
                              {% for error in form.file.errors %}

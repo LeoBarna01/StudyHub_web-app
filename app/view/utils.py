@@ -6,6 +6,8 @@ def apply_filters(query, filters):
       filters may include 'institute', 'course', 'subject', 'author', 'min_rating'.
     Returns a filtered query.
     """
+    if filters.get('title'):
+        query = query.filter(Document.title.ilike(f"%{filters['title']}%"))
     if filters.get('institute'):
         query = query.filter_by(institute=filters['institute'])
     if filters.get('course'):
@@ -17,8 +19,6 @@ def apply_filters(query, filters):
         query = query.join(User).filter(
             User.first_name.ilike(f"%{filters['author']}%")
         )
-    if filters.get('min_rating'):
-        query = query.filter(Document.rating >= filters['min_rating'])
     return query
 
 def get_recent_documents(limit=5):

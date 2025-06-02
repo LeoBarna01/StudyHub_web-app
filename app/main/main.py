@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for
 from flask_login import current_user
-from app.models import Document, Question, Notification # Import Question and Notification models
+from app.models import Document, Question # Import Question and Notification models
 from . import bp
 from flask_sqlalchemy import SQLAlchemy
 
@@ -11,7 +11,7 @@ def errore():
     """
     Pagina di errore generica per i link del footer.
     """
-    return render_template('erros/404.html'), 404
+    return render_template('errors/404.html'), 404
 
 @bp.route('/')
 def index():
@@ -51,24 +51,3 @@ def dashboard():
                            favorite_count=favorite_count,
                            downloads_count=downloads_count,
                            forms_sent_count=forms_sent_count)
-
-@bp.route('/notifications')
-def notifications():
-    """
-    Notifications Page
-    - Shows all notifications for authenticated users
-    - Redirects to login for non-authenticated users
-    """
-    if not current_user.is_authenticated:
-        return redirect(url_for('auth.login'))
-    
-    # Get notifications ordered by timestamp
-    notifications = Notification.query.filter_by(user_id=current_user.id).order_by(Notification.timestamp.desc()).all()
-    
-    # Mark all unread notifications as read
-    for notification in notifications:
-        if not notification.is_read:
-            notification.is_read = True
-    db.session.commit()
-    
-    return render_template('main/notifications.html', notifications=notifications)

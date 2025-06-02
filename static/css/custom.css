@@ -325,3 +325,81 @@
     margin-bottom: 10px; /* Add some space below the label */
     font-weight: bold; /* Make the text bold */
 }
+
+/* Add a class to change copyright text color when authenticated */
+.authenticated-user .footer-copyright {
+  color: black !important; /* Use !important to ensure override */
+}
+
+/* Ensure vertical alignment of search bar and button */
+.form-row .form-control-lg, .form-row .btn-lg {
+    vertical-align: middle;
+}
+
+/* Ensure search bar and button have consistent height and are aligned */
+.form-row {
+    align-items: center; /* Vertically align items in the flex container */
+}
+
+.form-row .form-control-lg, .form-row .btn-lg {
+    /* Remove previous vertical-align if it's causing issues and set explicit height */
+    vertical-align: unset; /* Reset or remove the previous vertical-align */
+    height: calc(2.875rem + 2px); /* Match the calculated height of form-control-lg in Bootstrap 5 */
+}
+
+/* Styles for the favorite button to ensure visibility and appearance */
+.favorite-button {
+    border: none !important; /* Rimuove il bordo di default del pulsante */
+    background-color: transparent !important; /* Rimuove lo sfondo di default */
+    padding: .25rem .5rem; /* Ajusta il padding se necessario per allinearlo */
+    display: inline-flex !important; /* Ensure it participates in layout and is a flex container */
+    align-items: center; /* Center icon vertically within the button */
+    justify-content: center; /* Center icon horizontally within the button */
+    min-width: 30px !important; /* Ensure a minimum width */
+    min-height: 30px !important; /* Ensure a minimum height */
+    /* Add other styles as needed for appearance */
+}
+
+.favorite-button:not(.favorited) {
+    opacity: 1 !important; /* Ensure non-favorited button is always visible */
+    visibility: visible !important; /* Ensure non-favorited button is always visible */
+}
+
+/* Ensure outline star is always visible and has the correct color when not favorited */
+.favorite-button:not(.favorited) i.fa-star-o {
+    opacity: 1 !important; /* Ensure icon is always visible */
+    visibility: visible !important; /* Ensure icon is always visible */
+    color: var(--bs-secondary) !important; /* Default color for non-favorited star (outline) */
+}
+
+.favorite-button.favorited i.fa-star {
+    color: var(--bs-warning) !important; /* Color for favorited star (filled) */
+}
+
+/* Fix for btn-outline-secondary border color not appearing */
+.btn-outline-secondary {
+    border-color: var(--bs-btn-border-color) !important; /* Use the variable defined by Bootstrap */
+    /* Ensure text color is also correct - Removed to allow hover state */
+    /* color: var(--bs-btn-color) !important; */
+}
+
+/* Remove the temporary debugging styles for favorite button */
+/* .favorite-button {
+    border: 3px solid red !important;
+    background-color: yellow !important;
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    min-width: 30px !important;
+    min-height: 30px !important;
+} */
+
+/* Add this rule to ensure btn-outline-secondary has a visible border on hover */
+/* Removed previous temporary fix that caused hover issues */
+/*
+.btn-outline-secondary:hover {
+    color: var(--bs-btn-hover-color);
+    background-color: var(--bs-btn-hover-bg);
+    border-color: var(--bs-btn-hover-border-color);
+}
+*/

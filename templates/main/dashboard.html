@@ -5,93 +5,140 @@
 {% block content %}
 <div class="container py-5">
   <!-- Welcome Section -->
-  <div class="row mb-5">
-    <div class="col-12">
+  <div class="row mb-5 justify-content-center">
+    <div class="col-12 text-center">
       <h1 class="display-4 fw-bold mb-3">Welcome to StudyHub, {{ current_user.first_name }}!</h1>
       <p class="lead text-muted">Your personal study companion. Here's how to make the most of StudyHub:</p>
     </div>
   </div>
 
-  <!-- Navigation Guide -->
-  <div class="row g-4">
-    <!-- Upload Section -->
-    <div class="col-md-6">
-      <div class="card h-100 border-0 shadow-sm">
-        <div class="card-body p-4">
-          <div class="d-flex align-items-center mb-3">
-            <i class="fas fa-upload fa-2x text-primary me-3"></i>
-            <h3 class="h4 mb-0">Upload</h3>
+  <!-- Navigation Guide (3x3 Grid) -->
+  <div class="row g-4 justify-content-center">
+    
+    {# Row 1 #}
+    <div class="row g-4 w-100"> {# Use w-100 to make this row take full width of its parent column #}
+      {# Row 1, Col 1: Upload #}
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body p-4 text-center">
+            <div class="d-flex align-items-center justify-content-center mb-3">
+              <i class="fas fa-upload fa-2x text-primary me-3"></i>
+              <h3 class="h4 mb-0">Upload</h3>
+            </div>
+            <p class="text-muted mb-3">Share your study materials with the community:</p>
+            <ul class="list-unstyled">
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Upload lecture notes, summaries, and study guides</li>
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Add detailed descriptions and tags</li>
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Organize by course and subject</li>
+            </ul>
+            <a href="{{ url_for('upload.upload_document') }}" class="btn btn-primary mt-3">Start Uploading</a>
           </div>
-          <p class="text-muted mb-3">Share your study materials with the community:</p>
-          <ul class="list-unstyled">
-            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Upload lecture notes, summaries, and study guides</li>
-            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Add detailed descriptions and tags</li>
-            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Organize by course and subject</li>
-          </ul>
-          <a href="{{ url_for('upload.upload_document') }}" class="btn btn-primary mt-3">Start Uploading</a>
+        </div>
+      </div>
+      
+      {# Row 1, Col 2: Empty #}
+      <div class="col-md-4">
+        {# This column is intentionally left blank #}
+      </div>
+      
+      {# Row 1, Col 3: Browse #}
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body p-4 text-center">
+            <div class="d-flex align-items-center justify-content-center mb-3">
+              <i class="fas fa-search fa-2x text-primary me-3"></i>
+              <h3 class="h4 mb-0">Browse</h3>
+            </div>
+            <p class="text-muted mb-3">Discover study materials from other students:</p>
+            <ul class="list-unstyled">
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Search by course, subject, or keyword</li>
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Filter by university or author</li>
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Save your favorite materials</li>
+            </ul>
+            <a href="{{ url_for('view.search') }}" class="btn btn-primary mt-3">Start Browsing</a>
+          </div>
         </div>
       </div>
     </div>
-
-    <!-- Browse Section -->
-    <div class="col-md-6">
-      <div class="card h-100 border-0 shadow-sm">
-        <div class="card-body p-4">
-          <div class="d-flex align-items-center mb-3">
-            <i class="fas fa-search fa-2x text-primary me-3"></i>
-            <h3 class="h4 mb-0">Browse</h3>
+    
+    {# Row 2 #}
+    <div class="row g-4 w-100"> {# Use w-100 to make this row take full width of its parent column #}
+      {# Row 2, Col 1: Empty #}
+      <div class="col-md-4">
+        {# This column is intentionally left blank #}
+      </div>
+      
+      {# Row 2, Col 2: Profile (Centered) #}
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body p-4 text-center">
+            <div class="d-flex align-items-center justify-content-center mb-3">
+              <i class="fas fa-user-circle fa-2x text-primary me-3"></i>
+              <h3 class="h4 mb-0">Profile</h3>
+            </div>
+            <p class="text-muted mb-3">Manage your StudyHub account:</p>
+            <ul class="list-unstyled">
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>View your uploaded documents</li>
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Access saved materials</li>
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Update your profile information</li>
+            </ul>
+            <a href="{{ url_for('auth.profile') }}" class="btn btn-primary mt-3">View Profile</a>
           </div>
-          <p class="text-muted mb-3">Discover study materials from other students:</p>
-          <ul class="list-unstyled">
-            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Search by subject, course, or keywords</li>
-            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Filter by document type and rating</li>
-            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Save your favorite materials</li>
-          </ul>
-          <a href="{{ url_for('view.search') }}" class="btn btn-primary mt-3">Start Browsing</a>
+        </div>
+      </div>
+      
+      {# Row 2, Col 3: Empty #}
+      <div class="col-md-4">
+        {# This column is intentionally left blank #}
+      </div>
+    </div>
+    
+    {# Row 3 #}
+    <div class="row g-4 w-100"> {# Use w-100 to make this row take full width of its parent column #}
+      {# Row 3, Col 1: Form #}
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body p-4 text-center">
+            <div class="d-flex align-items-center justify-content-center mb-3">
+              <i class="fas fa-comments fa-2x text-primary me-3"></i>
+              <h3 class="h4 mb-0">Form</h3>
+            </div>
+            <p class="text-muted mb-3">Ask questions and get help:</p>
+            <ul class="list-unstyled">
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Post your questions</li>
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Get answers from the community</li>
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Help others with their questions</li>
+            </ul>
+            <a href="{{ url_for('form.ask_question') }}" class="btn btn-primary mt-3">Ask a Question</a>
+          </div>
+        </div>
+      </div>
+      
+      {# Row 3, Col 2: Empty #}
+      <div class="col-md-4">
+        {# This column is intentionally left blank #}
+      </div>
+      
+      {# Row 3, Col 3: Favorites #}
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body p-4 text-center">
+            <div class="d-flex align-items-center justify-content-center mb-3">
+              <i class="fas fa-star fa-2x text-primary me-3"></i>
+              <h3 class="h4 mb-0">Favorites</h3>
+            </div>
+            <p class="text-muted mb-3">Manage your saved documents:</p>
+            <ul class="list-unstyled">
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>View your favorite documents</li>
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Organize your saved study materials</li>
+            </ul>
+            <a href="{{ url_for('view.favorites') }}" class="btn btn-primary mt-3">View Favorites</a>
+          </div>
         </div>
       </div>
     </div>
-
-    <!-- Form Section -->
-    <div class="col-md-6">
-      <div class="card h-100 border-0 shadow-sm">
-        <div class="card-body p-4">
-          <div class="d-flex align-items-center mb-3">
-            <i class="fas fa-comments fa-2x text-primary me-3"></i>
-            <h3 class="h4 mb-0">Form</h3>
-          </div>
-          <p class="text-muted mb-3">Ask questions and get help from the community:</p>
-          <ul class="list-unstyled">
-            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Post questions about your studies</li>
-            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Get answers from peers and experts</li>
-            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Participate in discussions</li>
-          </ul>
-          <a href="{{ url_for('form.ask_question') }}" class="btn btn-primary mt-3">Ask a Question</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Profile Section -->
-    <div class="col-md-6">
-      <div class="card h-100 border-0 shadow-sm">
-        <div class="card-body p-4">
-          <div class="d-flex align-items-center mb-3">
-            <i class="fas fa-user-circle fa-2x text-primary me-3"></i>
-            <h3 class="h4 mb-0">Profile</h3>
-          </div>
-          <p class="text-muted mb-3">Manage your StudyHub account:</p>
-          <ul class="list-unstyled">
-            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>View your uploaded documents</li>
-            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Access saved materials</li>
-            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Update your profile information</li>
-          </ul>
-          <a href="{{ url_for('auth.profile') }}" class="btn btn-primary mt-3">View Profile</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Quick Stats -->
+    
+  </div>{# End of the main navigation guide row #}
 
   <!-- Effective Study Methodologies Section -->
   <div class="row mt-5">
@@ -223,6 +270,24 @@
                     <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Choose a familiar place (your home, school, etc.)</li>
                     <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Associate information with specific locations</li>
                     <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Create vivid mental images for each item</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Flash Cards -->
+            <div class="col-md-6">
+              <div class="card h-100 border-0 shadow-sm bg-warning text-white">
+                <div class="card-body">
+                  <h4 class="card-title h5 mb-3 text-white">
+                    <i class="fas fa-clone text-dark me-2"></i>
+                    Flash Cards
+                  </h4>
+                  <p class="card-text text-white">A powerful tool for active recall and spaced repetition:</p>
+                  <ul class="list-unstyled text-white">
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Create cards with questions on one side and answers on the other</li>
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Use them for quick review sessions</li>
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Perfect for memorizing definitions, formulas, and key concepts</li>
                   </ul>
                 </div>
               </div>

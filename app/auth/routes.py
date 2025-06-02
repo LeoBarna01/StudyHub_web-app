@@ -182,7 +182,20 @@ def profile():
     # Determine the correct image URL to display
     image_file = url_for('static', filename='profile_pics/' + (current_user.profile_image if current_user.profile_image else 'default_avatar.jpg'))
     
-    return render_template('auth/profile.html', title='Profile', form=form, image_file=image_file)
+    # Load user's uploaded documents
+    user_uploads = current_user.documents.all()
+
+    # Load user's favorited documents
+    user_favorites = current_user.favorites.all()
+
+    return render_template(
+        'auth/profile.html',
+        title='Profile',
+        form=form,
+        image_file=image_file,
+        my_uploads=user_uploads, # Pass uploaded documents
+        favorites=user_favorites # Pass favorited documents
+    )
 
 
 # Function to save resized image (Optional, but recommended for efficiency)

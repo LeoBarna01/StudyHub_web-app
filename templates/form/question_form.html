@@ -19,7 +19,7 @@
             <div class="mb-3">
               {{ form.subject.label(class="form-label") }}
               {{ form.subject(
-                  class="form-select" ~ (form.subject.errors and ' is-invalid' or '')
+                  class="form-control" ~ (form.subject.errors and ' is-invalid' or '')
                 ) }}
               {% for err in form.subject.errors %}
                 <div class="invalid-feedback">{{ err }}</div>
