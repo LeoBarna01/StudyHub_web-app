@@ -4,6 +4,7 @@ from app.view import bp
 from app.models import Document, Category
 from app.view.utils import apply_filters, get_recent_documents, get_popular_documents
 from app import db
+import os
 
 @bp.route('/', methods=['GET'])
 def search():
@@ -117,3 +118,40 @@ def favorites():
     """
     user_favorites_docs = current_user.favorites.all()
     return render_template('view/favorites.html', favorites=user_favorites_docs)
+
+@bp.route('/api/favorites')
+@login_required
+def api_favorites():
+    """Return the user's favorite documents as JSON."""
+    user_favorites_docs = current_user.favorites.all()
+    return jsonify([
+        {
+            'id': doc.id,
+            'title': doc.title,
+            'course': doc.course,
+            'institute': doc.institute,
+            'subject': doc.subject,
+            'author': f"{doc.author.first_name} {doc.author.last_name}" if doc.author else "",
+            'category': doc.category.name if doc.category else "",
+            'downloads': doc.downloads
+        }
+        for doc in user_favorites_docs
+    ])
+
+@bp.route('/delete_document/<int:doc_id>', methods=['POST'])
+@login_required
+def delete_document(doc_id):
+    doc = Document.query.get_or_404(doc_id)
+    if doc.user_id != current_user.id:
+        return jsonify({'status': 'error', 'message': 'You are not authorized to delete this document.'}), 403
+    try:
+        # Elimina il file fisico se esiste
+        file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], doc.filename)
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        db.session.delete(doc)
+        db.session.commit()
+        return jsonify({'status': 'success', 'message': 'Document deleted.'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'status': 'error', 'message': str(e)}), 500

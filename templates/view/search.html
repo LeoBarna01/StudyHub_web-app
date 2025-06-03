@@ -120,34 +120,42 @@
           <a href="{{ url_for('view.favorites') }}" class="text-decoration-none text-dark">
             <h3>Your Favorites</h3>
           </a>
-          <ul class="list-group" id="yourFavoritesList">
+          <div class="row g-4" id="yourFavoritesList">
             {% if user_favorites_docs %}
               {% for doc in user_favorites_docs %}
-                <li class="list-group-item">
-                   <strong>{{ doc.title }}</strong><br>
-                  <small class="text-muted">
-                    {{ doc.course }}{% if doc.institute %}, {{ doc.institute }}{% endif %}{% if doc.year %}, {{ doc.year }}{% endif %}
-                    {% if doc.subject %} • {{ doc.subject }}{% endif %}
-                    {% if doc.author %} • Uploaded by {{ doc.author.first_name }} {{ doc.author.last_name }}{% endif %}
-                    • {{ doc.downloads }} downloads
-                  </small>
-                  {# Preview button for Favorites #}
-                  <button class="btn btn-sm btn-outline-secondary preview-button" data-doc-id="{{ doc.id }}">
-                    Preview
-                  </button>
-                  <button class="btn btn-sm btn-outline-secondary favorite-button favorited" 
-                          data-doc-id="{{ doc.id }}"
-                          title="Remove from favorites">
-                    <i class="fas fa-star"></i>
-                  </button>
-                </li>
+                <div class="col-md-6">
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-8">
+                          <strong>{{ doc.title }}</strong><br>
+                          <small class="text-muted">
+                            {{ doc.course }}{% if doc.institute %} @ {{ doc.institute }}{% endif %}{% if doc.year %}, {{ doc.year }}{% endif %}
+                            {% if doc.subject %} • {{ doc.subject }}{% endif %}
+                            {% if doc.author %} • Uploaded by {{ doc.author.first_name }} {{ doc.author.last_name }}{% endif %}
+                          </small>
+                        </div>
+                        <div class="col-md-4 d-flex flex-column align-items-end justify-content-center">
+                          <div class="d-flex gap-2 mt-2 mt-md-0">
+                            <button class="btn btn-sm btn-outline-secondary preview-button" data-doc-id="{{ doc.id }}">Preview</button>
+                            <button class="btn btn-sm btn-outline-secondary favorite-button favorited" data-doc-id="{{ doc.id }}" title="Remove from favorites"><i class="fas fa-star"></i></button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               {% endfor %}
             {% else %}
-              <li class="list-group-item text-muted">
-                No favorite documents yet.
-              </li>
+              <div class="col-12">
+                <div class="card h-100">
+                  <div class="card-body text-muted text-center">
+                    No favorite documents yet.
+                  </div>
+                </div>
+              </div>
             {% endif %}
-          </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -178,207 +186,189 @@
   </div>
 </div>
 
+<style>
+#yourFavoritesList {
+    max-height: 250px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+#yourFavoritesList::-webkit-scrollbar {
+    width: 8px;
+}
+#yourFavoritesList::-webkit-scrollbar-thumb {
+    background: #e0c96d;
+    border-radius: 4px;
+}
+#yourFavoritesList::-webkit-scrollbar-track {
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+</style>
+
 {% endblock %}
 
 {% block scripts %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Select both favorite buttons (filled star) and add-to-favorites buttons
-    const favoriteButtons = document.querySelectorAll('.favorite-button');
-    const addToFavoritesButtons = document.querySelectorAll('.add-to-favorites-button');
+function updateFavoritesList() {
+    fetch('/view/api/favorites')
+        .then(response => response.json())
+        .then(favorites => {
+            const favoritesList = document.getElementById('yourFavoritesList');
+            if (!favoritesList) return;
 
-    const favoritesList = document.querySelector('#yourFavoritesList'); // Get the Your Favorites UL element
-    const noFavoritesMessage = favoritesList ? favoritesList.closest('.col-md-12').querySelector('.text-muted') : null; // Get the 'No favorites yet' message
+            favoritesList.innerHTML = '';
 
-    // Combine both types of buttons for event listening
-    const allFavoriteToggleButtons = [...favoriteButtons, ...addToFavoritesButtons];
+            if (favorites.length === 0) {
+                favoritesList.innerHTML = `<div class="col-12">
+                    <div class="card h-100">
+                        <div class="card-body text-muted text-center">
+                            No favorite documents yet.
+                        </div>
+                    </div>
+                </div>`;
+                return;
+            }
 
-    allFavoriteToggleButtons.forEach(button => {
-        button.addEventListener('click', function() {
+            favorites.forEach(doc => {
+                const card = document.createElement('div');
+                card.className = 'col-md-6';
+                card.innerHTML = `
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <strong>${doc.title}</strong><br>
+                                    <small class="text-muted">
+                                        ${doc.course || ''}${doc.institute ? ' @ ' + doc.institute : ''}
+                                        ${doc.subject ? ' • ' + doc.subject : ''}
+                                        ${doc.author ? ' • Uploaded by ' + doc.author : ''}
+                                        ${doc.category ? ' • ' + doc.category : ''}
+                                    </small>
+                                </div>
+                                <div class="col-md-4 d-flex flex-column align-items-end justify-content-center">
+                                    <div class="d-flex gap-2 mt-2 mt-md-0">
+                                        <button class="btn btn-sm btn-outline-secondary preview-button" data-doc-id="${doc.id}">Preview</button>
+                                        <button class="btn btn-sm btn-outline-secondary favorite-button favorited" data-doc-id="${doc.id}" title="Remove from favorites"><i class="fas fa-star"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                favoritesList.appendChild(card);
+            });
+
+            // Ri-collega i listener alle nuove stelle e preview
+            attachFavoriteListeners();
+            attachPreviewListeners();
+        })
+        .catch(error => {
+            console.error('Error fetching favorites:', error);
+        });
+}
+
+function attachFavoriteListeners() {
+    document.querySelectorAll('.favorite-button, .add-to-favorites-button').forEach(button => {
+        // Rimuovo eventuali listener esistenti
+        button.replaceWith(button.cloneNode(true));
+    });
+
+    document.querySelectorAll('.favorite-button, .add-to-favorites-button').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
             const docId = this.dataset.docId;
-            const currentButton = this; // Reference to the button that was clicked
-            const listItem = this.closest('li.list-group-item'); // Get the parent list item
-
             fetch(`/view/toggle_favorite/${docId}`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
+                headers: { 'Content-Type': 'application/json' }
             })
             .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    // Find the container div for the buttons in the list item
-                    const buttonContainer = currentButton.closest('.d-flex.gap-2');
-
-                    if (data.is_favorited) {
-                        // Remove the current button
-                        currentButton.remove();
-
-                        // Create the new favorited button (filled star)
-                        const favoritedButtonHTML = `
-                            <button class="btn btn-sm btn-outline-secondary favorite-button favorited" 
-                                    data-doc-id="${docId}"
-                                    title="Remove from favorites">
-                              <i class="fas fa-star"></i>
-                            </button>
-                        `;
-                        buttonContainer.insertAdjacentHTML('beforeend', favoritedButtonHTML);
-
-                         // Re-attach event listener to the newly created button
-                         const newFavoritedButton = buttonContainer.querySelector('.favorite-button.favorited[data-doc-id="' + docId + '"]');
-                         if (newFavoritedButton) {
-                              newFavoritedButton.addEventListener('click', arguments.callee); // Re-attach the same click handler
-                         }
-
-
-                        // Add the document to the 'Your Favorites' list dynamically
-                        if (favoritesList && listItem) {
-                            const newFavoriteItem = listItem.cloneNode(true);
-                             // Ensure the button in the cloned item is the favorited version
-                            const buttonInClone = newFavoriteItem.querySelector('.add-to-favorites-button, .favorite-button');
-                            if(buttonInClone) { // Replace or update the button in the clone
-                                const newButtonHTML = `
-                                    <button class="btn btn-sm btn-outline-secondary favorite-button favorited" 
-                                            data-doc-id="${docId}"
-                                            title="Remove from favorites">
-                                      <i class="fas fa-star"></i>
-                                    </button>
-                                `;
-                                buttonInClone.outerHTML = newButtonHTML; // Replace the button HTML
-                            }
-
-                            // Ensure the event listener is attached to the new button in the cloned item
-                            const newFavButtonInClone = newFavoriteItem.querySelector('.favorite-button.favorited[data-doc-id="' + docId + '"]');
-                            if(newFavButtonInClone) {
-                                newFavButtonInClone.addEventListener('click', arguments.callee); // Re-attach handler
-                            }
-
-                            // Append the new item to the favorites list
-                            favoritesList.appendChild(newFavoriteItem);
-
-                            // Hide the 'No favorites yet' message if it's visible
-                            if (noFavoritesMessage && !noFavoritesMessage.classList.contains('d-none')) {
-                                noFavoritesMessage.classList.add('d-none');
-                            }
-                        }
-
-                    } else { // Document was removed from favorites
-                        // Remove the current button
-                        currentButton.remove();
-
-                        // Create the new add-to-favorites button
-                         const addToFavoritesButtonHTML = `
-                            <button class="btn btn-sm btn-outline-primary add-to-favorites-button" 
-                                    data-doc-id="${docId}"
-                                    title="Add to favorites">
-                              Add to Favorites
-                            </button>
-                         `;
-                         buttonContainer.insertAdjacentHTML('beforeend', addToFavoritesButtonHTML);
-
-                          // Re-attach event listener to the newly created button
-                         const newAddToFavButton = buttonContainer.querySelector('.add-to-favorites-button[data-doc-id="' + docId + '"]');
-                         if (newAddToFavButton) {
-                               newAddToFavButton.addEventListener('click', arguments.callee); // Re-attach the same click handler
-                         }
-
-
-                        // Remove the document from the 'Your Favorites' list dynamically
-                        if (favoritesList) {
-                            const favoriteItems = favoritesList.querySelectorAll('li.list-group-item');
-                            favoriteItems.forEach(item => {
-                                const favButton = item.querySelector('.favorite-button, .add-to-favorites-button'); // Find either button type
-                                if (favButton && favButton.dataset.docId === docId) {
-                                    item.remove();
-                                }
-                            });
-
-                            // Show the 'No favorites yet' message if the list is now empty
-                            if (favoritesList.querySelectorAll('li.list-group-item').length === 0) {
-                                if (noFavoritesMessage) {
-                                     noFavoritesMessage.classList.remove('d-none');
-                                }
-                            } else {
-                                // Ensure message is hidden if not empty (in case it was somehow visible)
-                                if (noFavoritesMessage && !noFavoritesMessage.classList.contains('d-none')) {
-                                     noFavoritesMessage.classList.add('d-none');
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    console.error('Error toggling favorite status:', data.message);
-                    // Optionally revert button state or show error to user
-                }
+            .then(() => {
+                updateFavoritesList();
+                updateResultStars();
             })
             .catch(error => {
-                console.error('Error during fetch:', error);
-                // Optionally revert button state or show error to user
+                console.error('Error toggling favorite:', error);
             });
         });
     });
+}
 
-     // Add an ID to the Your Favorites UL for easy selection (already done in HTML)
-    // if(favoritesList) {
-    //     favoritesList.id = 'yourFavoritesList';
-    // }
-
-    // Handle Preview Button Clicks
+function attachPreviewListeners() {
     const previewButtons = document.querySelectorAll('.preview-button');
     const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
     const previewFrame = document.getElementById('documentPreviewFrame');
+    const downloadButton = document.getElementById('previewDownloadButton');
 
     previewButtons.forEach(button => {
         button.addEventListener('click', function() {
             const docId = this.dataset.docId;
-            // Construct the URL for the new preview route
             const previewUrl = `/view/preview/${docId}`;
-
-            // Set the iframe source and show the modal
             previewFrame.src = previewUrl;
+            downloadButton.href = `/view/download/${docId}`;
             previewModal.show();
         });
     });
 
-    // Clear iframe source when modal is closed to stop media
-    document.getElementById('previewModal').addEventListener('hidden.bs.modal', function () {
+    // Gestione chiusura modal
+    const modal = document.getElementById('previewModal');
+    modal.addEventListener('hidden.bs.modal', function () {
         previewFrame.src = '';
-        // Clear the download button href as well
-        document.getElementById('previewDownloadButton').href = '#';
+        downloadButton.href = '#';
+        // Rimuovo eventuali classi di backdrop
+        document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
     });
+}
 
-    // Update the download button href when the modal is shown
-    document.getElementById('previewModal').addEventListener('show.bs.modal', function (event) {
-        // The button that triggered the modal
-        const button = event.relatedTarget;
-        const docId = button.dataset.docId;
-        const downloadButton = document.getElementById('previewDownloadButton');
-        // Construct the download URL using the docId
-        downloadButton.href = `/view/download/${docId}`;
-    });
+function updateResultStars() {
+    fetch('/view/api/favorites')
+        .then(response => response.json())
+        .then(favorites => {
+            const favoriteIds = favorites.map(doc => doc.id.toString());
+            document.querySelectorAll('.favorite-button, .add-to-favorites-button').forEach(button => {
+                const docId = button.dataset.docId;
+                if (favoriteIds.includes(docId)) {
+                    button.classList.add('favorite-button', 'favorited');
+                    button.classList.remove('add-to-favorites-button', 'btn-outline-primary');
+                    button.classList.add('btn-outline-secondary');
+                    button.innerHTML = '<i class="fas fa-star"></i>';
+                    button.title = "Remove from favorites";
+                } else {
+                    button.classList.remove('favorite-button', 'favorited', 'btn-outline-secondary');
+                    button.classList.add('add-to-favorites-button', 'btn-outline-primary');
+                    button.innerHTML = 'Add to Favorites';
+                    button.title = "Add to favorites";
+                }
+            });
+            attachFavoriteListeners();
+        })
+        .catch(error => {
+            console.error('Error updating stars:', error);
+        });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    attachFavoriteListeners();
+    updateFavoritesList();
+    updateResultStars();
+    attachPreviewListeners();
 
     // Handle Full Screen button click
     const fullscreenButton = document.getElementById('fullscreenButton');
     const previewModalDialog = document.querySelector('#previewModal .modal-dialog');
 
     fullscreenButton.addEventListener('click', function() {
-        // Toggle a class on the modal dialog for styling
         previewModalDialog.classList.toggle('modal-fullscreen-mode');
-
-        // Toggle icon and text on the button
         if (previewModalDialog.classList.contains('modal-fullscreen-mode')) {
             this.innerHTML = '<i class="fas fa-compress me-2"></i>Exit Full Screen';
-            // You might need to adjust iframe size here if not handled purely by CSS
         } else {
             this.innerHTML = '<i class="fas fa-expand me-2"></i>Full Screen';
-             // Reset iframe size if necessary
         }
-        // Optional: Adjust modal body/iframe size based on fullscreen state
-        // The CSS rules below will handle the sizing based on the class toggle
     });
 
-    // Add CSS for fullscreen mode (can be moved to custom.css)
+    // Add CSS for fullscreen mode
     const style = document.createElement('style');
     style.innerHTML = `
         .modal-fullscreen-mode {
@@ -393,25 +383,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         .modal-fullscreen-mode .modal-body {
             flex-grow: 1 !important;
-            overflow: hidden !important; /* Prevent scrollbars in modal body */
-            display: flex !important; /* Use flex to manage iframe size */
-            flex-direction: column; /* Stack children vertically */
+            overflow: hidden !important;
+            display: flex !important;
+            flex-direction: column;
         }
         .modal-fullscreen-mode .modal-body .embed-responsive {
-             flex-grow: 1 !important;
-             height: 100% !important; /* Make embed-responsive take full height */
+            flex-grow: 1 !important;
+            height: 100% !important;
         }
         .modal-fullscreen-mode .modal-body iframe {
             width: 100% !important;
-            height: 100% !important; /* Make iframe take full height of embed-responsive */
+            height: 100% !important;
         }
-         .modal-fullscreen-mode .modal-header, 
-         .modal-fullscreen-mode .modal-footer {
-            flex-shrink: 0; /* Prevent header/footer from shrinking */
-         }
+        .modal-fullscreen-mode .modal-header, 
+        .modal-fullscreen-mode .modal-footer {
+            flex-shrink: 0;
+        }
     `;
     document.head.appendChild(style);
-
 });
 </script>
 {% endblock %}

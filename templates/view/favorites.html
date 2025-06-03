@@ -4,143 +4,170 @@
 {% block content %}
 <div class="container py-5 d-flex flex-column flex-grow-1">
     <h2 class="mb-4 text-center">Your Favorite Documents</h2>
-
-    {% if favorites %}
-        <ul class="list-group flex-grow-1 overflow-auto">
+    <div class="row g-4" id="yourFavoritesList">
+        {% if favorites %}
             {% for doc in favorites %}
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <div>
-                        <strong>{{ doc.title }}</strong><br>
-                        <small class="text-muted">
-                            {{ doc.course }}{% if doc.institute %}, {{ doc.institute }}{% endif %}{% if doc.year %}, {{ doc.year }}{% endif %}
-                            {% if doc.subject %} • {{ doc.subject }}{% endif %}
-                            {% if doc.author %} • Uploaded by {{ doc.author.first_name }} {{ doc.author.last_name }}{% endif %}
-                            {% if doc.category %} • {{ doc.category.name }}{% endif %}
-                        </small>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <strong>{{ doc.title }}</strong><br>
+                                    <small class="text-muted">
+                                        {{ doc.course }}{% if doc.institute %} @ {{ doc.institute }}{% endif %}{% if doc.year %}, {{ doc.year }}{% endif %}
+                                        {% if doc.subject %} • {{ doc.subject }}{% endif %}
+                                        {% if doc.author %} • Uploaded by {{ doc.author.first_name }} {{ doc.author.last_name }}{% endif %}
+                                        {% if doc.category %} • {{ doc.category.name }}{% endif %}
+                                    </small>
+                                </div>
+                                <div class="col-md-4 d-flex flex-column align-items-end justify-content-center">
+                                    <div class="d-flex gap-2 mt-2 mt-md-0">
+                                        <button class="btn btn-sm btn-outline-secondary preview-button" data-doc-id="{{ doc.id }}">Preview</button>
+                                        <button class="btn btn-sm btn-outline-secondary favorite-button favorited" data-doc-id="{{ doc.id }}" title="Remove from favorites"><i class="fas fa-star"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="d-flex gap-2">
-                        {# Preview button #}
-                        <button class="btn btn-sm btn-outline-secondary preview-button" data-doc-id="{{ doc.id }}">
-                          Preview
-                        </button>
-                        <a href="{{ url_for('view.download', doc_id=doc.id) }}"
-                           class="btn btn-sm btn-outline-secondary">
-                          Download
-                        </a>
-                         {# Favorite button (filled star) - allows removing from favorites #}
-                        <button class="btn btn-sm btn-outline-secondary favorite-button favorited" 
-                                data-doc-id="{{ doc.id }}"
-                                title="Remove from favorites">
-                          <i class="fas fa-star"></i>
-                        </button>
-                    </div>
-                </li>
+                </div>
             {% endfor %}
-        </ul>
-    {% else %}
-        <p class="text-muted text-center">You have not added any documents to your favorites yet.</p>
-    {% endif %}
+        {% else %}
+            <div class="col-12">
+                <div class="card h-100">
+                    <div class="card-body text-muted text-center">
+                        No favorite documents yet.
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
 </div>
 
-<!-- Document Preview Modal (copy from search.html) -->
+<!-- Document Preview Modal -->
 <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="previewModalLabel">Document Preview</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title w-100 text-center" id="previewModalLabel">Document Preview</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe id="documentPreviewFrame" class="embed-responsive-item" style="width: 100%; height: 500px;" src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+         <p class="text-muted mt-3 text-center">If the preview is not working, try downloading the document.</p>
+      </div>
+       <div class="modal-footer d-flex justify-content-between">
+            <div class="w-100 text-center">
+                <button type="button" class="btn btn-secondary" id="fullscreenButton">Full Screen</button>
             </div>
-            <div class="modal-body">
-                <div class="embed-responsive embed-responsive-16by9">
-                    <iframe id="documentPreviewFrame" class="embed-responsive-item" style="width: 100%; height: 500px;" src="" frameborder="0" allowfullscreen></iframe>
-                </div>
-                <p class="text-muted mt-3 text-center">If the preview is not working, try downloading the document.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
+            <a href="#" id="previewDownloadButton" class="btn btn-primary position-absolute end-0 me-3">Download</a>
         </div>
     </div>
+  </div>
 </div>
 
 {% endblock %}
 
 {% block scripts %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-
-    // Handle favorite button clicks to remove from favorites
-    // Use event delegation because list items are added/removed dynamically
-    document.getElementById('yourFavoritesList').addEventListener('click', function(event) {
-        const targetButton = event.target.closest('.favorite-button.favorited');
-        if (!targetButton) return; // Ignore clicks not on a favorited button
-
-        const docId = targetButton.dataset.docId;
-        const listItem = targetButton.closest('li.list-group-item'); // Get the parent list item
-
-        fetch(`/view/toggle_favorite/${docId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success' && !data.is_favorited) {
-                // Document was successfully removed from favorites
-                if (listItem) {
-                    listItem.remove(); // Remove the list item from the display
-                }
-                // Check if the list is now empty and show the message if needed
-                const favoritesList = document.getElementById('yourFavoritesList');
-                if (favoritesList && favoritesList.querySelectorAll('li.list-group-item').length === 0) {
-                    const container = favoritesList.closest('.container');
-                    if (container) {
-                        let noFavoritesMessage = container.querySelector('p.text-muted.text-center');
-                        if (!noFavoritesMessage) {
-                             // Create message if it doesn't exist
-                            noFavoritesMessage = document.createElement('p');
-                            noFavoritesMessage.classList.add('text-muted', 'text-center');
-                            noFavoritesMessage.textContent = 'You have not added any documents to your favorites yet.';
-                             // Find a suitable place to insert the message, e.g., before the ul or at the end of the container
-                             favoritesList.parentNode.insertBefore(noFavoritesMessage, favoritesList);
-                        }
-                        noFavoritesMessage.classList.remove('d-none');
-                    }
-                }
-            } else if (data.status === 'success' && data.is_favorited) {
-                // This case shouldn't happen for a 'favorited' button click, but handle defensively
-                 console.warn('Unexpected: Document reported as favorited after clicking a favorited button.');
-            } else {
-                console.error('Error toggling favorite status:', data.message);
-                // Optionally show error to user
-            }
-        })
-        .catch(error => {
-            console.error('Error during fetch:', error);
-            // Optionally show error to user
+function attachFavoriteListeners() {
+    document.querySelectorAll('.favorite-button, .add-to-favorites-button').forEach(button => {
+        button.replaceWith(button.cloneNode(true));
+    });
+    document.querySelectorAll('.favorite-button, .add-to-favorites-button').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const docId = this.dataset.docId;
+            fetch(`/view/toggle_favorite/${docId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(() => {
+                updateFavoritesList();
+            })
+            .catch(error => {
+                console.error('Error toggling favorite:', error);
+            });
         });
     });
+}
 
-    // Handle Preview Button Clicks (copy from search.html)
+function attachPreviewListeners() {
     const previewButtons = document.querySelectorAll('.preview-button');
     const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
     const previewFrame = document.getElementById('documentPreviewFrame');
-
     previewButtons.forEach(button => {
         button.addEventListener('click', function() {
             const docId = this.dataset.docId;
-            const previewUrl = `/view/preview/${docId}`; // URL for the new preview route
-            previewFrame.src = previewUrl; // Set the iframe source
-            previewModal.show(); // Show the modal
+            const previewUrl = `/view/preview/${docId}`;
+            previewFrame.src = previewUrl;
+            previewModal.show();
         });
     });
-
-    // Clear iframe source when modal is closed to stop media
     document.getElementById('previewModal').addEventListener('hidden.bs.modal', function () {
         previewFrame.src = '';
     });
+}
 
+function updateFavoritesList() {
+    fetch('/view/api/favorites')
+        .then(response => response.json())
+        .then(favorites => {
+            const favoritesList = document.getElementById('yourFavoritesList');
+            if (!favoritesList) return;
+            favoritesList.innerHTML = '';
+            if (favorites.length === 0) {
+                favoritesList.innerHTML = `<div class="col-12">
+                    <div class="card h-100">
+                        <div class="card-body text-muted text-center">
+                            No favorite documents yet.
+                        </div>
+                    </div>
+                </div>`;
+                return;
+            }
+            favorites.forEach(doc => {
+                const card = document.createElement('div');
+                card.className = 'col-md-6';
+                card.innerHTML = `
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <strong>${doc.title}</strong><br>
+                                    <small class="text-muted">
+                                        ${doc.course || ''}${doc.institute ? ' @ ' + doc.institute : ''}
+                                        ${doc.subject ? ' • ' + doc.subject : ''}
+                                        ${doc.author ? ' • Uploaded by ' + doc.author : ''}
+                                        ${doc.category ? ' • ' + doc.category : ''}
+                                        • ${doc.downloads} downloads
+                                    </small>
+                                </div>
+                                <div class="col-md-4 d-flex flex-column align-items-end justify-content-center">
+                                    <div class="d-flex gap-2 mt-2 mt-md-0">
+                                        <button class="btn btn-sm btn-outline-secondary preview-button" data-doc-id="${doc.id}">Preview</button>
+                                        <button class="btn btn-sm btn-outline-secondary favorite-button favorited" data-doc-id="${doc.id}" title="Remove from favorites"><i class="fas fa-star"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                favoritesList.appendChild(card);
+            });
+            attachFavoriteListeners();
+            attachPreviewListeners();
+        })
+        .catch(error => {
+            console.error('Error fetching favorites:', error);
+        });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    attachFavoriteListeners();
+    attachPreviewListeners();
 });
 </script>
 {% endblock %} 
