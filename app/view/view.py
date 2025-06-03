@@ -1,4 +1,4 @@
-from flask import render_template, request, send_from_directory, current_app, jsonify
+from flask import render_template, request, send_from_directory, current_app, jsonify, abort, Response
 from flask_login import login_required, current_user
 from app.view import bp
 from app.models import Document, Category
@@ -78,8 +78,14 @@ def preview(doc_id):
     - Serve the file from UPLOAD_FOLDER
     Note: Security consideration - ensure files are not malicious and handle sensitive data appropriately.
     """
-    doc = Document.query.get_or_404(doc_id)
-
+    doc = Document.query.get(doc_id)
+    if not doc:
+        # Return a minimal HTML page for not found (no header, no navbar)
+        return Response(
+            '''<html><head><title>Document Not Found</title></head><body style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;background:#fffbe6;"><div style="text-align:center;"><h2 style="color:#dc3545;">Document Not Found</h2><p>The document you are trying to preview does not exist or has been removed.</p></div></body></html>''',
+            status=404,
+            mimetype='text/html'
+        )
     # For preview, we don't want to force download, so serve inline
     return send_from_directory(
         current_app.config['UPLOAD_FOLDER'],
@@ -155,3 +161,12 @@ def delete_document(doc_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({'status': 'error', 'message': str(e)}), 500
+
+@bp.route('/uploaded_documents')
+@login_required
+def uploaded_documents():
+    """
+    Pagina che mostra tutti i documenti caricati dall'utente loggato.
+    """
+    user_uploads = current_user.documents.all()
+    return render_template('view/uploaded.html', uploads=user_uploads)

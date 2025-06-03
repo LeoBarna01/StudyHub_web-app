@@ -8,9 +8,9 @@
     <div class="row flex-grow-1">
         <!-- Left Column: Image and Static Info -->
         <div class="col-md-4 d-flex flex-column">
-            <div class="card shadow-sm mb-4">
-                <div class="card-body text-center">
-                    <div class="profile-image-frame mb-3 mx-auto" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#imageModal">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center d-flex flex-column">
+                    <div class="profile-image-frame mb-3 mx-auto">
                         <!-- eslint-disable-next-line -->
                         <img id="profile-preview" src="{{ url_for('static', filename='profile_pics/' + (current_user.profile_image or 'default_avatar.jpg')) }}" class="img-fluid rounded-circle" alt="Profile Image">
                     </div>
@@ -53,6 +53,16 @@
 
                     </form>
 
+                    <!-- Notifications/Settings Placeholder -->
+                    <hr class="mt-3">
+                    <h6>Settings & Notifications</h6>
+                    <p class="text-muted small">Content for settings and notifications goes here.</p>
+
+                    <!-- Logout Button -->
+                    <div class="mt-auto">
+                        <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger w-100">Logout</a>
+                    </div>
+
                     <!-- Script to handle file input click and form submission -->
                     <script>
                         document.getElementById('update-picture-button').addEventListener('click', function() {
@@ -79,23 +89,7 @@
                             }
                         });
 
-                         // Update modal image when clicking on profile image
-                         document.querySelector('.profile-image-frame').addEventListener('click', function() {
-                             const previewSrc = document.getElementById('profile-preview').src;
-                             document.getElementById('modal-image').src = previewSrc;
-                         });
-
                     </script>
-
-                    <!-- Notifications/Settings Placeholder -->
-                    <hr>
-                    <h6>Settings & Notifications</h6>
-                    <p class="text-muted small">Content for settings and notifications goes here.</p>
-
-                    <!-- Logout Button -->
-                    <div class="mt-4">
-                        <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger w-100">Logout</a>
-                    </div>
                 </div>
             </div>
         </div>
@@ -105,7 +99,9 @@
             <!-- Uploaded Documents -->
             <div class="card shadow-sm flex-fill mb-4">
                 <div class="card-body d-flex flex-column">
-                    <h3>Uploaded documents</h3>
+                    <a href="{{ url_for('view.uploaded_documents') }}" class="text-decoration-none text-dark">
+                        <h3>Uploaded documents</h3>
+                    </a>
                     {% if my_uploads %}
                         <div class="row g-4 mt-1" id="profileUploadsList">
                             {% for doc in my_uploads %}
@@ -141,7 +137,13 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        <p class="text-muted">You haven't uploaded any documents yet.</p>
+                        <div class="col-12">
+                            <div class="card h-100">
+                                <div class="card-body text-muted text-center">
+                                    You haven't uploaded any documents yet.
+                                </div>
+                            </div>
+                        </div>
                     {% endif %}
                 </div>
             </div>
@@ -261,7 +263,7 @@
     width: 8px;
 }
 #profileFavoritesList::-webkit-scrollbar-thumb {
-    background: #e0c96d;
+    background: #000000;
     border-radius: 4px;
 }
 #profileFavoritesList::-webkit-scrollbar-track {
@@ -272,12 +274,30 @@
     width: 8px;
 }
 #profileUploadsList::-webkit-scrollbar-thumb {
-    background: #e0c96d;
+    background: #000000;
     border-radius: 4px;
 }
 #profileUploadsList::-webkit-scrollbar-track {
     background: #f8f9fa;
     border-radius: 4px;
+}
+
+/* Yellow background for outer containers */
+.card.shadow-sm.flex-fill.mb-4 {
+    background-color: #e0c96d !important;
+}
+.card.shadow-sm.flex-fill {
+    background-color: #e0c96d !important;
+}
+
+/* White titles for sections */
+.card.shadow-sm.flex-fill.mb-4 h3,
+.card.shadow-sm.flex-fill h3 {
+    color: #ffffff !important;
+}
+.card.shadow-sm.flex-fill.mb-4 a.text-dark,
+.card.shadow-sm.flex-fill a.text-dark {
+    color: #ffffff !important;
 }
 </style>
 {% endblock %}
@@ -319,9 +339,56 @@ function attachPreviewListeners() {
             const fullscreenButton = document.getElementById('fullscreenButton');
             const previewModalDialog = document.querySelector('#previewModal .modal-dialog');
 
+            // Reset modal to non-fullscreen and reset button text/icon
+            previewModalDialog.classList.remove('modal-fullscreen-mode');
+            fullscreenButton.innerHTML = '<i class="fas fa-expand me-2"></i>Full Screen';
+
             previewFrame.src = `/view/preview/${docId}`;
             downloadButton.href = `/view/download/${docId}`;
             previewModal.show();
+
+            // Add error handling for the iframe
+            previewFrame.onerror = function() {
+                previewFrame.srcdoc = `
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; font-family: Arial, sans-serif;">
+                        <h3 style="color: #dc3545;">Document Preview Error</h3>
+                        <p>The document preview is not available.</p>
+                        <p>This might be because:</p>
+                        <ul style="text-align: left;">
+                            <li>The document has been deleted</li>
+                            <li>The document is no longer accessible</li>
+                            <li>There was an error loading the document</li>
+                        </ul>
+                        <p>Please try downloading the document instead.</p>
+                    </div>
+                `;
+            };
+
+            // Add load event handler to check for 404
+            previewFrame.onload = function() {
+                try {
+                    // Check if the iframe content is a 404 page
+                    if (previewFrame.contentDocument.body.innerHTML.includes('404') || 
+                        previewFrame.contentDocument.body.innerHTML.includes('Not Found')) {
+                        previewFrame.srcdoc = `
+                            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; font-family: Arial, sans-serif;">
+                                <h3 style="color: #dc3545;">Document Not Found</h3>
+                                <p>The document you're trying to preview is no longer available.</p>
+                                <p>This might be because:</p>
+                                <ul style="text-align: left;">
+                                    <li>The document has been deleted</li>
+                                    <li>The document has been moved</li>
+                                    <li>You don't have permission to access it</li>
+                                </ul>
+                                <p>Please try downloading the document instead.</p>
+                            </div>
+                        `;
+                    }
+                } catch (e) {
+                    // Handle cross-origin errors
+                    console.log('Could not check iframe content due to cross-origin restrictions');
+                }
+            };
 
             // Rimuovo eventuali listener precedenti
             const newFullscreenButton = fullscreenButton.cloneNode(true);
@@ -500,6 +567,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 const card = deleteButtonRef.closest('.col-md-12');
                 if (card) card.remove();
                 showDeleteSuccessAlert();
+                
+                // Update all document lists across the platform
+                updateProfileFavoritesList();
+                updateProfileResultStars();
+                
+                // Dispatch a custom event to notify other components
+                const deleteEvent = new CustomEvent('documentDeleted', {
+                    detail: { documentId: deleteDocId }
+                });
+                document.dispatchEvent(deleteEvent);
             } else {
                 alert(data.message || 'Error deleting document.');
             }
@@ -513,6 +590,21 @@ document.addEventListener('DOMContentLoaded', function() {
             deleteDocId = null;
             deleteButtonRef = null;
         });
+    });
+
+    // Listen for document deletion events from other components
+    document.addEventListener('documentDeleted', function(e) {
+        const deletedDocId = e.detail.documentId;
+        
+        // Remove document from favorites if present
+        const favoriteCard = document.querySelector(`#profileFavoritesList .favorite-button[data-doc-id="${deletedDocId}"]`)?.closest('.col-md-12');
+        if (favoriteCard) {
+            favoriteCard.remove();
+        }
+        
+        // Update all document lists
+        updateProfileFavoritesList();
+        updateProfileResultStars();
     });
 
     // Funzione per mostrare alert temporaneo

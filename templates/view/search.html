@@ -120,7 +120,7 @@
           <a href="{{ url_for('view.favorites') }}" class="text-decoration-none text-dark">
             <h3>Your Favorites</h3>
           </a>
-          <div class="row g-4" id="yourFavoritesList">
+          <div class="row g-4 mt-1" id="yourFavoritesList">
             {% if user_favorites_docs %}
               {% for doc in user_favorites_docs %}
                 <div class="col-md-6">
@@ -191,17 +191,29 @@
     max-height: 250px;
     overflow-y: auto;
     padding-right: 8px;
+    margin-bottom: -20px;
 }
 #yourFavoritesList::-webkit-scrollbar {
     width: 8px;
 }
 #yourFavoritesList::-webkit-scrollbar-thumb {
-    background: #e0c96d;
+    background: #000000;
     border-radius: 4px;
 }
 #yourFavoritesList::-webkit-scrollbar-track {
     background: #f8f9fa;
     border-radius: 4px;
+}
+
+/* Yellow background for favorites container */
+.card.shadow-sm.mb-4 {
+    background-color: #e0c96d !important;
+}
+
+/* White title for favorites section */
+.card.shadow-sm.mb-4 h3,
+.card.shadow-sm.mb-4 a.text-dark {
+    color: #ffffff !important;
 }
 </style>
 
@@ -298,10 +310,16 @@ function attachPreviewListeners() {
     const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
     const previewFrame = document.getElementById('documentPreviewFrame');
     const downloadButton = document.getElementById('previewDownloadButton');
+    const fullscreenButton = document.getElementById('fullscreenButton');
+    const previewModalDialog = document.querySelector('#previewModal .modal-dialog');
 
     previewButtons.forEach(button => {
         button.addEventListener('click', function() {
             const docId = this.dataset.docId;
+            // Reset modal to non-fullscreen and reset button text/icon
+            previewModalDialog.classList.remove('modal-fullscreen-mode');
+            fullscreenButton.innerHTML = '<i class="fas fa-expand me-2"></i>Full Screen';
+
             const previewUrl = `/view/preview/${docId}`;
             previewFrame.src = previewUrl;
             downloadButton.href = `/view/download/${docId}`;
