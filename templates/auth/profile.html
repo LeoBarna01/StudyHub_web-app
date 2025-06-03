@@ -114,12 +114,12 @@
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-md-8">
-                                                    <strong>{{ doc.title }}</strong><br>
-                                                    <small class="text-muted">
+                                        <strong>{{ doc.title }}</strong><br>
+                                        <small class="text-muted">
                                                         {{ doc.course }}{% if doc.institute %} @ {{ doc.institute }}{% endif %}{% if doc.year %}, {{ doc.year }}{% endif %}
-                                                        {% if doc.subject %} • {{ doc.subject }}{% endif %}
+                                            {% if doc.subject %} • {{ doc.subject }}{% endif %}
                                                         {% if doc.author %} • Uploaded by {{ doc.author.first_name }} {{ doc.author.last_name }}{% endif %}
-                                                    </small>
+                                        </small>
                                                 </div>
                                                 <div class="col-md-4 d-flex flex-column align-items-end justify-content-center">
                                                     <div class="d-flex gap-2 mt-2 mt-md-0">
@@ -153,19 +153,19 @@
                        <h3>Favorites</h3>
                     </a>
                     <div class="row g-4 mt-1" id="profileFavoritesList">
-                        {% if favorites %}
+                    {% if favorites %}
                             {% for doc in favorites %}
                                 <div class="col-md-12">
                                     <div class="card h-100">
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-md-8">
-                                                    <strong>{{ doc.title }}</strong><br>
-                                                    <small class="text-muted">
+                                        <strong>{{ doc.title }}</strong><br>
+                                        <small class="text-muted">
                                                         {{ doc.course }}{% if doc.institute %} @ {{ doc.institute }}{% endif %}{% if doc.year %}, {{ doc.year }}{% endif %}
-                                                        {% if doc.subject %} • {{ doc.subject }}{% endif %}
-                                                        {% if doc.author %} • Uploaded by {{ doc.author.first_name }} {{ doc.author.last_name }}{% endif %}
-                                                    </small>
+                                            {% if doc.subject %} • {{ doc.subject }}{% endif %}
+                                            {% if doc.author %} • Uploaded by {{ doc.author.first_name }} {{ doc.author.last_name }}{% endif %}
+                                        </small>
                                                     {% if doc.description %}
                                                         <p class="mb-1">{{ doc.description | truncate(150) }}</p>
                                                     {% endif %}
@@ -183,7 +183,7 @@
                                     </div>
                                 </div>
                             {% endfor %}
-                        {% else %}
+                    {% else %}
                             <div class="col-12">
                                 <div class="card h-100">
                                     <div class="card-body text-muted text-center">
@@ -191,7 +191,7 @@
                                     </div>
                                 </div>
                             </div>
-                        {% endif %}
+                    {% endif %}
                     </div>
                 </div>
             </div>

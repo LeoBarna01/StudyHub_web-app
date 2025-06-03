@@ -128,12 +128,12 @@
                     <div class="card-body">
                       <div class="row">
                         <div class="col-md-8">
-                          <strong>{{ doc.title }}</strong><br>
-                          <small class="text-muted">
+                   <strong>{{ doc.title }}</strong><br>
+                  <small class="text-muted">
                             {{ doc.course }}{% if doc.institute %} @ {{ doc.institute }}{% endif %}{% if doc.year %}, {{ doc.year }}{% endif %}
-                            {% if doc.subject %} • {{ doc.subject }}{% endif %}
-                            {% if doc.author %} • Uploaded by {{ doc.author.first_name }} {{ doc.author.last_name }}{% endif %}
-                          </small>
+                    {% if doc.subject %} • {{ doc.subject }}{% endif %}
+                    {% if doc.author %} • Uploaded by {{ doc.author.first_name }} {{ doc.author.last_name }}{% endif %}
+                  </small>
                         </div>
                         <div class="col-md-4 d-flex flex-column align-items-end justify-content-center">
                           <div class="d-flex gap-2 mt-2 mt-md-0">
@@ -150,7 +150,7 @@
               <div class="col-12">
                 <div class="card h-100">
                   <div class="card-body text-muted text-center">
-                    No favorite documents yet.
+                No favorite documents yet.
                   </div>
                 </div>
               </div>
@@ -328,7 +328,7 @@ function updateResultStars() {
         .then(favorites => {
             const favoriteIds = favorites.map(doc => doc.id.toString());
             document.querySelectorAll('.favorite-button, .add-to-favorites-button').forEach(button => {
-                const docId = button.dataset.docId;
+        const docId = button.dataset.docId;
                 if (favoriteIds.includes(docId)) {
                     button.classList.add('favorite-button', 'favorited');
                     button.classList.remove('add-to-favorites-button', 'btn-outline-primary');
@@ -388,17 +388,17 @@ document.addEventListener('DOMContentLoaded', function() {
             flex-direction: column;
         }
         .modal-fullscreen-mode .modal-body .embed-responsive {
-            flex-grow: 1 !important;
+             flex-grow: 1 !important;
             height: 100% !important;
         }
         .modal-fullscreen-mode .modal-body iframe {
             width: 100% !important;
             height: 100% !important;
         }
-        .modal-fullscreen-mode .modal-header, 
-        .modal-fullscreen-mode .modal-footer {
+         .modal-fullscreen-mode .modal-header, 
+         .modal-fullscreen-mode .modal-footer {
             flex-shrink: 0;
-        }
+         }
     `;
     document.head.appendChild(style);
 });
