@@ -7,7 +7,7 @@ app = create_app()
 if __name__ == '__main__':
     # Set up argument parsing
     parser = argparse.ArgumentParser(description='Run the StudyHub Flask application')
-    parser.add_argument('--port', type=int, default=5001, help='Port to run the Flask app on (default: 5001)')
+    parser.add_argument('--port', type=int, default=5000, help='Port to run the Flask app on (default: 5000)')
     parser.add_argument('--host', type=str, default='127.0.0.1', help='Host to run the Flask app on (default: 127.0.0.1)')
     args = parser.parse_args()
     

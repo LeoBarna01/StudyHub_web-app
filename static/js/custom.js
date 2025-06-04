@@ -3,7 +3,52 @@
  * Handles interactive elements and custom functionality
  */
 
+// Initialize scroll indicator
+function initScrollIndicator() {
+    const scrollIndicator = document.getElementById('scrollIndicator');
+    const backToTopButton = document.querySelector('.back-to-top');
+    
+    if (!scrollIndicator) return;
+    
+    // Function to check if user is at the bottom of the page
+    function isAtBottom() {
+        return window.innerHeight + window.scrollY >= document.body.offsetHeight - 100; // 100px threshold
+    }
+    
+    // Function to handle scroll events
+    function handleScroll() {
+        if (isAtBottom() || window.scrollY > 1000) {
+            scrollIndicator.classList.add('hidden');
+        } else {
+            // Only show scroll indicator if we're not at the top and not at the bottom
+            scrollIndicator.classList.remove('hidden');
+        }
+    }
+    
+    // Add click event to scroll down
+    scrollIndicator.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollBy({
+            top: window.innerHeight * 0.8, // Scroll 80% of viewport height
+            behavior: 'smooth'
+        });
+    });
+    
+    // Initial check
+    handleScroll();
+    
+    // Throttle scroll events for better performance
+    let isScrolling;
+    window.addEventListener('scroll', function() {
+        window.clearTimeout(isScrolling);
+        isScrolling = setTimeout(handleScroll, 50);
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize scroll indicator
+    initScrollIndicator();
+    
     // Initialize tooltips
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     tooltipTriggerList.map(function (tooltipTriggerEl) {
