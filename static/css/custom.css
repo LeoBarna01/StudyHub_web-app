@@ -436,28 +436,5 @@
 
 /* Fix for btn-outline-secondary border color not appearing */
 .btn-outline-secondary {
-    border-color: var(--bs-btn-border-color) !important; /* Use the variable defined by Bootstrap */
-    /* Ensure text color is also correct - Removed to allow hover state */
-    /* color: var(--bs-btn-color) !important; */
+    border-color: var(--bs-btn-border-color) !important;
 }
-
-/* Remove the temporary debugging styles for favorite button */
-/* .favorite-button {
-    border: 3px solid red !important;
-    background-color: yellow !important;
-    display: inline-block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    min-width: 30px !important;
-    min-height: 30px !important;
-} */
-
-/* Add this rule to ensure btn-outline-secondary has a visible border on hover */
-/* Removed previous temporary fix that caused hover issues */
-/*
-.btn-outline-secondary:hover {
-    color: var(--bs-btn-hover-color);
-    background-color: var(--bs-btn-hover-bg);
-    border-color: var(--bs-btn-hover-border-color);
-}
-*/
