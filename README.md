@@ -1,104 +1,35 @@
 # StudyHub - Academic Document Sharing Platform
 
-[![Flask](https://img.shields.io/badge/Flask-2.3.0-blue.svg)](https://flask.palletsprojects.com/)
-[![Python](https://img.shields.io/badge/Python-3.11-green.svg)](https://python.org/)
-[![SQLite](https://img.shields.io/badge/Database-SQLite-orange.svg)](https://sqlite.org/)
-[![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-purple.svg)](https://getbootstrap.com/)
+StudyHub is a modern web application built with Flask that enables students to share, discover, and manage academic documents in a collaborative environment. The platform provides a secure and user-friendly interface for uploading, categorizing, and searching educational resources.
 
-**StudyHub** is a modern web application built with Flask that enables students to share, discover, and manage academic documents in a collaborative environment. The platform provides a secure and user-friendly interface for uploading, categorizing, and searching educational resources.
+## 📋 Project Description and Goals
 
-## 🚀 Features
+**StudyHub** is designed as a collaboration and resource platform specifically for college students. The main goals of this project are:
 
-### Core Functionality
-- **Document Management**: Upload, categorize, and organize academic documents
-- **Smart Search**: Advanced search with filters for categories, tags, and content
-- **User Authentication**: Secure registration, login, and profile management
-- **Favorites System**: Save and organize frequently accessed documents
-- **Contact System**: Support and feedback forms for user assistance
+- **Document Sharing**: Enable university students to share notes, learning materials, and exam preparation resources
+- **Collaborative Learning**: Enhance both individual and collaborative study organization and effectiveness
+- **Academic Resource Management**: Provide a centralized platform for organizing and accessing educational content
+- **User-Friendly Experience**: Offer an intuitive interface with responsive design for optimal user experience
 
-### Technical Features
-- **Responsive Design**: Mobile-first Bootstrap 5 interface
-- **File Validation**: Comprehensive upload security and validation
-- **Database Relationships**: Optimized SQLAlchemy models with proper relationships
-- **Error Handling**: Comprehensive error pages and user feedback
-- **Security**: CSRF protection, input validation, and secure file handling
+### Target Audience
+University students aged 18-30, enrolled in bachelor's and master's degree programs.
 
-## 🛠️ Technology Stack
+### Key Features
+- Secure user authentication and profile management
+- Document upload with comprehensive validation
+- Advanced search functionality with filters
+- Favorites system for frequently accessed documents
+- Contact forms for support and feedback
+- Mobile-responsive design using Bootstrap 5
 
-### Backend
-- **Framework**: Flask 2.3.0 (Python web framework)
-- **Database**: SQLAlchemy ORM with SQLite (development) / PostgreSQL (production)
-- **Authentication**: Flask-Login with secure password hashing
-- **Forms**: Flask-WTF with comprehensive validation
-- **Migrations**: Flask-Migrate for database schema management
-
-### Frontend
-- **UI Framework**: Bootstrap 5.3 for responsive design
-- **Icons**: Font Awesome for consistent iconography
-- **Fonts**: Google Fonts (Inter) for modern typography
-- **JavaScript**: Vanilla JS for enhanced user interactions
-
-### Development Tools
-- **Environment**: Flask CLI with auto-reload
-- **Configuration**: Environment-based configuration management
-- **File Structure**: Modular blueprint architecture
-- **Documentation**: Comprehensive inline documentation
-
-## 📁 Project Structure
-
-```
-StudyHub_web-app/
-├── app/                          # Main application package
-│   ├── __init__.py              # Application factory
-│   ├── models.py                # Database models
-│   ├── auth/                    # Authentication blueprint
-│   │   ├── __init__.py
-│   │   ├── routes.py           # Auth routes and logic
-│   │   └── form.py             # Authentication forms
-│   ├── main/                    # Main pages blueprint
-│   │   ├── __init__.py
-│   │   ├── main.py             # Main routes
-│   │   └── errors.py           # Error handlers
-│   ├── upload/                  # Document upload blueprint
-│   │   ├── __init__.py
-│   │   ├── upload.py           # Upload routes
-│   │   ├── forms.py            # Upload forms
-│   │   └── utils.py            # Upload utilities
-│   ├── view/                    # Document viewing blueprint
-│   │   ├── __init__.py
-│   │   ├── view.py             # View routes
-│   │   └── utils.py            # View utilities
-│   └── form/                    # Contact forms blueprint
-│       ├── __init__.py
-│       ├── form.py             # Contact routes
-│       └── forms.py            # Contact forms
-├── templates/                   # Jinja2 templates
-│   ├── main/                   # Main page templates
-│   ├── auth/                   # Authentication templates
-│   ├── upload/                 # Upload templates
-│   ├── view/                   # Document view templates
-│   ├── form/                   # Contact form templates
-│   └── errors/                 # Error page templates
-├── static/                     # Static assets
-│   ├── css/                   # Stylesheets
-│   ├── js/                    # JavaScript files
-│   ├── images/                # Application images
-│   └── profile_pics/          # User profile pictures
-├── uploads/                    # User uploaded documents
-├── migrations/                 # Database migration files
-├── config.py                  # Application configuration
-├── run.py                     # Application entry point
-└── requirements.txt           # Python dependencies
-```
-
-## 🚀 Quick Start
+## 🚀 Instructions for Running the Web Application
 
 ### Prerequisites
 - Python 3.11 or higher
 - pip (Python package manager)
 - Git
 
-### Installation
+### Installation and Setup
 
 1. **Clone the repository**
    ```bash
@@ -108,8 +39,8 @@ StudyHub_web-app/
 
 2. **Create and activate virtual environment**
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   python3 -m venv venv
+   source venv/bin/activate
    ```
 
 3. **Install dependencies**
@@ -126,7 +57,7 @@ StudyHub_web-app/
    ```bash
    flask run
    ```
-
+ 
 6. **Access the application**
    Open your browser and navigate to: `http://127.0.0.1:5000`
 
@@ -135,116 +66,127 @@ StudyHub_web-app/
 python app/populate_sample_data.py
 ```
 
-## 🔧 Configuration
+### Configuration
+The application uses environment variables for configuration. Make sure to set up your environment properly before running the application.
 
-### Environment Variables
-Create a `.env` file in the project root for production:
+## 👥 Team Contributions
 
-```bash
-# Security
-SECRET_KEY=your-very-long-random-secret-key
+**Leonardo** and **Cesare** developed this web application collaboratively, working together on all aspects of the project:
 
-# Database
-DATABASE_URL=postgresql://user:password@localhost/studyhub
+- **Shared Development**: Both team members contributed equally to the entire development process
+- **Backend Development**: Joint work on Flask application structure, database models, routing, and business logic
+- **Frontend Development**: Collaborative effort on HTML templates, CSS styling, JavaScript functionality, and responsive design
+- **Full-Stack Integration**: Combined efforts in connecting frontend and backend components
+- **Testing and Debugging**: Shared responsibility for quality assurance and bug fixes
 
-# Email (Optional)
-MAIL_SERVER=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USE_TLS=1
-MAIL_USERNAME=your-email@gmail.com
-MAIL_PASSWORD=your-app-password
+The development approach emphasized pair programming and collaborative problem-solving, ensuring both team members gained comprehensive experience across all aspects of web development.
+
+## 🛠️ Technology Stack
+
+- **Backend**: Flask, SQLAlchemy, Flask-Login, Flask-WTF
+- **Frontend**: HTML5, CSS3, Bootstrap 5, JavaScript
+- **Database**: SQLite (development)
+- **Development Tools**: Python 3.11, Flask CLI, Git
+
+## 📁 Project Structure
+
+```
+StudyHub_web-app/
+├── .flaskenv              # Flask environment configuration
+├── .gitignore             # Git ignore rules
+├── README.md              # Project documentation
+├── Description_Project_LWT.md # Course project description
+├── check_uploads.py       # Upload validation utility script
+├── config.py              # Application configuration
+├── init_db.py             # Database initialization script
+├── requirements.txt       # Python dependencies
+├── run.py                 # Application entry point
+├── app/                   # Main application package
+│   ├── __init__.py        # Package initialization
+│   ├── models.py          # Database models
+│   ├── check_db_content.py # Database content checker
+│   ├── populate_sample_data.py # Sample data population script
+│   ├── auth/              # Authentication module
+│   │   ├── __init__.py
+│   │   ├── form.py
+│   │   └── routes.py
+│   ├── form/              # Forms module
+│   │   ├── __init__.py
+│   │   ├── form.py
+│   │   └── forms.py
+│   ├── main/              # Main application routes
+│   │   ├── __init__.py
+│   │   ├── errors.py
+│   │   └── main.py
+│   ├── upload/            # File upload functionality
+│   │   ├── __init__.py
+│   │   ├── forms.py
+│   │   ├── upload.py
+│   │   └── utils.py
+│   └── view/              # View-related functionality
+│       ├── __init__.py
+│       ├── utils.py
+│       └── view.py
+├── static/                # Static files (CSS, JS, images)
+│   ├── css/               # Stylesheets
+│   │   ├── authenticated_styles.css
+│   │   ├── custom.css
+│   │   └── style.css
+│   ├── images/            # Image assets
+│   │   ├── Ask&Discuss.jpg
+│   │   ├── Browse&Discover.jpg
+│   │   ├── hero-illustration.webp
+│   │   ├── logo.png
+│   │   ├── logo.svg
+│   │   └── Upload_Resources.jpg
+│   ├── js/                # JavaScript files
+│   │   ├── custom.js
+│   │   ├── main.js
+│   │   └── script.js
+│   └── profile_pics/      # Default profile pictures
+│       └── default_avatar.jpg
+├── templates/             # HTML templates
+│   ├── auth/              # Authentication templates
+│   │   ├── login.html
+│   │   ├── profile.html
+│   │   └── register.html
+│   ├── errors/            # Error page templates
+│   │   ├── 404.html
+│   │   └── 500.html
+│   ├── form/              # Form templates
+│   │   └── question_form.html
+│   ├── main/              # Main page templates
+│   │   ├── base.html
+│   │   ├── dashboard.html
+│   │   └── home.html
+│   ├── upload/            # Upload templates
+│   │   └── upload.html
+│   └── view/              # View templates
+│       ├── favorites.html
+│       ├── search.html
+│       ├── uploaded.html
+│       └── partials/
+│           ├── footer.html
+│           └── navbar.html
+├── uploads/               # User uploaded files
+│   ├── documents/         # Document uploads
+│   └── profile_pics/      # User profile pictures
+└── migrations/            # Database migration files
+    ├── alembic.ini
+    ├── env.py
+    ├── README
+    └── script.py.mako
 ```
 
-### Development Configuration
-The application uses `.flaskenv` for development settings:
-- **FLASK_APP**: `run.py`
-- **FLASK_ENV**: `development`
-- **FLASK_DEBUG**: `1`
-- **FLASK_RUN_PORT**: `5000`
-- **FLASK_RUN_HOST**: `127.0.0.1`
+## 🔧 Development Features
 
-## 📚 Usage Guide
-
-### For Students
-
-1. **Registration**: Create an account with your academic email
-2. **Upload Documents**: Share your notes, assignments, and study materials
-3. **Search & Discover**: Find relevant documents using advanced search filters
-4. **Organize**: Use categories and tags to organize content
-5. **Favorites**: Save frequently accessed documents for quick access
-
-### For Administrators
-
-- **User Management**: Monitor user accounts and activity
-- **Content Moderation**: Review and manage uploaded documents
-- **System Maintenance**: Use utility scripts for database management
-
-## 🔒 Security Features
-
-- **Authentication**: Secure login with password hashing (Werkzeug)
-- **Authorization**: Role-based access control
-- **CSRF Protection**: Cross-site request forgery protection
-- **File Validation**: Comprehensive upload security
-- **Input Sanitization**: XSS prevention and data validation
-- **Secure Sessions**: Flask-Login session management
-
-## 🧰 Utility Scripts
-
-- **`init_db.py`**: Initialize database schema
-- **`app/populate_sample_data.py`**: Create sample data for testing
-- **`app/check_db_content.py`**: Inspect database content
-- **`check_uploads.py`**: Validate file integrity and clean orphaned records
-
-## 🚀 Deployment
-
-### Production Deployment
-See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed production deployment instructions including:
-- WSGI server configuration (Gunicorn)
-- Database setup (PostgreSQL)
-- Environment configuration
-- Security considerations
-
-### Quick Deployment with Gunicorn
-```bash
-pip install gunicorn
-gunicorn --bind 0.0.0.0:8000 run:app
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-### Development Guidelines
-- Follow PEP 8 style guidelines
-- Write comprehensive docstrings
-- Add comments for complex logic
-- Test all new features thoroughly
-- Update documentation for new features
+- **User Authentication**: Secure login and registration system
+- **File Upload**: Support for various document formats with validation
+- **Search Functionality**: Advanced search with filtering options
+- **Responsive Design**: Mobile-friendly interface
+- **Database Management**: SQLAlchemy ORM with migration support
+- **Error Handling**: Custom error pages and validation
 
 ## 📄 License
 
 This project is developed for academic purposes as part of the Web Technologies Laboratory course.
-
-## 👥 Authors
-
-StudyHub Development Team
-
-## 🆘 Support
-
-- **Documentation**: Check the inline code documentation
-- **Issues**: Use the contact form within the application
-- **Development**: Review the comprehensive code comments
-
-## 🔄 Version History
-
-- **v1.0.0**: Initial release with core functionality
-- **v1.1.0**: Enhanced security and documentation
-- **v1.2.0**: Production-ready with comprehensive restructuring
-
----
-
-**Made with ❤️ for the academic community** 
