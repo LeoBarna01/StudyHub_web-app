@@ -6,22 +6,23 @@ app = create_app()
 
 with app.app_context():
     upload_folder = app.config['UPLOAD_FOLDER']
-    print(f"Controllo file nella cartella: {upload_folder}")
+    print(f"Checking files in folder: {upload_folder}")
     missing_files = []
     all_docs = Document.query.all()
     for doc in all_docs:
         file_path = os.path.join(upload_folder, doc.filename)
         if not os.path.isfile(file_path):
             missing_files.append((doc.id, doc.title, doc.filename))
-            print(f"[MANCANTE] ID: {doc.id} | Titolo: {doc.title} | File: {doc.filename}")
-            # Rimuovo il documento orfano dal database
+            print(f"[MISSING] ID: {doc.id} | Title: {doc.title} | File: {doc.filename}")
+            # Remove the orphan document from the database
             db.session.delete(doc)
     db.session.commit()
-    print(f"\nTotale documenti controllati: {len(all_docs)}")
-    print(f"File mancanti e rimossi: {len(missing_files)}")
+    print(f"\nTotal documents checked: {len(all_docs)}")
+    print(f"Missing and removed files: {len(missing_files)}")
     if missing_files:
-        print("\nElenco file/documenti rimossi:")
+        print("\nList of removed files/documents:")
         for doc_id, title, filename in missing_files:
-            print(f"ID: {doc_id} | Titolo: {title} | File: {filename}")
+            print(f"ID: {doc_id} | Title: {title} | File: {filename}")
     else:
-        print("Tutti i file sono presenti.") 
+        print("All files are present.")
+    
