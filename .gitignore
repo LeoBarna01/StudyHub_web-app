@@ -69,4 +69,19 @@ migrations/versions/*.py
 build/
 dist/
 *.egg-info/
-venv/
+
+# Frontend dependencies (se usi strumenti frontend)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Sass cache
+.sass-cache/
+
+# Coverage reports
+coverage/
+.nyc_output/
+
+# PyCharm
+.idea/
