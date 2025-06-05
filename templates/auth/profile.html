@@ -12,7 +12,7 @@
                 <div class="card-body text-center d-flex flex-column">
                     <div class="profile-image-frame mb-3 mx-auto">
                         <!-- eslint-disable-next-line -->
-                        <img id="profile-preview" src="{{ url_for('static', filename='profile_pics/' + (current_user.profile_image or 'default_avatar.jpg')) }}" class="img-fluid rounded-circle" alt="Profile Image">
+                        <img id="profile-preview" src="{{ current_user.avatar_url }}" class="img-fluid rounded-circle" alt="Profile Image">
                     </div>
                     
                     <!-- Image Modal -->
