@@ -1,10 +1,17 @@
 # File di sistema macOS
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
 # Cartelle di ambiente virtuale (modifica se usi un nome diverso)
 venv/
 env/
 .env/
+ENV/
 
 # File di cache Python
 __pycache__/
@@ -14,24 +21,52 @@ __pycache__/
 # File di test e copertura
 .pytest_cache/
 .coverage
+htmlcov/
 
 # Cartella instance di Flask (spesso contiene configurazioni locali e segrete)
 instance/
+.webassets-cache
 
 # File di log
 *.log
+logs/
 
 # File di database SQLite (se usi SQLite)
 *.db
 *.sqlite3
+*.sqlite
+database.db
+app.db
+
+# Upload files e immagini profilo (generati dagli utenti)
+uploads/*
+!uploads/.gitkeep
+static/profile_pics/*
+!static/profile_pics/default_avatar.jpg
+app/forum/static/uploads/*
+
+# Flask-Migrate generated files
+migrations/versions/*.py
+!migrations/versions/.gitkeep
 
 # Configurazioni locali e file temporanei
 *.env
+.flaskenv.local
 *.local
 *.swp
 *.swo
 *.bak
+*.tmp
+*.temp
+
+# IDE specifici
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
 
 # Cartelle di build o distribuzione (se presenti)
 build/
 dist/
+*.egg-info/
+venv/
