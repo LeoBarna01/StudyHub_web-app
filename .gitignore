@@ -39,13 +39,14 @@ database.db
 app.db
 
 # Upload files e immagini profilo (generati dagli utenti)
-uploads/*
-!uploads/.gitkeep
+uploads/documents/*
+!uploads/documents/.gitkeep
+uploads/profile_pics/*
+!uploads/profile_pics/.gitkeep
 static/profile_pics/*
 !static/profile_pics/default_avatar.jpg
-app/forum/static/uploads/*
 
-# Flask-Migrate generated files
+# Flask-Migrate generated files (quando verranno create)
 migrations/versions/*.py
 !migrations/versions/.gitkeep
 
