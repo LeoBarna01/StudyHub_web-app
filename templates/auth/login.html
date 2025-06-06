@@ -1,47 +1,73 @@
-{% extends 'main/base.html' %}
-{% block title %}Sign In – StudyHub{% endblock %}
+{#
+  StudyHub - User Login Template
+  
+  Purpose: Provides a responsive login form for user authentication
+  Features:
+  - Centered card layout with Bootstrap styling
+  - Flask-WTF form integration with CSRF protection
+  - Client-side and server-side validation display
+  - Remember me functionality
+  - Responsive design for mobile and desktop
+  - Error message display with Bootstrap invalid feedback
+  
+  Form Fields:
+  - Email address (required, email validation)
+  - Password (required, secure input)
+  - Remember me checkbox (persistent login)
+  
+  Dependencies: Flask-WTF forms, Bootstrap CSS, base template
+#}
 
-{% block content %}
-<div class="container py-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6 col-lg-4">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <h2 class="card-title text-center mb-4">Sign In</h2>
-          <form method="post" action="{{ url_for('auth.login') }}">
-            {{ form.hidden_tag() }}
+{% extends 'main/base.html' %} {# Inherit from base template for consistent layout #}
+{% block title %}Sign In – StudyHub{% endblock %} {# Set page title in browser tab #}
 
-            <div class="mb-3">
-              {{ form.email.label(class="form-label") }}
-              {{ form.email(class="form-control", class=form.email.errors and 'is-invalid' or '') }}
-              {% for err in form.email.errors %}
-                <div class="invalid-feedback">{{ err }}</div>
+{% block content %} {# Main content block #}
+<div class="container py-5"> <!-- Main container with vertical padding -->
+  <div class="row justify-content-center"> <!-- Center-aligned row -->
+    <div class="col-md-6 col-lg-4"> <!-- Responsive column: medium=6/12, large=4/12 -->
+      <div class="card shadow-sm"> <!-- Card container with subtle shadow -->
+        <div class="card-body"> <!-- Card content with padding -->
+          <h2 class="card-title text-center mb-4">Sign In</h2> <!-- Centered form title -->
+          
+          {# Flask-WTF login form with CSRF protection #}
+          <form method="post" action="{{ url_for('auth.login') }}"> <!-- POST form to login route -->
+            {{ form.hidden_tag() }} <!-- CSRF token and hidden fields -->
+
+            {# Email Address Field #}
+            <div class="mb-3"> <!-- Form group with bottom margin -->
+              {{ form.email.label(class="form-label") }} <!-- Email label with Bootstrap styling -->
+              {{ form.email(class="form-control", class=form.email.errors and 'is-invalid' or '') }} <!-- Email input with conditional error styling -->
+              {% for err in form.email.errors %} <!-- Loop through email validation errors -->
+                <div class="invalid-feedback">{{ err }}</div> <!-- Display validation error message -->
               {% endfor %}
             </div>
 
-            <div class="mb-3">
-              {{ form.password.label(class="form-label") }}
-              {{ form.password(class="form-control", class=form.password.errors and 'is-invalid' or '') }}
-              {% for err in form.password.errors %}
-                <div class="invalid-feedback">{{ err }}</div>
+            {# Password Field #}
+            <div class="mb-3"> <!-- Form group with bottom margin -->
+              {{ form.password.label(class="form-label") }} <!-- Password label with Bootstrap styling -->
+              {{ form.password(class="form-control", class=form.password.errors and 'is-invalid' or '') }} <!-- Password input with conditional error styling -->
+              {% for err in form.password.errors %} <!-- Loop through password validation errors -->
+                <div class="invalid-feedback">{{ err }}</div> <!-- Display validation error message -->
               {% endfor %}
             </div>
 
-            <div class="mb-3 form-check">
-              {{ form.remember(class="form-check-input") }}
-              {{ form.remember.label(class="form-check-label text-white") }}
+            {# Remember Me Checkbox #}
+            <div class="mb-3 form-check"> <!-- Checkbox form group -->
+              {{ form.remember(class="form-check-input") }} <!-- Remember me checkbox -->
+              {{ form.remember.label(class="form-check-label text-white") }} <!-- Checkbox label with white text -->
             </div>
 
-            <button type="submit" class="btn btn-primary w-100">Sign In</button>
+            <button type="submit" class="btn btn-primary w-100">Sign In</button> <!-- Full-width submit button -->
           </form>
 
-          <p class="text-center mt-3 small text-white">
+          {# Registration Link #}
+          <p class="text-center mt-3 small text-white"> <!-- Centered text with top margin -->
             Don't have an account?
-            <a href="{{ url_for('auth.register') }}">Register here</a>
+            <a href="{{ url_for('auth.register') }}">Register here</a> <!-- Link to registration page -->
           </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-{% endblock %}
+        </div> <!-- End of card body -->
+      </div> <!-- End of card -->
+    </div> <!-- End of responsive column -->
+  </div> <!-- End of centered row -->
+</div> <!-- End of main container -->
+{% endblock %} {# End of content block #}

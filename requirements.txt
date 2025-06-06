@@ -1,3 +1,15 @@
+# StudyHub Web Application - Python Dependencies
+# 
+# This file specifies all Python packages and their exact versions required
+# to run the StudyHub Flask web application. It ensures consistent dependency
+# management across different environments (development, testing, production).
+#
+# Usage:
+#   pip install -r requirements.txt
+#
+# This will install all listed packages with their pinned versions to avoid
+# compatibility issues and ensure reproducible deployments.
+
 blinker==1.9.0
 click==8.2.1
 dnspython==2.7.0

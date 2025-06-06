@@ -1,66 +1,96 @@
-{% extends 'main/base.html' %}
-{% block title %}Register – StudyHub{% endblock %}
+{#
+  StudyHub - User Registration Template
+  
+  Purpose: Provides a responsive registration form for new user account creation
+  Features:
+  - Centered card layout with Bootstrap styling
+  - Flask-WTF form integration with CSRF protection
+  - Comprehensive form validation with error display
+  - Password confirmation field
+  - Responsive design for mobile and desktop
+  - Server-side validation feedback
+  
+  Form Fields:
+  - First name (required, text input)
+  - Last name (required, text input)
+  - Email address (required, email validation, uniqueness check)
+  - Password (required, strength validation)
+  - Confirm password (required, must match password)
+  
+  Dependencies: Flask-WTF forms, Bootstrap CSS, base template
+#}
 
-{% block content %}
-<div class="container py-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6 col-lg-4">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <h2 class="card-title text-center mb-4">Create Account</h2>
-          <form method="post" action="{{ url_for('auth.register') }}">
-            {{ form.hidden_tag() }}
+{% extends 'main/base.html' %} {# Inherit from base template for consistent layout #}
+{% block title %}Register – StudyHub{% endblock %} {# Set page title in browser tab #}
 
-            <div class="mb-3">
-              {{ form.first_name.label(class="form-label") }}
-              {{ form.first_name(class="form-control", class=form.first_name.errors and 'is-invalid' or '') }}
-              {% for err in form.first_name.errors %}
-                <div class="invalid-feedback">{{ err }}</div>
+{% block content %} {# Main content block #}
+<div class="container py-5"> <!-- Main container with vertical padding -->
+  <div class="row justify-content-center"> <!-- Center-aligned row -->
+    <div class="col-md-6 col-lg-4"> <!-- Responsive column: medium=6/12, large=4/12 -->
+      <div class="card shadow-sm"> <!-- Card container with subtle shadow -->
+        <div class="card-body"> <!-- Card content with padding -->
+          <h2 class="card-title text-center mb-4">Create Account</h2> <!-- Centered form title -->
+          
+          {# Flask-WTF registration form with CSRF protection #}
+          <form method="post" action="{{ url_for('auth.register') }}"> <!-- POST form to registration route -->
+            {{ form.hidden_tag() }} <!-- CSRF token and hidden fields -->
+
+            {# First Name Field #}
+            <div class="mb-3"> <!-- Form group with bottom margin -->
+              {{ form.first_name.label(class="form-label") }} <!-- First name label with Bootstrap styling -->
+              {{ form.first_name(class="form-control", class=form.first_name.errors and 'is-invalid' or '') }} <!-- First name input with conditional error styling -->
+              {% for err in form.first_name.errors %} <!-- Loop through first name validation errors -->
+                <div class="invalid-feedback">{{ err }}</div> <!-- Display validation error message -->
               {% endfor %}
             </div>
 
-            <div class="mb-3">
-              {{ form.last_name.label(class="form-label") }}
-              {{ form.last_name(class="form-control", class=form.last_name.errors and 'is-invalid' or '') }}
-              {% for err in form.last_name.errors %}
-                <div class="invalid-feedback">{{ err }}</div>
+            {# Last Name Field #}
+            <div class="mb-3"> <!-- Form group with bottom margin -->
+              {{ form.last_name.label(class="form-label") }} <!-- Last name label with Bootstrap styling -->
+              {{ form.last_name(class="form-control", class=form.last_name.errors and 'is-invalid' or '') }} <!-- Last name input with conditional error styling -->
+              {% for err in form.last_name.errors %} <!-- Loop through last name validation errors -->
+                <div class="invalid-feedback">{{ err }}</div> <!-- Display validation error message -->
               {% endfor %}
             </div>
 
-            <div class="mb-3">
-              {{ form.email.label(class="form-label") }}
-              {{ form.email(class="form-control", class=form.email.errors and 'is-invalid' or '') }}
-              {% for err in form.email.errors %}
-                <div class="invalid-feedback">{{ err }}</div>
+            {# Email Address Field #}
+            <div class="mb-3"> <!-- Form group with bottom margin -->
+              {{ form.email.label(class="form-label") }} <!-- Email label with Bootstrap styling -->
+              {{ form.email(class="form-control", class=form.email.errors and 'is-invalid' or '') }} <!-- Email input with conditional error styling -->
+              {% for err in form.email.errors %} <!-- Loop through email validation errors -->
+                <div class="invalid-feedback">{{ err }}</div> <!-- Display validation error message -->
               {% endfor %}
             </div>
 
-            <div class="mb-3">
-              {{ form.password.label(class="form-label") }}
-              {{ form.password(class="form-control", class=form.password.errors and 'is-invalid' or '') }}
-              {% for err in form.password.errors %}
-                <div class="invalid-feedback">{{ err }}</div>
+            {# Password Field #}
+            <div class="mb-3"> <!-- Form group with bottom margin -->
+              {{ form.password.label(class="form-label") }} <!-- Password label with Bootstrap styling -->
+              {{ form.password(class="form-control", class=form.password.errors and 'is-invalid' or '') }} <!-- Password input with conditional error styling -->
+              {% for err in form.password.errors %} <!-- Loop through password validation errors -->
+                <div class="invalid-feedback">{{ err }}</div> <!-- Display validation error message -->
               {% endfor %}
             </div>
 
-            <div class="mb-3">
-              {{ form.confirm.label(class="form-label") }}
-              {{ form.confirm(class="form-control", class=form.confirm.errors and 'is-invalid' or '') }}
-              {% for err in form.confirm.errors %}
-                <div class="invalid-feedback">{{ err }}</div>
+            {# Confirm Password Field #}
+            <div class="mb-3"> <!-- Form group with bottom margin -->
+              {{ form.confirm.label(class="form-label") }} <!-- Confirm password label with Bootstrap styling -->
+              {{ form.confirm(class="form-control", class=form.confirm.errors and 'is-invalid' or '') }} <!-- Confirm password input with conditional error styling -->
+              {% for err in form.confirm.errors %} <!-- Loop through password confirmation validation errors -->
+                <div class="invalid-feedback">{{ err }}</div> <!-- Display validation error message -->
               {% endfor %}
             </div>
 
-            <button type="submit" class="btn btn-success w-100">Register</button>
+            <button type="submit" class="btn btn-success w-100">Register</button> <!-- Full-width submit button with success color -->
           </form>
 
-          <p class="text-center mt-3 small text-white">
+          {# Login Link #}
+          <p class="text-center mt-3 small text-white"> <!-- Centered text with top margin -->
             Already have an account?
-            <a href="{{ url_for('auth.login') }}">Sign in here</a>
+            <a href="{{ url_for('auth.login') }}">Sign in here</a> <!-- Link to login page -->
           </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-{% endblock %}
+        </div> <!-- End of card body -->
+      </div> <!-- End of card -->
+    </div> <!-- End of responsive column -->
+  </div> <!-- End of centered row -->
+</div> <!-- End of main container -->
+{% endblock %} {# End of content block #}

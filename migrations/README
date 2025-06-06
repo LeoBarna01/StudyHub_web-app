@@ -1,1 +1,4 @@
+# Flask-Migrate Database Migration Configuration
+# This file indicates that the migrations directory contains database
+# migration scripts for a single database configuration using Flask-Migrate.
 Single-database configuration for Flask.

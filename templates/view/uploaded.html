@@ -1,35 +1,75 @@
-{% extends 'main/base.html' %}
-{% block title %}Your Uploaded Documents – StudyHub{% endblock %}
+{#
+  StudyHub - User Uploaded Documents Template
+  
+  Purpose: Display and manage documents uploaded by the current user
+  Features:
+  - Comprehensive list of user's uploaded documents in full-width cards
+  - Document management capabilities (preview, favorite, delete)
+  - Document preview modal with fullscreen functionality
+  - Confirmation modal for safe document deletion
+  - Real-time updates via AJAX for seamless user experience
+  - Success notifications for user feedback
+  
+  Document Information Displayed:
+  - Title, course, institute, year, subject, category
+  - Author information (uploader details)
+  - Complete metadata for comprehensive document identification
+  
+  Management Features:
+  - Preview: Modal-based document viewer with fullscreen support
+  - Favorite: Add/remove from user's favorites collection
+  - Delete: Secure deletion with confirmation dialog
+  - Live updates: Dynamic interface updates without page refresh
+  
+  User Experience:
+  - Full-width cards for better document visibility
+  - Responsive button layout with clear action indicators
+  - Visual feedback through alerts and state changes
+  - Safe operations with confirmation prompts for destructive actions
+  
+  Dependencies: Flask upload views, Bootstrap modals, Font Awesome icons, base template
+#}
 
-{% block content %}
-<div class="container py-5 d-flex flex-column flex-grow-1">
-    <h2 class="mb-4 text-center">Your Uploaded Documents</h2>
-    <div class="row g-4" id="yourUploadsList">
-        {% if uploads %}
-            {% for doc in uploads %}
-                <div class="col-md-12">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <strong>{{ doc.title }}</strong><br>
-                                    <small class="text-muted">
-                                        {{ doc.course }}{% if doc.institute %} @ {{ doc.institute }}{% endif %}{% if doc.year %}, {{ doc.year }}{% endif %}
-                                        {% if doc.subject %} • {{ doc.subject }}{% endif %}
-                                        {% if doc.author %} • Uploaded by {{ doc.author.first_name }} {{ doc.author.last_name }}{% endif %}
-                                        {% if doc.category %} • {{ doc.category.name }}{% endif %}
+{% extends 'main/base.html' %} {# Inherit from base template for consistent layout #}
+{% block title %}Your Uploaded Documents – StudyHub{% endblock %} {# Set browser tab title #}
+
+{% block content %} {# Main content block #}
+<div class="container py-5 d-flex flex-column flex-grow-1"> {# Main container with flex layout and vertical padding #}
+    <h2 class="mb-4 text-center">Your Uploaded Documents</h2> {# Page title with bottom margin #}
+    
+    {# Uploaded Documents Grid Container #}
+    <div class="row g-4" id="yourUploadsList"> {# Grid container with gap spacing and unique ID for JavaScript targeting #}
+        {% if uploads %} {# Display uploaded documents if user has any #}
+            {% for doc in uploads %} {# Loop through each uploaded document #}
+                <div class="col-md-12"> {# Full-width column for each uploaded document #}
+                    <div class="card h-100"> {# Card with full height for consistent layout #}
+                        <div class="card-body"> {# Card body for padding and structure #}
+                            <div class="row"> {# Internal row for two-column layout #}
+                                {# Document Information Column #}
+                                <div class="col-md-8"> {# 8/12 columns for document details #}
+                                    <strong>{{ doc.title }}</strong><br> {# Document title in bold #}
+                                    <small class="text-muted"> {# Document metadata in smaller, muted text #}
+                                        {{ doc.course }}{% if doc.institute %} @ {{ doc.institute }}{% endif %}{% if doc.year %}, {{ doc.year }}{% endif %} {# Course, institute, and year #}
+                                        {% if doc.subject %} • {{ doc.subject }}{% endif %} {# Subject if available #}
+                                        {% if doc.author %} • Uploaded by {{ doc.author.first_name }} {{ doc.author.last_name }}{% endif %} {# Author information #}
+                                        {% if doc.category %} • {{ doc.category.name }}{% endif %} {# Category if available #}
                                     </small>
                                 </div>
-                                <div class="col-md-4 d-flex flex-column align-items-end justify-content-center">
-                                    <div class="d-flex gap-2 mt-2 mt-md-0">
-                                        <button class="btn btn-sm btn-outline-secondary preview-button" data-doc-id="{{ doc.id }}">Preview</button>
-                                        {% if current_user.is_authenticated %}
-                                            {% if doc in current_user.favorites %}
-                                                <button class="btn btn-sm btn-outline-secondary favorite-button favorited" data-doc-id="{{ doc.id }}" title="Remove from favorites"><i class="fas fa-star"></i></button>
+                                {# Document Management Actions Column #}
+                                <div class="col-md-4 d-flex flex-column align-items-end justify-content-center"> {# 4/12 columns for action buttons, right-aligned #}
+                                    <div class="d-flex gap-2 mt-2 mt-md-0"> {# Button container with gap spacing #}
+                                        {# Document Preview Button #}
+                                        <button class="btn btn-sm btn-outline-secondary preview-button" data-doc-id="{{ doc.id }}">Preview</button> {# Preview button with document ID data attribute #}
+                                        {% if current_user.is_authenticated %} {# Show management buttons only for authenticated users #}
+                                            {% if doc in current_user.favorites %} {# Check if document is in user's favorites #}
+                                                {# Favorited State - Remove from Favorites Button #}
+                                                <button class="btn btn-sm btn-outline-secondary favorite-button favorited" data-doc-id="{{ doc.id }}" title="Remove from favorites"><i class="fas fa-star"></i></button> {# Unfavorite button with filled star #}
                                             {% else %}
-                                                <button class="btn btn-sm btn-outline-primary add-to-favorites-button" data-doc-id="{{ doc.id }}" title="Add to favorites">Add to Favorites</button>
+                                                {# Unfavorited State - Add to Favorites Button #}
+                                                <button class="btn btn-sm btn-outline-primary add-to-favorites-button" data-doc-id="{{ doc.id }}" title="Add to favorites">Add to Favorites</button> {# Add to favorites button #}
                                             {% endif %}
-                                            <button class="btn btn-sm btn-outline-danger delete-document-button" data-doc-id="{{ doc.id }}" title="Delete document"><i class="fas fa-trash"></i></button>
+                                            {# Document Delete Button #}
+                                            <button class="btn btn-sm btn-outline-danger delete-document-button" data-doc-id="{{ doc.id }}" title="Delete document"><i class="fas fa-trash"></i></button> {# Delete button with trash icon #}
                                         {% endif %}
                                     </div>
                                 </div>
@@ -39,10 +79,11 @@
                 </div>
             {% endfor %}
         {% else %}
-            <div class="col-12">
-                <div class="card h-100">
-                    <div class="card-body text-muted text-center">
-                        You haven't uploaded any documents yet.
+            {# Empty State - No Uploaded Documents #}
+            <div class="col-12"> {# Full-width column for empty state #}
+                <div class="card h-100"> {# Card container for consistent styling #}
+                    <div class="card-body text-muted text-center"> {# Centered muted text for empty state #}
+                        You haven't uploaded any documents yet. {# Empty state message #}
                     </div>
                 </div>
             </div>
@@ -50,184 +91,206 @@
     </div>
 </div>
 
+{# Document Preview Modal - Full-screen document viewer with download and fullscreen functionality #}
 <!-- Document Preview Modal -->
-<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title w-100 text-center" id="previewModalLabel">Document Preview</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true"> {# Bootstrap modal for document preview #}
+  <div class="modal-dialog modal-xl modal-dialog-centered"> {# Extra large centered modal dialog #}
+    <div class="modal-content"> {# Modal content container #}
+      {# Modal Header with Title and Close Button #}
+      <div class="modal-header"> {# Modal header section #}
+        <h5 class="modal-title w-100 text-center" id="previewModalLabel">Document Preview</h5> {# Centered modal title #}
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> {# Bootstrap close button #}
       </div>
-      <div class="modal-body">
-        <div class="embed-responsive embed-responsive-16by9">
-          <iframe id="documentPreviewFrame" class="embed-responsive-item" style="width: 100%; height: 500px;" src="" frameborder="0" allowfullscreen></iframe>
+      {# Modal Body with Document Iframe #}
+      <div class="modal-body"> {# Modal body for content #}
+        <div class="embed-responsive embed-responsive-16by9"> {# Responsive embed container #}
+          <iframe id="documentPreviewFrame" class="embed-responsive-item" style="width: 100%; height: 500px;" src="" frameborder="0" allowfullscreen></iframe> {# Document preview iframe #}
         </div>
-         <p class="text-muted mt-3 text-center">If the preview is not working, try downloading the document.</p>
+         <p class="text-muted mt-3 text-center">If the preview is not working, try downloading the document.</p> {# Fallback message for preview issues #}
       </div>
-       <div class="modal-footer d-flex justify-content-between">
-            <div class="w-100 text-center">
-                <button type="button" class="btn btn-secondary" id="fullscreenButton">Full Screen</button>
+      {# Modal Footer with Action Buttons #}
+       <div class="modal-footer d-flex justify-content-between"> {# Footer with button layout #}
+            <div class="w-100 text-center"> {# Centered fullscreen button container #}
+                <button type="button" class="btn btn-secondary" id="fullscreenButton">Full Screen</button> {# Fullscreen toggle button #}
             </div>
-            <a href="#" id="previewDownloadButton" class="btn btn-primary position-absolute end-0 me-3">Download</a>
+            <a href="#" id="previewDownloadButton" class="btn btn-primary position-absolute end-0 me-3">Download</a> {# Positioned download button #}
         </div>
     </div>
   </div>
 </div>
 {% endblock %}
 
+{# JavaScript Block for Uploaded Documents Page Interactive Functionality #}
 {% block scripts %}
 <script>
+// Attach Favorite Button Event Listeners - Handles favorite/unfavorite actions for uploaded documents
 function attachFavoriteListeners() {
+    // Remove existing listeners to prevent duplicates
     document.querySelectorAll('.favorite-button, .add-to-favorites-button').forEach(button => {
-        button.replaceWith(button.cloneNode(true));
+        button.replaceWith(button.cloneNode(true)); // Clone node to remove existing listeners
     });
+    // Add new event listeners to all favorite buttons
     document.querySelectorAll('.favorite-button, .add-to-favorites-button').forEach(button => {
         button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const docId = this.dataset.docId;
-            fetch(`/view/toggle_favorite/${docId}`, {
+            e.preventDefault(); // Prevent default button behavior
+            const docId = this.dataset.docId; // Get document ID from data attribute
+            fetch(`/view/toggle_favorite/${docId}`, { // Make AJAX request to toggle favorite
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             })
-            .then(response => response.json())
+            .then(response => response.json()) // Parse JSON response
             .then(() => {
-                updateProfileResultStars();
+                updateProfileResultStars(); // Update favorite button states
             })
             .catch(error => {
-                console.error('Error toggling favorite:', error);
+                console.error('Error toggling favorite:', error); // Log any errors
             });
         });
     });
 }
 
+// Attach Delete Button Event Listeners - Handles document deletion with confirmation
 function attachDeleteListeners() {
-    let deleteDocId = null;
-    let deleteButtonRef = null;
-    const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
-    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    let deleteDocId = null; // Store document ID to delete
+    let deleteButtonRef = null; // Store reference to delete button
+    const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal')); // Initialize delete confirmation modal
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn'); // Get confirmation button
 
+    // Add click event listeners to all delete buttons
     document.querySelectorAll('.delete-document-button').forEach(button => {
         button.addEventListener('click', function() {
-            deleteDocId = this.dataset.docId;
-            deleteButtonRef = this;
-            deleteModal.show();
+            deleteDocId = this.dataset.docId; // Store document ID for deletion
+            deleteButtonRef = this; // Store button reference for DOM manipulation
+            deleteModal.show(); // Show confirmation modal
         });
     });
 
+    // Handle delete confirmation button click
     confirmDeleteBtn.addEventListener('click', function() {
-        if (!deleteDocId) return;
-        fetch(`/view/delete_document/${deleteDocId}`, {
+        if (!deleteDocId) return; // Exit if no document ID stored
+        fetch(`/view/delete_document/${deleteDocId}`, { // Make AJAX request to delete document
             method: 'POST',
             headers: { 'Content-Type': 'application/json' }
         })
-        .then(response => response.json())
+        .then(response => response.json()) // Parse JSON response
         .then(data => {
             if (data.status === 'success') {
-                // Remove the card from the DOM
+                // Remove the document card from the DOM
                 const card = deleteButtonRef.closest('.col-md-12');
-                if (card) card.remove();
-                showDeleteSuccessAlert();
-                updateProfileResultStars();
+                if (card) card.remove(); // Remove card element
+                showDeleteSuccessAlert(); // Show success notification
+                updateProfileResultStars(); // Update favorite states
             } else {
-                alert(data.message || 'Error deleting document.');
+                alert(data.message || 'Error deleting document.'); // Show error message
             }
-            deleteModal.hide();
+            deleteModal.hide(); // Hide confirmation modal
+            // Reset stored values
             deleteDocId = null;
             deleteButtonRef = null;
         })
         .catch(() => {
-            alert('Error deleting document.');
-            deleteModal.hide();
+            alert('Error deleting document.'); // Show generic error message
+            deleteModal.hide(); // Hide confirmation modal
+            // Reset stored values
             deleteDocId = null;
             deleteButtonRef = null;
         });
     });
 }
 
+// Show Delete Success Alert - Displays temporary success notification
 function showDeleteSuccessAlert() {
-    let alert = document.createElement('div');
-    alert.className = 'alert alert-success position-fixed top-0 start-50 translate-middle-x mt-3';
-    alert.style.zIndex = 2000;
-    alert.innerText = 'Documento eliminato con successo!';
-    document.body.appendChild(alert);
+    let alert = document.createElement('div'); // Create alert element
+    alert.className = 'alert alert-success position-fixed top-0 start-50 translate-middle-x mt-3'; // Set Bootstrap alert classes with positioning
+    alert.style.zIndex = 2000; // Ensure alert appears above other content
+    alert.innerText = 'Documento eliminato con successo!'; // Set success message text
+    document.body.appendChild(alert); // Add alert to document body
     setTimeout(() => {
-        alert.remove();
+        alert.remove(); // Remove alert after 2 seconds
     }, 2000);
 }
 
+// Update Profile Result Stars Function - Synchronizes favorite button states
 function updateProfileResultStars() {
-    fetch('/view/api/favorites')
-        .then(response => response.json())
+    fetch('/view/api/favorites') // Fetch current favorites from API
+        .then(response => response.json()) // Parse JSON response
         .then(favorites => {
-            const favoriteIds = favorites.map(doc => doc.id.toString());
+            const favoriteIds = favorites.map(doc => doc.id.toString()); // Extract favorite document IDs
+            // Update button states based on favorite status
             document.querySelectorAll('.favorite-button, .add-to-favorites-button').forEach(button => {
-                const docId = button.dataset.docId;
+                const docId = button.dataset.docId; // Get document ID from button
                 if (favoriteIds.includes(docId)) {
+                    // Document is favorited - show filled star
                     button.classList.add('favorite-button', 'favorited');
                     button.classList.remove('add-to-favorites-button', 'btn-outline-primary');
                     button.classList.add('btn-outline-secondary');
                     button.innerHTML = '<i class="fas fa-star"></i>';
                     button.title = "Remove from favorites";
                 } else {
+                    // Document is not favorited - show add button
                     button.classList.remove('favorite-button', 'favorited', 'btn-outline-secondary');
                     button.classList.add('add-to-favorites-button', 'btn-outline-primary');
                     button.innerHTML = 'Add to Favorites';
                     button.title = "Add to favorites";
                 }
             });
-            attachFavoriteListeners();
+            attachFavoriteListeners(); // Reattach listeners after updating buttons
         })
         .catch(error => {
-            console.error('Error updating stars:', error);
+            console.error('Error updating stars:', error); // Log any errors
         });
 }
 
+// Attach Preview Button Event Listeners - Handles document preview modal functionality
 function attachPreviewListeners() {
-    const previewButtons = document.querySelectorAll('.preview-button');
-    const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
-    const previewFrame = document.getElementById('documentPreviewFrame');
-    const downloadButton = document.getElementById('previewDownloadButton');
-    const fullscreenButton = document.getElementById('fullscreenButton');
-    const previewModalDialog = document.querySelector('#previewModal .modal-dialog');
+    const previewButtons = document.querySelectorAll('.preview-button'); // Get all preview buttons
+    const previewModal = new bootstrap.Modal(document.getElementById('previewModal')); // Initialize Bootstrap modal
+    const previewFrame = document.getElementById('documentPreviewFrame'); // Get preview iframe
+    const downloadButton = document.getElementById('previewDownloadButton'); // Get download button
+    const fullscreenButton = document.getElementById('fullscreenButton'); // Get fullscreen button
+    const previewModalDialog = document.querySelector('#previewModal .modal-dialog'); // Get modal dialog
 
+    // Add click event listeners to all preview buttons
     previewButtons.forEach(button => {
         button.addEventListener('click', function() {
-            const docId = this.dataset.docId;
-            // Reset modal to non-fullscreen and reset button text/icon
+            const docId = this.dataset.docId; // Get document ID from data attribute
+            // Reset modal to non-fullscreen state and reset button text
             previewModalDialog.classList.remove('modal-fullscreen-mode');
             fullscreenButton.innerHTML = '<i class=\'fas fa-expand me-2\'></i>Full Screen';
 
-            previewFrame.src = `/view/preview/${docId}`;
-            downloadButton.href = `/view/download/${docId}`;
-            previewModal.show();
+            // Set iframe source and download link
+            previewFrame.src = `/view/preview/${docId}`; // Set preview URL
+            downloadButton.href = `/view/download/${docId}`; // Set download URL
+            previewModal.show(); // Show the modal
         });
     });
 
-    // Gestione chiusura modal
+    // Handle modal close event - cleanup and reset
     const modal = document.getElementById('previewModal');
     modal.addEventListener('hidden.bs.modal', function () {
-        previewFrame.src = '';
-        downloadButton.href = '#';
+        previewFrame.src = ''; // Clear iframe source
+        downloadButton.href = '#'; // Reset download link
+        // Clean up modal backdrop and body classes
         document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
         document.body.classList.remove('modal-open');
         document.body.style.overflow = '';
         document.body.style.paddingRight = '';
     });
 
-    // Gestione full screen
+    // Handle fullscreen toggle functionality
     fullscreenButton.addEventListener('click', function() {
-        previewModalDialog.classList.toggle('modal-fullscreen-mode');
+        previewModalDialog.classList.toggle('modal-fullscreen-mode'); // Toggle fullscreen class
         if (previewModalDialog.classList.contains('modal-fullscreen-mode')) {
-            this.innerHTML = '<i class="fas fa-compress me-2"></i>Exit Full Screen';
+            this.innerHTML = '<i class="fas fa-compress me-2"></i>Exit Full Screen'; // Update button text
         } else {
-            this.innerHTML = '<i class="fas fa-expand me-2"></i>Full Screen';
+            this.innerHTML = '<i class="fas fa-expand me-2"></i>Full Screen'; // Update button text
         }
     });
 
-    // Add CSS for fullscreen mode solo una volta
+    // Add CSS for fullscreen mode - only inject once
     if (!document.getElementById('fullscreen-style')) {
         const style = document.createElement('style');
-        style.id = 'fullscreen-style';
+        style.id = 'fullscreen-style'; // Set unique ID to prevent duplicate injection
         style.innerHTML = `
             .modal-fullscreen-mode {
                 width: 100vw !important;
@@ -257,34 +320,39 @@ function attachPreviewListeners() {
             .modal-fullscreen-mode .modal-footer {
                 flex-shrink: 0;
             }
-        `;
-        document.head.appendChild(style);
+        `; // CSS rules for fullscreen modal mode
+        document.head.appendChild(style); // Add styles to document head
     }
 }
 
+// Document Ready Event Handler - Initialize all functionality when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    attachFavoriteListeners();
-    attachDeleteListeners();
-    attachPreviewListeners();
-    updateProfileResultStars();
+    attachFavoriteListeners(); // Initialize favorite button listeners
+    attachDeleteListeners(); // Initialize delete button listeners
+    attachPreviewListeners(); // Initialize preview button listeners
+    updateProfileResultStars(); // Initialize favorite button states
 });
 </script>
 
+{# Document Delete Confirmation Modal - Safe deletion with user confirmation #}
 <!-- Modal di conferma eliminazione documento -->
-<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deleteConfirmModalLabel">Confirm Deletion</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true"> {# Bootstrap modal for delete confirmation #}
+  <div class="modal-dialog modal-dialog-centered"> {# Centered modal dialog #}
+    <div class="modal-content"> {# Modal content container #}
+      {# Modal Header with Title and Close Button #}
+      <div class="modal-header"> {# Modal header section #}
+        <h5 class="modal-title" id="deleteConfirmModalLabel">Confirm Deletion</h5> {# Modal title #}
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> {# Bootstrap close button #}
       </div>
-      <div class="modal-body">
-        Are you sure you want to delete this document?<br>
-        This action cannot be undone.
+      {# Modal Body with Confirmation Message #}
+      <div class="modal-body"> {# Modal body for content #}
+        Are you sure you want to delete this document?<br> {# Confirmation question #}
+        This action cannot be undone. {# Warning about irreversible action #}
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Elimina</button>
+      {# Modal Footer with Action Buttons #}
+      <div class="modal-footer"> {# Modal footer for buttons #}
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button> {# Cancel button #}
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Elimina</button> {# Confirm delete button #}
       </div>
     </div>
   </div>

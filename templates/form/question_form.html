@@ -1,54 +1,91 @@
-{% extends 'main/base.html' %}
+{#
+  StudyHub - Question/Request Submission Form Template
+  
+  Purpose: Provide users with a contact form to submit questions, doubts, or problems
+  Features:
+  - Clean, centered form layout with professional styling
+  - Flask-WTF form integration with CSRF protection
+  - Real-time validation with error display
+  - Responsive design for all device sizes
+  - User-friendly interface with clear instructions
+  
+  Form Fields:
+  - Subject: Topic or title of the user's question/request
+  - Email: User's email address for response communication
+  - Body: Detailed description of the question, doubt, or problem
+  
+  Form Validation:
+  - Server-side validation through Flask-WTF
+  - Visual error feedback with Bootstrap invalid-feedback classes
+  - Required field validation for all inputs
+  - Email format validation for email field
+  
+  User Experience:
+  - Centered card layout for focus and professionalism
+  - Clear instructions and form labeling
+  - Full-width submit button for easy interaction
+  - Responsive column sizing for different screen sizes
+  
+  Dependencies: Flask-WTF forms, Bootstrap styling, CSRF protection, base template
+#}
 
-{% block title %}Form – StudyHub{% endblock %}
+{% extends 'main/base.html' %} {# Inherit from base template for consistent layout #}
 
-{% block content %}
-<div class="container py-5">
-  <div class="row justify-content-center">
-    <div class="col-md-8 col-lg-6">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <h2 class="card-title text-center mb-4">Submit a Request</h2>
-          <p class="text-center mb-4">
-            Please fill out the form below with your questions, doubts, or problems.
+{% block title %}Form – StudyHub{% endblock %} {# Set browser tab title #}
+
+{% block content %} {# Main content block #}
+<div class="container py-5"> {# Main container with vertical padding #}
+  <div class="row justify-content-center"> {# Centered row for form positioning #}
+    <div class="col-md-8 col-lg-6"> {# Responsive column - wider on medium screens, narrower on large #}
+      <div class="card shadow-sm"> {# Card container with subtle shadow for depth #}
+        <div class="card-body"> {# Card body for padding and structure #}
+          {# Form Header Section #}
+          <h2 class="card-title text-center mb-4">Submit a Request</h2> {# Centered form title with bottom margin #}
+          <p class="text-center mb-4"> {# Centered instruction text with bottom margin #}
+            Please fill out the form below with your questions, doubts, or problems. {# User guidance instructions #}
           </p>
           
-          <form method="post" action="{{ url_for('form.ask_question') }}">
-            {{ form.hidden_tag() }}
+          {# Contact Form - Flask-WTF Integration #}
+          <form method="post" action="{{ url_for('form.ask_question') }}"> {# POST form to question submission endpoint #}
+            {{ form.hidden_tag() }} {# CSRF protection token - Flask-WTF hidden field #}
 
-            <div class="mb-3">
-              {{ form.subject.label(class="form-label") }}
+            {# Subject Field - Question/Request Topic #}
+            <div class="mb-3"> {# Bootstrap form group with bottom margin #}
+              {{ form.subject.label(class="form-label") }} {# Subject field label with Bootstrap styling #}
               {{ form.subject(
                   class="form-control" ~ (form.subject.errors and ' is-invalid' or '')
-                ) }}
-              {% for err in form.subject.errors %}
-                <div class="invalid-feedback">{{ err }}</div>
+                ) }} {# Subject input with Bootstrap classes and conditional error styling #}
+              {% for err in form.subject.errors %} {# Loop through subject field validation errors #}
+                <div class="invalid-feedback">{{ err }}</div> {# Display validation error message with Bootstrap invalid feedback styling #}
               {% endfor %}
             </div>
 
-            <div class="mb-3">
-              {{ form.email.label(class="form-label") }}
+            {# Email Field - User Contact Information #}
+            <div class="mb-3"> {# Bootstrap form group with bottom margin #}
+              {{ form.email.label(class="form-label") }} {# Email field label with Bootstrap styling #}
               {{ form.email(
                   class="form-control" ~ (form.email.errors and ' is-invalid' or '')
-                ) }}
-              {% for err in form.email.errors %}
-                <div class="invalid-feedback">{{ err }}</div>
+                ) }} {# Email input with Bootstrap classes and conditional error styling #}
+              {% for err in form.email.errors %} {# Loop through email field validation errors #}
+                <div class="invalid-feedback">{{ err }}</div> {# Display validation error message with Bootstrap invalid feedback styling #}
               {% endfor %}
             </div>
 
-            <div class="mb-3">
-              {{ form.body.label(class="form-label") }}
+            {# Message Body Field - Detailed Question/Problem Description #}
+            <div class="mb-3"> {# Bootstrap form group with bottom margin #}
+              {{ form.body.label(class="form-label") }} {# Body field label with Bootstrap styling #}
               {{ form.body(
                   class="form-control" ~ (form.body.errors and ' is-invalid' or ''),
                   rows=5
-                ) }}
-              {% for err in form.body.errors %}
-                <div class="invalid-feedback">{{ err }}</div>
+                ) }} {# Body textarea with 5 rows, Bootstrap classes, and conditional error styling #}
+              {% for err in form.body.errors %} {# Loop through body field validation errors #}
+                <div class="invalid-feedback">{{ err }}</div> {# Display validation error message with Bootstrap invalid feedback styling #}
               {% endfor %}
             </div>
 
-            <button type="submit" class="btn btn-primary w-100">
-              Send Request
+            {# Form Submit Button #}
+            <button type="submit" class="btn btn-primary w-100"> {# Full-width primary submit button #}
+              Send Request {# Button text #}
             </button>
           </form>
         </div>

@@ -1,11 +1,43 @@
-{% extends 'main/base.html' %}
+{#
+    STUDYHUB WEB APPLICATION - 500 SERVER ERROR PAGE TEMPLATE
+    ================================================================
+    
+    PURPOSE:
+    - Displays user-friendly 500 "Internal Server Error" page
+    - Provides clear error message and recovery options
+    - Maintains consistent branding during server error states
+    
+    FEATURES:
+    - Large, prominent 500 error code display
+    - Clear explanatory message about server issues
+    - Primary action button to return to homepage
+    - Centered layout with responsive design
+    - Bootstrap styling integration
+    
+    FUNCTIONALITY:
+    - Extends base template for consistent header/footer
+    - Uses Flask url_for() for dynamic home page linking
+    - Responsive container with vertical padding
+    - Professional error handling for technical issues
+    
+    DEPENDENCIES:
+    - base.html template for layout structure
+    - Bootstrap for responsive styling and components
+    - Flask routing for home page redirection
+    
+    AUTHOR: StudyHub Development Team
+    LAST MODIFIED: 2024
+#}
 
-{% block title %}500 - Internal Server Error{% endblock %}
+<!-- filepath: /Users/leo_barna/Documents/UNIVERSITA'/3° YEAR/ELECTIVE courses/Lab of Web Technologies/GitHub/StudyHub_web-app/templates/errors/500.html -->
+{% extends 'main/base.html' %} <!-- Extend base template for consistent layout -->
 
-{% block content %}
-<div class="container text-center py-5">
-  <h1 class="display-4">500</h1>
-  <p class="lead">Internal server error. Please try again later.</p>
-  <a href="{{ url_for('main.index') }}" class="btn btn-primary">Return Home</a>
-</div>
-{% endblock %}
+{% block title %}500 - Internal Server Error{% endblock %} <!-- Set browser tab title for server error page -->
+
+{% block content %} <!-- Main content block for 500 error display -->
+<div class="container text-center py-5"> <!-- Centered container with vertical padding -->
+  <h1 class="display-4">500</h1> <!-- Large, prominent 500 error code -->
+  <p class="lead">Internal server error. Please try again later.</p> <!-- Clear explanatory message about server issues -->
+  <a href="{{ url_for('main.index') }}" class="btn btn-primary">Return Home</a> <!-- Primary action button to homepage -->
+</div> <!-- End container -->
+{% endblock %} <!-- End content block -->

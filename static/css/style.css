@@ -1,54 +1,62 @@
+/* StudyHub Main Stylesheet
+ * This is the primary CSS file for the StudyHub web application containing
+ * the complete design system with CSS custom properties, component styles,
+ * layout definitions, and responsive design rules. It implements a dark theme
+ * with gold accent colors for the public-facing sections of the application.
+ */
+
+/* CSS Custom Properties (CSS Variables) */
 /* Base Styles & Variables */
 :root {
-    /* Primary Colors */
-    --primary-50: #D4A017;
-    --primary-100: #D4A017;
-    --primary-200: #D4A017;
-    --primary-300: #D4A017;
-    --primary-400: #D4A017;
-    --primary-500: #D4A017;
-    --primary-600: #D4A017;
-    --primary-700: #D4A017;
-    --primary-800: #D4A017;
-    --primary-900: #D4A017;
+    /* Primary Brand Colors - Golden yellow theme palette */
+    --primary-50: #D4A017;   /* Lightest primary shade */
+    --primary-100: #D4A017;  /* Light primary shade */
+    --primary-200: #D4A017;  /* Medium-light primary shade */
+    --primary-300: #D4A017;  /* Medium primary shade */
+    --primary-400: #D4A017;  /* Medium primary shade */
+    --primary-500: #D4A017;  /* Base primary color - StudyHub gold */
+    --primary-600: #D4A017;  /* Medium-dark primary shade */
+    --primary-700: #D4A017;  /* Dark primary shade */
+    --primary-800: #D4A017;  /* Darker primary shade */
+    --primary-900: #D4A017;  /* Darkest primary shade */
     
-    /* Accent Colors */
-    --accent-500: #D4A017;
-    --accent-600: #D4A017;
-    --accent-700: #D4A017;
+    /* Accent Colors - Secondary brand colors */
+    --accent-500: #D4A017;   /* Base accent color */
+    --accent-600: #D4A017;   /* Medium accent shade */
+    --accent-700: #D4A017;   /* Dark accent shade */
     
-    /* Neutral Colors */
-    --gray-50: #000000;
-    --gray-100: #000000;
-    --gray-200: #000000;
-    --gray-300: #000000;
-    --gray-400: #000000;
-    --gray-500: #FFFFFF;
-    --gray-600: #FFFFFF;
-    --gray-700: #FFFFFF;
-    --gray-800: #FFFFFF;
-    --gray-900: #FFFFFF;
+    /* Neutral Colors - Dark theme grayscale palette */
+    --gray-50: #000000;      /* Darkest neutral (black) */
+    --gray-100: #000000;     /* Very dark neutral */
+    --gray-200: #000000;     /* Dark neutral */
+    --gray-300: #000000;     /* Medium-dark neutral */
+    --gray-400: #000000;     /* Medium neutral */
+    --gray-500: #FFFFFF;     /* Medium-light neutral (white) */
+    --gray-600: #FFFFFF;     /* Light neutral */
+    --gray-700: #FFFFFF;     /* Very light neutral */
+    --gray-800: #FFFFFF;     /* Lightest neutral */
+    --gray-900: #FFFFFF;     /* Lightest neutral (white) */
     
-    /* Semantic Colors */
-    --success: #D4A017;
-    --warning: #D4A017;
-    --danger: #D4A017;
-    --info: #D4A017;
+    /* Semantic Colors - Status and feedback colors */
+    --success: #D4A017;      /* Success state color */
+    --warning: #D4A017;      /* Warning state color */
+    --danger: #D4A017;       /* Error/danger state color */
+    --info: #D4A017;         /* Information state color */
     
-    /* Theme Colors */
-    --primary: var(--primary-700);
-    --primary-hover: var(--primary-800);
-    --secondary: var(--gray-600);
-    --accent: var(--accent-600);
-    --accent-hover: var(--accent-700);
-    --background: #000000;
-    --text: #FFFFFF;
-    --text-light: #FFFFFF;
-    --border: #FFFFFF;
-    --card-bg: #000000;
+    /* Theme Application Colors - Main color assignments */
+    --primary: var(--primary-700);         /* Primary brand color */
+    --primary-hover: var(--primary-800);   /* Primary hover state */
+    --secondary: var(--gray-600);          /* Secondary text color */
+    --accent: var(--accent-600);           /* Accent color */
+    --accent-hover: var(--accent-700);     /* Accent hover state */
+    --background: #000000;                 /* Page background color */
+    --text: #FFFFFF;                       /* Primary text color */
+    --text-light: #FFFFFF;                 /* Secondary text color */
+    --border: #FFFFFF;                     /* Border color */
+    --card-bg: #000000;                    /* Card background color */
     
-    /* Shadows */
-    --shadow-sm: 0 1px 2px 0 rgba(255, 255, 255, 0.05);
+    /* Shadow System - Depth and elevation effects */
+    --shadow-sm: 0 1px 2px 0 rgba(255, 255, 255, 0.05);  /* Small shadow */
     --shadow: 0 1px 3px 0 rgba(255, 255, 255, 0.1), 0 1px 2px 0 rgba(255, 255, 255, 0.06);
     --shadow-md: 0 4px 6px -1px rgba(255, 255, 255, 0.1), 0 2px 4px -1px rgba(255, 255, 255, 0.06);
     --shadow-lg: 0 10px 15px -3px rgba(255, 255, 255, 0.1), 0 4px 6px -2px rgba(255, 255, 255, 0.05);

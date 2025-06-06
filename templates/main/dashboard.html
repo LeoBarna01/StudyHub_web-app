@@ -1,305 +1,318 @@
-{% extends 'main/base.html' %}
+<!-- 
+  StudyHub Dashboard Template
+  Main dashboard interface for authenticated users providing navigation to key features,
+  study methodology recommendations, and personalized welcome experience. Uses a 3x3 grid
+  layout for feature navigation and includes educational content about effective study techniques.
+-->
+{% extends 'main/base.html' %} <!-- Inherit from base template -->
 
-{% block title %}Dashboard - StudyHub{% endblock %}
+{% block title %}Dashboard - StudyHub{% endblock %} <!-- Set page title -->
 
 {% block content %}
-<div class="container py-5">
-  <!-- Welcome Section -->
-  <div class="row mb-5 justify-content-center">
-    <div class="col-12 text-center">
-      <h1 class="display-4 fw-bold mb-3">Welcome to StudyHub, {{ current_user.first_name }}!</h1>
-      <p class="lead text-muted">Your personal study companion. Here's how to make the most of StudyHub:</p>
+<div class="container py-5"> <!-- Main container with vertical padding -->
+  
+  <!-- Welcome Section: Personalized greeting for authenticated users -->
+  <div class="row mb-5 justify-content-center"> <!-- Welcome row with bottom margin -->
+    <div class="col-12 text-center"> <!-- Full-width centered column -->
+      <h1 class="display-4 fw-bold mb-3">Welcome to StudyHub, {{ current_user.first_name }}!</h1> <!-- Personalized welcome message with user's first name -->
+      <p class="lead text-muted">Your personal study companion. Here's how to make the most of StudyHub:</p> <!-- Introductory description -->
     </div>
   </div>
 
-  <!-- Navigation Guide (3x3 Grid) -->
-  <div class="row g-4 justify-content-center">
+  <!-- Navigation Guide: 3x3 Grid Layout for Feature Discovery -->
+  <div class="row g-4 justify-content-center"> <!-- Main grid container with gap spacing -->
     
-    {# Row 1 #}
-    <div class="row g-4 w-100"> {# Use w-100 to make this row take full width of its parent column #}
-      {# Row 1, Col 1: Upload #}
-      <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body p-4 text-center">
-            <div class="d-flex align-items-center justify-content-center mb-3">
-              <i class="fas fa-upload fa-2x text-primary me-3"></i>
-              <h3 class="h4 mb-0">Upload</h3>
+    {# Row 1: Upload and Browse Features #}
+    <div class="row g-4 w-100"> {# Full-width row for proper grid alignment #}
+      
+      {# Upload Feature Card - Position 1,1 #}
+      <div class="col-md-4"> <!-- First column: Upload functionality -->
+        <div class="card h-100 border-0 shadow-sm"> <!-- Full-height card with subtle shadow -->
+          <div class="card-body p-4 text-center"> <!-- Card content with padding and center alignment -->
+            <div class="d-flex align-items-center justify-content-center mb-3"> <!-- Icon and title container -->
+              <i class="fas fa-upload fa-2x text-primary me-3"></i> <!-- Upload icon -->
+              <h3 class="h4 mb-0">Upload</h3> <!-- Feature title -->
             </div>
-            <p class="text-muted mb-3">Share your study materials with the community:</p>
-            <ul class="list-unstyled">
-              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Upload lecture notes, summaries, and study guides</li>
-              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Add detailed descriptions and tags</li>
-              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Organize by course and subject</li>
+            <p class="text-muted mb-3">Share your study materials with the community:</p> <!-- Feature description -->
+            <ul class="list-unstyled"> <!-- Benefits list without bullet points -->
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Upload lecture notes, summaries, and study guides</li> <!-- Benefit 1 with checkmark -->
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Add detailed descriptions and tags</li> <!-- Benefit 2 with checkmark -->
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Organize by course and subject</li> <!-- Benefit 3 with checkmark -->
             </ul>
-            <a href="{{ url_for('upload.upload_document') }}" class="btn btn-primary mt-3">Start Uploading</a>
+            <a href="{{ url_for('upload.upload_document') }}" class="btn btn-primary mt-3">Start Uploading</a> <!-- Action button -->
           </div>
         </div>
       </div>
       
-      {# Row 1, Col 2: Empty #}
-      <div class="col-md-4">
-        {# This column is intentionally left blank #}
+      {# Empty Space - Position 1,2 #}
+      <div class="col-md-4"> <!-- Middle column intentionally left empty for grid balance -->
+        {# This column is intentionally left blank for visual balance #}
       </div>
       
-      {# Row 1, Col 3: Browse #}
-      <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body p-4 text-center">
-            <div class="d-flex align-items-center justify-content-center mb-3">
-              <i class="fas fa-search fa-2x text-primary me-3"></i>
-              <h3 class="h4 mb-0">Browse</h3>
+      {# Browse Feature Card - Position 1,3 #}
+      <div class="col-md-4"> <!-- Third column: Browse functionality -->
+        <div class="card h-100 border-0 shadow-sm"> <!-- Full-height card with subtle shadow -->
+          <div class="card-body p-4 text-center"> <!-- Card content with padding and center alignment -->
+            <div class="d-flex align-items-center justify-content-center mb-3"> <!-- Icon and title container -->
+              <i class="fas fa-search fa-2x text-primary me-3"></i> <!-- Search icon -->
+              <h3 class="h4 mb-0">Browse</h3> <!-- Feature title -->
             </div>
-            <p class="text-muted mb-3">Discover study materials from other students:</p>
-            <ul class="list-unstyled">
-              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Search by course, subject, or keyword</li>
-              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Filter by university or author</li>
-              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Save your favorite materials</li>
+            <p class="text-muted mb-3">Discover study materials from other students:</p> <!-- Feature description -->
+            <ul class="list-unstyled"> <!-- Benefits list without bullet points -->
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Search by course, subject, or keyword</li> <!-- Benefit 1 with checkmark -->
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Filter by university or author</li> <!-- Benefit 2 with checkmark -->
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Save your favorite materials</li> <!-- Benefit 3 with checkmark -->
             </ul>
-            <a href="{{ url_for('view.search') }}" class="btn btn-primary mt-3">Start Browsing</a>
+            <a href="{{ url_for('view.search') }}" class="btn btn-primary mt-3">Start Browsing</a> <!-- Action button -->
           </div>
         </div>
       </div>
     </div>
     
-    {# Row 2 #}
-    <div class="row g-4 w-100"> {# Use w-100 to make this row take full width of its parent column #}
-      {# Row 2, Col 1: Empty #}
-      <div class="col-md-4">
-        {# This column is intentionally left blank #}
+    {# Row 2: Profile Feature (Centered) #}
+    <div class="row g-4 w-100"> {# Full-width row for proper grid alignment #}
+      
+      {# Empty Space - Position 2,1 #}
+      <div class="col-md-4"> <!-- First column intentionally left empty for grid balance -->
+        {# This column is intentionally left blank for visual balance #}
       </div>
       
-      {# Row 2, Col 2: Profile (Centered) #}
-      <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body p-4 text-center">
-            <div class="d-flex align-items-center justify-content-center mb-3">
-              <i class="fas fa-user-circle fa-2x text-primary me-3"></i>
-              <h3 class="h4 mb-0">Profile</h3>
+      {# Profile Feature Card - Position 2,2 (Center) #}
+      <div class="col-md-4"> <!-- Center column: Profile management -->
+        <div class="card h-100 border-0 shadow-sm"> <!-- Full-height card with subtle shadow -->
+          <div class="card-body p-4 text-center"> <!-- Card content with padding and center alignment -->
+            <div class="d-flex align-items-center justify-content-center mb-3"> <!-- Icon and title container -->
+              <i class="fas fa-user-circle fa-2x text-primary me-3"></i> <!-- User profile icon -->
+              <h3 class="h4 mb-0">Profile</h3> <!-- Feature title -->
             </div>
-            <p class="text-muted mb-3">Manage your StudyHub account:</p>
-            <ul class="list-unstyled">
-              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>View your uploaded documents</li>
-              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Access saved materials</li>
-              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Update your profile information</li>
+            <p class="text-muted mb-3">Manage your StudyHub account:</p> <!-- Feature description -->
+            <ul class="list-unstyled"> <!-- Benefits list without bullet points -->
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>View your uploaded documents</li> <!-- Benefit 1 with checkmark -->
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Access saved materials</li> <!-- Benefit 2 with checkmark -->
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Update your profile information</li> <!-- Benefit 3 with checkmark -->
             </ul>
-            <a href="{{ url_for('auth.profile') }}" class="btn btn-primary mt-3">View Profile</a>
+            <a href="{{ url_for('auth.profile') }}" class="btn btn-primary mt-3">View Profile</a> <!-- Action button -->
           </div>
         </div>
       </div>
       
-      {# Row 2, Col 3: Empty #}
-      <div class="col-md-4">
-        {# This column is intentionally left blank #}
+      {# Empty Space - Position 2,3 #}
+      <div class="col-md-4"> <!-- Third column intentionally left empty for grid balance -->
+        {# This column is intentionally left blank for visual balance #}
       </div>
     </div>
     
-    {# Row 3 #}
-    <div class="row g-4 w-100"> {# Use w-100 to make this row take full width of its parent column #}
-      {# Row 3, Col 1: Form #}
-      <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body p-4 text-center">
-            <div class="d-flex align-items-center justify-content-center mb-3">
-              <i class="fas fa-comments fa-2x text-primary me-3"></i>
-              <h3 class="h4 mb-0">Form</h3>
+    {# Row 3: Form and Favorites Features #}
+    <div class="row g-4 w-100"> {# Full-width row for proper grid alignment #}
+      
+      {# Form Feature Card - Position 3,1 #}
+      <div class="col-md-4"> <!-- First column: Question/Help form -->
+        <div class="card h-100 border-0 shadow-sm"> <!-- Full-height card with subtle shadow -->
+          <div class="card-body p-4 text-center"> <!-- Card content with padding and center alignment -->
+            <div class="d-flex align-items-center justify-content-center mb-3"> <!-- Icon and title container -->
+              <i class="fas fa-comments fa-2x text-primary me-3"></i> <!-- Comments/chat icon -->
+              <h3 class="h4 mb-0">Form</h3> <!-- Feature title -->
             </div>
-            <p class="text-muted mb-3">A form that allows you to ask questions or resolve any doubts or problems you're experiencing, especially regarding various subjects and topics.</p>
-            <ul class="list-unstyled">
-              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Fill out the form to request assistance</li>
-              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Our team will respond to you via email</li>
-              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Support for any academic subject or topic</li>
+            <p class="text-muted mb-3">A form that allows you to ask questions or resolve any doubts or problems you're experiencing, especially regarding various subjects and topics.</p> <!-- Detailed feature description -->
+            <ul class="list-unstyled"> <!-- Benefits list without bullet points -->
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Fill out the form to request assistance</li> <!-- Benefit 1 with checkmark -->
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Our team will respond to you via email</li> <!-- Benefit 2 with checkmark -->
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Support for any academic subject or topic</li> <!-- Benefit 3 with checkmark -->
             </ul>
-            <a href="{{ url_for('form.ask_question') }}" class="btn btn-primary mt-3">Ask a Question</a>
+            <a href="{{ url_for('form.ask_question') }}" class="btn btn-primary mt-3">Ask a Question</a> <!-- Action button -->
           </div>
         </div>
       </div>
       
-      {# Row 3, Col 2: Empty #}
-      <div class="col-md-4">
-        {# This column is intentionally left blank #}
+      {# Empty Space - Position 3,2 #}
+      <div class="col-md-4"> <!-- Middle column intentionally left empty for grid balance -->
+        {# This column is intentionally left blank for visual balance #}
       </div>
       
-      {# Row 3, Col 3: Favorites #}
-      <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body p-4 text-center">
-            <div class="d-flex align-items-center justify-content-center mb-3">
-              <i class="fas fa-star fa-2x text-primary me-3"></i>
-              <h3 class="h4 mb-0">Favorites</h3>
+      {# Favorites Feature Card - Position 3,3 #}
+      <div class="col-md-4"> <!-- Third column: Saved/favorite documents -->
+        <div class="card h-100 border-0 shadow-sm"> <!-- Full-height card with subtle shadow -->
+          <div class="card-body p-4 text-center"> <!-- Card content with padding and center alignment -->
+            <div class="d-flex align-items-center justify-content-center mb-3"> <!-- Icon and title container -->
+              <i class="fas fa-star fa-2x text-primary me-3"></i> <!-- Star/favorites icon -->
+              <h3 class="h4 mb-0">Favorites</h3> <!-- Feature title -->
             </div>
-            <p class="text-muted mb-3">Manage your saved documents:</p>
-            <ul class="list-unstyled">
-              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>View your favorite documents</li>
-              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Organize your saved study materials</li>
+            <p class="text-muted mb-3">Manage your saved documents:</p> <!-- Feature description -->
+            <ul class="list-unstyled"> <!-- Benefits list without bullet points -->
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>View your favorite documents</li> <!-- Benefit 1 with checkmark -->
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Organize your saved study materials</li> <!-- Benefit 2 with checkmark -->
             </ul>
-            <a href="{{ url_for('view.favorites') }}" class="btn btn-primary mt-3">View Favorites</a>
+            <a href="{{ url_for('view.favorites') }}" class="btn btn-primary mt-3">View Favorites</a> <!-- Action button -->
           </div>
         </div>
       </div>
     </div>
     
-  </div>{# End of the main navigation guide row #}
+  </div>{# End of the main navigation guide grid layout #}
 
   <!-- Effective Study Methodologies Section -->
-  <div class="row mt-5">
-    <div class="col-12">
-      <div class="card shadow-sm bg-warning text-white">
-        <div class="card-body">
-          <h3 class="card-title mb-4 text-white">Effective Study Methodologies</h3>
-          <p class="card-text text-white mb-4">Discover proven study techniques that can help you learn more effectively and retain information better.</p>
+  {# Educational section showcasing evidence-based study techniques #}
+  <div class="row mt-5"> <!-- Top margin for visual separation from main features -->
+    <div class="col-12"> <!-- Full-width column for methodology section -->
+      <div class="card shadow-sm bg-warning text-white"> <!-- Warning color background creates visual distinction -->
+        <div class="card-body"> <!-- Card content with padding -->
+          <h3 class="card-title mb-4 text-white">Effective Study Methodologies</h3> <!-- Section title -->
+          <p class="card-text text-white mb-4">Discover proven study techniques that can help you learn more effectively and retain information better.</p> <!-- Section description -->
           
-          <div class="row g-4">
-            <!-- Pomodoro Technique -->
-            <div class="col-md-6">
-              <div class="card h-100 border-0 shadow-sm bg-warning text-white">
-                <div class="card-body">
-                  <h4 class="card-title h5 mb-3 text-white">
-                    <i class="fas fa-clock text-dark me-2"></i>
+          {# 4x2 grid layout for study methodology cards #}
+          <div class="row g-4"> <!-- Grid with gap spacing for methodology cards -->
+            {# Pomodoro Technique Card - Time Management Method #}
+            <div class="col-md-6"> <!-- Half-width column for responsive grid -->
+              <div class="card h-100 border-0 shadow-sm bg-warning text-white"> <!-- Full-height card matching parent styling -->
+                <div class="card-body"> <!-- Card content with padding -->
+                  <h4 class="card-title h5 mb-3 text-white"> <!-- Methodology title -->
+                    <i class="fas fa-clock text-dark me-2"></i> <!-- Clock icon representing time management -->
                     Pomodoro Technique
                   </h4>
-                  <p class="card-text text-white">A time management method that uses focused work intervals followed by short breaks:</p>
-                  <ul class="list-unstyled text-white">
-                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>25 minutes of focused study</li>
-                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>5-minute break</li>
-                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>After 4 cycles, take a longer break (15-30 minutes)</li>
+                  <p class="card-text text-white">A time management method that uses focused work intervals followed by short breaks:</p> <!-- Method description -->
+                  <ul class="list-unstyled text-white"> <!-- Benefits list without bullet points -->
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>25 minutes of focused study</li> <!-- Step 1 with checkmark -->
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>5-minute break</li> <!-- Step 2 with checkmark -->
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>After 4 cycles, take a longer break (15-30 minutes)</li> <!-- Step 3 with checkmark -->
                   </ul>
                 </div>
               </div>
             </div>
 
-            <!-- Active Recall -->
-            <div class="col-md-6">
-              <div class="card h-100 border-0 shadow-sm bg-warning text-white">
-                <div class="card-body">
-                  <h4 class="card-title h5 mb-3 text-white">
-                    <i class="fas fa-brain text-dark me-2"></i>
+            {# Active Recall Card - Memory Retrieval Technique #}
+            <div class="col-md-6"> <!-- Half-width column for responsive grid -->
+              <div class="card h-100 border-0 shadow-sm bg-warning text-white"> <!-- Full-height card matching parent styling -->
+                <div class="card-body"> <!-- Card content with padding -->
+                  <h4 class="card-title h5 mb-3 text-white"> <!-- Methodology title -->
+                    <i class="fas fa-brain text-dark me-2"></i> <!-- Brain icon representing cognitive learning -->
                     Active Recall
                   </h4>
-                  <p class="card-text text-white">A powerful learning technique that involves actively retrieving information from memory:</p>
-                  <ul class="list-unstyled text-white">
-                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Test yourself without looking at notes</li>
-                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Create practice questions</li>
-                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Use flashcards for key concepts</li>
+                  <p class="card-text text-white">A powerful learning technique that involves actively retrieving information from memory:</p> <!-- Method description -->
+                  <ul class="list-unstyled text-white"> <!-- Benefits list without bullet points -->
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Test yourself without looking at notes</li> <!-- Step 1 with checkmark -->
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Create practice questions</li> <!-- Step 2 with checkmark -->
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Use flashcards for key concepts</li> <!-- Step 3 with checkmark -->
                   </ul>
                 </div>
               </div>
             </div>
 
-            <!-- Spaced Repetition -->
-            <div class="col-md-6">
-              <div class="card h-100 border-0 shadow-sm bg-warning text-white">
-                <div class="card-body">
-                  <h4 class="card-title h5 mb-3 text-white">
-                    <i class="fas fa-calendar-alt text-dark me-2"></i>
+            {# Spaced Repetition Card - Long-term Memory Technique #}
+            <div class="col-md-6"> <!-- Half-width column for responsive grid -->
+              <div class="card h-100 border-0 shadow-sm bg-warning text-white"> <!-- Full-height card matching parent styling -->
+                <div class="card-body"> <!-- Card content with padding -->
+                  <h4 class="card-title h5 mb-3 text-white"> <!-- Methodology title -->
+                    <i class="fas fa-calendar-alt text-dark me-2"></i> <!-- Calendar icon representing scheduled review -->
                     Spaced Repetition
                   </h4>
-                  <p class="card-text text-white">Review material at increasing intervals to strengthen long-term memory:</p>
-                  <ul class="list-unstyled text-white">
-                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Review after 1 day</li>
-                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Then after 3 days</li>
-                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Then after 1 week</li>
+                  <p class="card-text text-white">Review material at increasing intervals to strengthen long-term memory:</p> <!-- Method description -->
+                  <ul class="list-unstyled text-white"> <!-- Benefits list without bullet points -->
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Review after 1 day</li> <!-- Step 1 with checkmark -->
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Then after 3 days</li> <!-- Step 2 with checkmark -->
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Then after 1 week</li> <!-- Step 3 with checkmark -->
                   </ul>
                 </div>
               </div>
             </div>
 
-            <!-- Blurting Method -->
-            <div class="col-md-6">
-              <div class="card h-100 border-0 shadow-sm bg-warning text-white">
-                <div class="card-body">
-                  <h4 class="card-title h5 mb-3 text-white">
-                    <i class="fas fa-pen-fancy text-dark me-2"></i>
+            {# Blurting Method Card - Knowledge Assessment Technique #}
+            <div class="col-md-6"> <!-- Half-width column for responsive grid -->
+              <div class="card h-100 border-0 shadow-sm bg-warning text-white"> <!-- Full-height card matching parent styling -->
+                <div class="card-body"> <!-- Card content with padding -->
+                  <h4 class="card-title h5 mb-3 text-white"> <!-- Methodology title -->
+                    <i class="fas fa-pen-fancy text-dark me-2"></i> <!-- Fancy pen icon representing writing -->
                     Blurting Method
                   </h4>
-                  <p class="card-text text-white">Write down everything you know about a topic without referring to notes:</p>
-                  <ul class="list-unstyled text-white">
-                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Write continuously for 5-10 minutes</li>
-                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Compare with your notes</li>
-                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Identify knowledge gaps</li>
+                  <p class="card-text text-white">Write down everything you know about a topic without referring to notes:</p> <!-- Method description -->
+                  <ul class="list-unstyled text-white"> <!-- Benefits list without bullet points -->
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Write continuously for 5-10 minutes</li> <!-- Step 1 with checkmark -->
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Compare with your notes</li> <!-- Step 2 with checkmark -->
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Identify knowledge gaps</li> <!-- Step 3 with checkmark -->
                   </ul>
                 </div>
               </div>
             </div>
 
-            <!-- Teaching Others -->
-            <div class="col-md-6">
-              <div class="card h-100 border-0 shadow-sm bg-warning text-white">
-                <div class="card-body">
-                  <h4 class="card-title h5 mb-3 text-white">
-                    <i class="fas fa-chalkboard-teacher text-dark me-2"></i>
+            {# Teaching Others Card - Collaborative Learning Technique #}
+            <div class="col-md-6"> <!-- Half-width column for responsive grid -->
+              <div class="card h-100 border-0 shadow-sm bg-warning text-white"> <!-- Full-height card matching parent styling -->
+                <div class="card-body"> <!-- Card content with padding -->
+                  <h4 class="card-title h5 mb-3 text-white"> <!-- Methodology title -->
+                    <i class="fas fa-chalkboard-teacher text-dark me-2"></i> <!-- Teacher icon representing instruction -->
                     Teaching Others
                   </h4>
-                  <p class="card-text text-white">Explain concepts to others to deepen your understanding:</p>
-                  <ul class="list-unstyled text-white">
-                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Teach concepts to peers</li>
-                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Create study groups</li>
-                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Record video explanations</li>
+                  <p class="card-text text-white">Explain concepts to others to deepen your understanding:</p> <!-- Method description -->
+                  <ul class="list-unstyled text-white"> <!-- Benefits list without bullet points -->
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Teach concepts to peers</li> <!-- Step 1 with checkmark -->
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Create study groups</li> <!-- Step 2 with checkmark -->
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Record video explanations</li> <!-- Step 3 with checkmark -->
                   </ul>
                 </div>
               </div>
             </div>
 
-            <!-- Mind Mapping -->
-            <div class="col-md-6">
-              <div class="card h-100 border-0 shadow-sm bg-warning text-white">
-                <div class="card-body">
-                  <h4 class="card-title h5 mb-3 text-white">
-                    <i class="fas fa-project-diagram text-dark me-2"></i>
+            {# Mind Mapping Card - Visual Learning Technique #}
+            <div class="col-md-6"> <!-- Half-width column for responsive grid -->
+              <div class="card h-100 border-0 shadow-sm bg-warning text-white"> <!-- Full-height card matching parent styling -->
+                <div class="card-body"> <!-- Card content with padding -->
+                  <h4 class="card-title h5 mb-3 text-white"> <!-- Methodology title -->
+                    <i class="fas fa-project-diagram text-dark me-2"></i> <!-- Diagram icon representing visual connections -->
                     Mind Mapping
                   </h4>
-                  <p class="card-text text-white">Create visual representations of concepts and their relationships:</p>
-                  <ul class="list-unstyled text-white">
-                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Start with main concept in center</li>
-                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Add branches for related ideas</li>
-                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Use colors and images</li>
+                  <p class="card-text text-white">Create visual representations of concepts and their relationships:</p> <!-- Method description -->
+                  <ul class="list-unstyled text-white"> <!-- Benefits list without bullet points -->
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Start with main concept in center</li> <!-- Step 1 with checkmark -->
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Add branches for related ideas</li> <!-- Step 2 with checkmark -->
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Use colors and images</li> <!-- Step 3 with checkmark -->
                   </ul>
                 </div>
               </div>
             </div>
 
-            <!-- Memory Palace (Method of Loci) -->
-            <div class="col-md-6">
-              <div class="card h-100 border-0 shadow-sm bg-warning text-white">
-                <div class="card-body">
-                  <h4 class="card-title h5 mb-3 text-white">
-                    <i class="fas fa-landmark text-dark me-2"></i>
+            {# Memory Palace Card - Spatial Memory Technique #}
+            <div class="col-md-6"> <!-- Half-width column for responsive grid -->
+              <div class="card h-100 border-0 shadow-sm bg-warning text-white"> <!-- Full-height card matching parent styling -->
+                <div class="card-body"> <!-- Card content with padding -->
+                  <h4 class="card-title h5 mb-3 text-white"> <!-- Methodology title -->
+                    <i class="fas fa-landmark text-dark me-2"></i> <!-- Landmark icon representing spatial memory -->
                     Memory Palace (Method of Loci)
                   </h4>
-                  <p class="card-text text-white">An ancient mnemonic technique that uses spatial memory to organize and recall information:</p>
-                  <ul class="list-unstyled text-white">
-                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Choose a familiar place (your home, school, etc.)</li>
-                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Associate information with specific locations</li>
-                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Create vivid mental images for each item</li>
+                  <p class="card-text text-white">An ancient mnemonic technique that uses spatial memory to organize and recall information:</p> <!-- Method description -->
+                  <ul class="list-unstyled text-white"> <!-- Benefits list without bullet points -->
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Choose a familiar place (your home, school, etc.)</li> <!-- Step 1 with checkmark -->
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Associate information with specific locations</li> <!-- Step 2 with checkmark -->
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Create vivid mental images for each item</li> <!-- Step 3 with checkmark -->
                   </ul>
                 </div>
               </div>
             </div>
 
-            <!-- Flash Cards -->
-            <div class="col-md-6">
-              <div class="card h-100 border-0 shadow-sm bg-warning text-white">
-                <div class="card-body">
-                  <h4 class="card-title h5 mb-3 text-white">
-                    <i class="fas fa-clone text-dark me-2"></i>
+            {# Flash Cards Card - Quick Review Technique #}
+            <div class="col-md-6"> <!-- Half-width column for responsive grid -->
+              <div class="card h-100 border-0 shadow-sm bg-warning text-white"> <!-- Full-height card matching parent styling -->
+                <div class="card-body"> <!-- Card content with padding -->
+                  <h4 class="card-title h5 mb-3 text-white"> <!-- Methodology title -->
+                    <i class="fas fa-clone text-dark me-2"></i> <!-- Clone icon representing card duplication -->
                     Flash Cards
                   </h4>
-                  <p class="card-text text-white">A powerful tool for active recall and spaced repetition:</p>
-                  <ul class="list-unstyled text-white">
-                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Create cards with questions on one side and answers on the other</li>
-                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Use them for quick review sessions</li>
-                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Perfect for memorizing definitions, formulas, and key concepts</li>
+                  <p class="card-text text-white">A powerful tool for active recall and spaced repetition:</p> <!-- Method description -->
+                  <ul class="list-unstyled text-white"> <!-- Benefits list without bullet points -->
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Create cards with questions on one side and answers on the other</li> <!-- Step 1 with checkmark -->
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Use them for quick review sessions</li> <!-- Step 2 with checkmark -->
+                    <li class="mb-2 text-white"><i class="fas fa-check-circle text-dark me-2"></i>Perfect for memorizing definitions, formulas, and key concepts</li> <!-- Step 3 with checkmark -->
                   </ul>
                 </div>
               </div>
             </div>
-          </div>
+          </div> <!-- End of study methodologies grid -->
 
-          <div class="mt-4 text-center">
-            <p class="text-white small">Try different methods and find what works best for your learning style!</p>
+          {# Encouraging message footer #}
+          <div class="mt-4 text-center"> <!-- Top margin and center alignment -->
+            <p class="text-white small">Try different methods and find what works best for your learning style!</p> <!-- Motivational text -->
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-{% endblock %} 
+        </div> <!-- End of card body -->
+      </div> <!-- End of methodologies card -->
+    </div> <!-- End of full-width column -->
+  </div> <!-- End of methodologies section row -->
+</div> <!-- End of main container -->
+{% endblock %} {# End of content block #} 

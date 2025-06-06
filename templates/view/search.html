@@ -1,101 +1,134 @@
-{% extends 'main/base.html' %}
+{#
+  StudyHub - Document Search Template
+  
+  Purpose: Advanced search interface for finding study documents
+  Features:
+  - Real-time search with multiple filter criteria
+  - Responsive search form with title and metadata filters
+  - Dynamic search results display with document cards
+  - Favorites management integration
+  - Document preview modal functionality
+  - Pagination support for large result sets
+  - Search persistence (filters maintain values)
+  
+  Search Criteria:
+  - Title: Primary search field for document names
+  - Institute: Filter by educational institution
+  - Course: Filter by specific course/program
+  - Subject: Filter by academic subject
+  - Author: Filter by document uploader
+  
+  Results Display:
+  - Card-based layout with document metadata
+  - Interactive preview and favorite buttons
+  - Responsive grid system for multiple screen sizes
+  
+  Dependencies: Flask search views, Bootstrap CSS, base template
+#}
 
-{% block title %}Search Documents – StudyHub{% endblock %}
+{% extends 'main/base.html' %} {# Inherit from base template for consistent layout #}
 
-{% block content %}
-<div class="container py-5">
-  <h2 class="mb-4 text-center">Search study notes</h2>
+{% block title %}Search Documents – StudyHub{% endblock %} {# Set page title in browser tab #}
 
-  <!-- INTRO with brief description -->
-  <p class="lead text-center mb-4">Find the study materials you need by searching and filtering documents uploaded by the community.</p>
+{% block content %} {# Main content block #}
+<div class="container py-5"> <!-- Main container with vertical padding -->
+  <h2 class="mb-4 text-center">Search study notes</h2> <!-- Page title -->
 
-  <form method="get" action="{{ url_for('view.search') }}" class="row g-2 mb-5">
-    <!-- Search Bar and Button Row -->
-    <div class="col-md-12 mb-3">
-      <div class="row g-2 form-row">
-        <!-- Title Search Bar -->
-        <div class="col-md">
-          <input type="text" name="title" class="form-control form-control-lg" placeholder="Search by Title" value="{{ filters.title or '' }}">
+  {# Introduction Section #}
+  <p class="lead text-center mb-4">Find the study materials you need by searching and filtering documents uploaded by the community.</p> <!-- Descriptive introduction -->
+
+  {# Advanced Search Form with Multiple Filter Criteria #}
+  <form method="get" action="{{ url_for('view.search') }}" class="row g-2 mb-5"> <!-- GET form to search route with grid layout -->
+    {# Primary Search Bar Row #}
+    <div class="col-md-12 mb-3"> <!-- Full-width column for search bar -->
+      <div class="row g-2 form-row"> <!-- Nested row for search input and button -->
+        {# Title Search Field #}
+        <div class="col-md"> <!-- Flexible width column for search input -->
+          <input type="text" name="title" class="form-control form-control-lg" placeholder="Search by Title" value="{{ filters.title or '' }}"> <!-- Large title search input with persistent value -->
         </div>
-        <!-- Search Button -->
-        <div class="col-md-auto">
-          <button type="submit" class="btn btn-primary btn-lg">Search</button>
+        {# Search Submit Button #}
+        <div class="col-md-auto"> <!-- Auto-width column for search button -->
+          <button type="submit" class="btn btn-primary btn-lg">Search</button> <!-- Large primary search button -->
         </div>
       </div>
     </div>
 
-    <!-- Filters Row -->
-    <div class="col-md-12">
-      <div class="row g-2 align-items-center">
-        <!-- Filters Label -->
-        <div class="col-md-auto">
-          <span class="fw-bold">Filters:</span>
+    {# Additional Filter Criteria Row #}
+    <div class="col-md-12"> <!-- Full-width column for filter inputs -->
+      <div class="row g-2 align-items-center"> <!-- Aligned row for filter controls -->
+        {# Filters Label #}
+        <div class="col-md-auto"> <!-- Auto-width column for label -->
+          <span class="fw-bold">Filters:</span> <!-- Bold filter label -->
         </div>
         
-        <!-- Other filters -->
-        <div class="col-md-2">
+        {# Institute Filter #}
+        <div class="col-md-2"> <!-- Fixed width column for institute filter -->
           <input type="text" name="institute" class="form-control"
-                 placeholder="Institute" value="{{ filters.institute or '' }}">
+                 placeholder="Institute" value="{{ filters.institute or '' }}"> <!-- Institute filter input with persistent value -->
         </div>
-        <div class="col-md-2">
+        {# Course Filter #}
+        <div class="col-md-2"> <!-- Fixed width column for course filter -->
           <input type="text" name="course" class="form-control"
-                 placeholder="Course" value="{{ filters.course or '' }}">
+                 placeholder="Course" value="{{ filters.course or '' }}"> <!-- Course filter input with persistent value -->
         </div>
-        <div class="col-md-2">
+        {# Subject Filter #}
+        <div class="col-md-2"> <!-- Fixed width column for subject filter -->
           <input type="text" name="subject" class="form-control"
-                 placeholder="Subject" value="{{ filters.subject or '' }}">
+                 placeholder="Subject" value="{{ filters.subject or '' }}"> <!-- Subject filter input with persistent value -->
         </div>
-        <div class="col-md-2">
+        {# Author Filter #}
+        <div class="col-md-2"> <!-- Fixed width column for author filter -->
           <input type="text" name="author" class="form-control"
-                 placeholder="Author" value="{{ filters.author or '' }}">
+                 placeholder="Author" value="{{ filters.author or '' }}"> <!-- Author filter input with persistent value -->
         </div>
       </div>
     </div>
   </form>
 
-  {# Determine if a search has been performed by checking if any filter has a value #}
+  {# Search State Detection - Check if any search criteria has been provided #}
   {% set search_performed = (filters.title is not none and filters.title != '') or (filters.institute is not none and filters.institute != '') or (filters.course is not none and filters.course != '') or (filters.subject is not none and filters.subject != '') or (filters.author is not none and filters.author != '') %}
 
-  {% if documents and search_performed %}
-    <h4>Search Results</h4>
-    <div class="row g-4"> {# Use row and gutter for the grid #}
-      {% for doc in documents %}
-        <div class="col-md-6"> {# Each document result will be in a column #}
-          <div class="card h-100"> {# Optional: Wrap each result in a card for better visual separation #}
-            <div class="card-body"> {# Add card body padding #}
-              <div class="row"> {# Internal row for document info and buttons #}
-                {# Left Column: Document Info #}
-                <div class="col-md-8">
-                  <strong>{{ doc.title }}</strong><br>
-                  <small class="text-muted">
-                    {{ doc.course }}{% if doc.institute %} @ {{ doc.institute }}{% endif %}{% if doc.year %}, {{ doc.year }}{% endif %}
-                    {% if doc.subject %} • {{ doc.subject }}{% endif %}
-                    {% if doc.author %} • Uploaded by {{ doc.author.first_name }} {{ doc.author.last_name }}{% endif %}
+  {# Search Results Section - Dynamic display based on search state #}
+  {% if documents and search_performed %} <!-- Display results only if search was performed and documents found -->
+    <h4>Search Results</h4> <!-- Results section title -->
+    <div class="row g-4"> {# Grid container with gap spacing for document cards #}
+      {% for doc in documents %} {# Loop through each search result document #}
+        <div class="col-md-6"> {# Each document result will be in a responsive column #}
+          <div class="card h-100"> {# Card wrapper with full height for consistent layout #}
+            <div class="card-body"> {# Card body for padding and structure #}
+              <div class="row"> {# Internal row for two-column layout #}
+                {# Left Column: Document Information Display #}
+                <div class="col-md-8"> {# 8/12 columns for document details #}
+                  <strong>{{ doc.title }}</strong><br> {# Document title in bold #}
+                  <small class="text-muted"> {# Metadata in smaller, muted text #}
+                    {{ doc.course }}{% if doc.institute %} @ {{ doc.institute }}{% endif %}{% if doc.year %}, {{ doc.year }}{% endif %} {# Course and institute information #}
+                    {% if doc.subject %} • {{ doc.subject }}{% endif %} {# Subject if available #}
+                    {% if doc.author %} • Uploaded by {{ doc.author.first_name }} {{ doc.author.last_name }}{% endif %} {# Author information #}
                   </small>
-                  {% if doc.description %}
-                    <p class="mb-1">{{ doc.description | truncate(150) }}</p>
+                  {% if doc.description %} {# Show description if available #}
+                    <p class="mb-1">{{ doc.description | truncate(150) }}</p> {# Truncated description preview #}
                   {% endif %}
                 </div>
-                {# Right Column: Buttons #}
-                <div class="col-md-4 d-flex flex-column align-items-end justify-content-center">
-                  <div class="d-flex gap-2 mt-2 mt-md-0"> {# Add margin top for small screens #}
-                    {# Preview button #}
-                    <button class="btn btn-sm btn-outline-secondary preview-button" data-doc-id="{{ doc.id }}">
+                {# Right Column: Action Buttons #}
+                <div class="col-md-4 d-flex flex-column align-items-end justify-content-center"> {# 4/12 columns for buttons, right-aligned #}
+                  <div class="d-flex gap-2 mt-2 mt-md-0"> {# Button container with gap spacing #}
+                    {# Document Preview Button #}
+                    <button class="btn btn-sm btn-outline-secondary preview-button" data-doc-id="{{ doc.id }}"> {# Preview button with document ID #}
                       Preview
                     </button>
-                    {% if current_user.is_authenticated %}
-                      {% if doc in user_favorites_docs %}
-                        {# Show filled star if already favorited #}
+                    {% if current_user.is_authenticated %} {# Show favorite buttons only for authenticated users #}
+                      {% if doc in user_favorites_docs %} {# Check if document is already favorited #}
+                        {# Favorited State - Show filled star for removal #}
                         <button class="btn btn-sm btn-outline-secondary favorite-button favorited" 
                                 data-doc-id="{{ doc.id }}"
-                                title="Remove from favorites">
-                          <i class="fas fa-star"></i>
+                                title="Remove from favorites"> {# Unfavorite button with filled star #}
+                          <i class="fas fa-star"></i> {# Filled star icon #}
                         </button>
                       {% else %}
-                        {# Show 'Add to Favorites' button if not favorited #}
+                        {# Unfavorited State - Show add to favorites button #}
                         <button class="btn btn-sm btn-outline-primary add-to-favorites-button" 
                                 data-doc-id="{{ doc.id }}"
-                                title="Add to favorites">
+                                title="Add to favorites"> {# Add to favorites button #}
                           Add to Favorites
                         </button>
                       {% endif %}
@@ -109,36 +142,44 @@
       {% endfor %}
     </div>{# Close row g-4 #}
   {% else %}
-    <p class="text-muted">No documents match your criteria: use the search bar and filters to find what you need.</p>
+    {# No Results State - Show message when no documents match criteria #}
+    <p class="text-muted">No documents match your criteria: use the search bar and filters to find what you need.</p> <!-- No results message -->
   {% endif %}
 
+  {# User Favorites Section - Display user's favorite documents with yellow highlight #}
   <!-- Added mt-5 class to create more space above the favorites section -->
-  <div class="row mt-5">
-    <div class="col-md-12">
-      <div class="card shadow-sm mb-4">
-        <div class="card-body">
-          <a href="{{ url_for('view.favorites') }}" class="text-decoration-none text-dark">
-            <h3>Your Favorites</h3>
+  <div class="row mt-5"> <!-- Row with top margin for spacing -->
+    <div class="col-md-12"> <!-- Full-width column for favorites section -->
+      <div class="card shadow-sm mb-4"> {# Card with shadow and yellow theme (styled below) #}
+        <div class="card-body"> {# Card body for content padding #}
+          {# Favorites Section Header with Link #}
+          <a href="{{ url_for('view.favorites') }}" class="text-decoration-none text-dark"> {# Link to full favorites page #}
+            <h3>Your Favorites</h3> {# Section title styled with custom CSS #}
           </a>
-          <div class="row g-4 mt-1" id="yourFavoritesList">
-            {% if user_favorites_docs %}
-              {% for doc in user_favorites_docs %}
-                <div class="col-md-6">
-                  <div class="card h-100">
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="col-md-8">
-                   <strong>{{ doc.title }}</strong><br>
-                  <small class="text-muted">
-                            {{ doc.course }}{% if doc.institute %} @ {{ doc.institute }}{% endif %}{% if doc.year %}, {{ doc.year }}{% endif %}
-                    {% if doc.subject %} • {{ doc.subject }}{% endif %}
-                    {% if doc.author %} • Uploaded by {{ doc.author.first_name }} {{ doc.author.last_name }}{% endif %}
+          {# Favorites Grid Container #}
+          <div class="row g-4 mt-1" id="yourFavoritesList"> {# Grid with gap spacing, unique ID for JavaScript updates #}
+            {% if user_favorites_docs %} {# Display favorites if user has any #}
+              {% for doc in user_favorites_docs %} {# Loop through each favorite document #}
+                <div class="col-md-6"> {# Responsive column for each favorite #}
+                  <div class="card h-100"> {# Card with full height for consistent layout #}
+                    <div class="card-body"> {# Card body for padding #}
+                      <div class="row"> {# Two-column layout for document info and buttons #}
+                        {# Favorite Document Information Column #}
+                        <div class="col-md-8"> {# 8/12 columns for document details #}
+                   <strong>{{ doc.title }}</strong><br> {# Document title in bold #}
+                  <small class="text-muted"> {# Document metadata in smaller text #}
+                            {{ doc.course }}{% if doc.institute %} @ {{ doc.institute }}{% endif %}{% if doc.year %}, {{ doc.year }}{% endif %} {# Course and institute #}
+                    {% if doc.subject %} • {{ doc.subject }}{% endif %} {# Subject if available #}
+                    {% if doc.author %} • Uploaded by {{ doc.author.first_name }} {{ doc.author.last_name }}{% endif %} {# Author information #}
                   </small>
                         </div>
-                        <div class="col-md-4 d-flex flex-column align-items-end justify-content-center">
-                          <div class="d-flex gap-2 mt-2 mt-md-0">
-                            <button class="btn btn-sm btn-outline-secondary preview-button" data-doc-id="{{ doc.id }}">Preview</button>
-                            <button class="btn btn-sm btn-outline-secondary favorite-button favorited" data-doc-id="{{ doc.id }}" title="Remove from favorites"><i class="fas fa-star"></i></button>
+                        {# Favorite Document Action Buttons Column #}
+                        <div class="col-md-4 d-flex flex-column align-items-end justify-content-center"> {# 4/12 columns for buttons, right-aligned #}
+                          <div class="d-flex gap-2 mt-2 mt-md-0"> {# Button container with gap spacing #}
+                            {# Favorite Document Preview Button #}
+                            <button class="btn btn-sm btn-outline-secondary preview-button" data-doc-id="{{ doc.id }}">Preview</button> {# Preview button for favorite document #}
+                            {# Favorite Document Remove Button #}
+                            <button class="btn btn-sm btn-outline-secondary favorite-button favorited" data-doc-id="{{ doc.id }}" title="Remove from favorites"><i class="fas fa-star"></i></button> {# Remove from favorites button with filled star #}
                           </div>
                         </div>
                       </div>
@@ -147,10 +188,11 @@
                 </div>
               {% endfor %}
             {% else %}
-              <div class="col-12">
-                <div class="card h-100">
-                  <div class="card-body text-muted text-center">
-                No favorite documents yet.
+              {# Empty Favorites State #}
+              <div class="col-12"> {# Full-width column for empty state #}
+                <div class="card h-100"> {# Card container for empty state #}
+                  <div class="card-body text-muted text-center"> {# Centered muted text #}
+                No favorite documents yet. {# Empty state message #}
                   </div>
                 </div>
               </div>
@@ -162,74 +204,85 @@
   </div>
 </div>
 
+{# Document Preview Modal - Full-screen document viewer with download and fullscreen functionality #}
 <!-- Document Preview Modal -->
-<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title w-100 text-center" id="previewModalLabel">Document Preview</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true"> {# Bootstrap modal for document preview #}
+  <div class="modal-dialog modal-xl modal-dialog-centered"> {# Extra large centered modal dialog #}
+    <div class="modal-content"> {# Modal content container #}
+      {# Modal Header with Title and Close Button #}
+      <div class="modal-header"> {# Modal header section #}
+        <h5 class="modal-title w-100 text-center" id="previewModalLabel">Document Preview</h5> {# Centered modal title #}
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> {# Bootstrap close button #}
       </div>
-      <div class="modal-body">
-        <div class="embed-responsive embed-responsive-16by9">
-          <iframe id="documentPreviewFrame" class="embed-responsive-item" style="width: 100%; height: 500px;" src="" frameborder="0" allowfullscreen></iframe>
+      {# Modal Body with Document Iframe #}
+      <div class="modal-body"> {# Modal body for content #}
+        <div class="embed-responsive embed-responsive-16by9"> {# Responsive embed container #}
+          <iframe id="documentPreviewFrame" class="embed-responsive-item" style="width: 100%; height: 500px;" src="" frameborder="0" allowfullscreen></iframe> {# Document preview iframe #}
         </div>
-         <p class="text-muted mt-3 text-center">If the preview is not working, try downloading the document.</p>
+         <p class="text-muted mt-3 text-center">If the preview is not working, try downloading the document.</p> {# Fallback message for preview issues #}
       </div>
-       <div class="modal-footer d-flex justify-content-between">
-            <div class="w-100 text-center">
-                <button type="button" class="btn btn-secondary" id="fullscreenButton">Full Screen</button>
+      {# Modal Footer with Action Buttons #}
+       <div class="modal-footer d-flex justify-content-between"> {# Footer with button layout #}
+            <div class="w-100 text-center"> {# Centered fullscreen button container #}
+                <button type="button" class="btn btn-secondary" id="fullscreenButton">Full Screen</button> {# Fullscreen toggle button #}
             </div>
-            <a href="#" id="previewDownloadButton" class="btn btn-primary position-absolute end-0 me-3">Download</a>
+            <a href="#" id="previewDownloadButton" class="btn btn-primary position-absolute end-0 me-3">Download</a> {# Positioned download button #}
         </div>
     </div>
   </div>
 </div>
 
+{# Custom Styling for Search Page - Favorites section theming and scrollbar customization #}
 <style>
+/* Favorites List Scrolling Container */
 #yourFavoritesList {
-    max-height: 250px;
-    overflow-y: auto;
-    padding-right: 8px;
-    margin-bottom: -20px;
+    max-height: 250px; /* Limit height to prevent excessive scrolling */
+    overflow-y: auto; /* Enable vertical scrolling when content exceeds height */
+    padding-right: 8px; /* Add padding to prevent content from touching scrollbar */
+    margin-bottom: -20px; /* Adjust bottom margin for better spacing */
 }
+
+/* Custom Scrollbar Styling for Webkit Browsers */
 #yourFavoritesList::-webkit-scrollbar {
-    width: 8px;
+    width: 8px; /* Set scrollbar width */
 }
 #yourFavoritesList::-webkit-scrollbar-thumb {
-    background: #000000;
-    border-radius: 4px;
+    background: #000000; /* Dark scrollbar thumb */
+    border-radius: 4px; /* Rounded scrollbar thumb */
 }
 #yourFavoritesList::-webkit-scrollbar-track {
-    background: #f8f9fa;
-    border-radius: 4px;
+    background: #f8f9fa; /* Light scrollbar track */
+    border-radius: 4px; /* Rounded scrollbar track */
 }
 
-/* Yellow background for favorites container */
+/* Yellow Background Theme for Favorites Container */
 .card.shadow-sm.mb-4 {
-    background-color: #e0c96d !important;
+    background-color: #e0c96d !important; /* Yellow background for favorites section */
 }
 
-/* White title for favorites section */
+/* White Title Text for Favorites Section */
 .card.shadow-sm.mb-4 h3,
 .card.shadow-sm.mb-4 a.text-dark {
-    color: #ffffff !important;
+    color: #ffffff !important; /* White text for better contrast on yellow background */
 }
 </style>
 
 {% endblock %}
 
+{# JavaScript Block for Search Page Interactive Functionality #}
 {% block scripts %}
 <script>
+// Update Favorites List Function - Fetches and displays user's favorite documents
 function updateFavoritesList() {
-    fetch('/view/api/favorites')
-        .then(response => response.json())
-        .then(favorites => {
-            const favoritesList = document.getElementById('yourFavoritesList');
-            if (!favoritesList) return;
+    fetch('/view/api/favorites') // Make AJAX request to favorites API endpoint
+        .then(response => response.json()) // Parse JSON response
+        .then(favorites => { // Process favorites data
+            const favoritesList = document.getElementById('yourFavoritesList'); // Get favorites container element
+            if (!favoritesList) return; // Exit if element not found
 
-            favoritesList.innerHTML = '';
+            favoritesList.innerHTML = ''; // Clear existing content
 
+            // Handle empty favorites state
             if (favorites.length === 0) {
                 favoritesList.innerHTML = `<div class="col-12">
                     <div class="card h-100">
@@ -237,13 +290,14 @@ function updateFavoritesList() {
                             No favorite documents yet.
                         </div>
                     </div>
-                </div>`;
+                </div>`; // Display empty state message
                 return;
             }
 
+            // Generate HTML for each favorite document
             favorites.forEach(doc => {
-                const card = document.createElement('div');
-                card.className = 'col-md-6';
+                const card = document.createElement('div'); // Create card container
+                card.className = 'col-md-6'; // Set responsive column class
                 card.innerHTML = `
                     <div class="card h-100">
                         <div class="card-body">
@@ -266,73 +320,77 @@ function updateFavoritesList() {
                             </div>
                         </div>
                     </div>
-                `;
-                favoritesList.appendChild(card);
+                `; // Set card HTML with document data
+                favoritesList.appendChild(card); // Add card to favorites list
             });
 
-            // Ri-collega i listener alle nuove stelle e preview
-            attachFavoriteListeners();
-            attachPreviewListeners();
+            // Re-attach event listeners to newly created elements
+            attachFavoriteListeners(); // Reattach favorite button listeners
+            attachPreviewListeners(); // Reattach preview button listeners
         })
         .catch(error => {
-            console.error('Error fetching favorites:', error);
+            console.error('Error fetching favorites:', error); // Log any errors
         });
 }
 
+// Attach Favorite Button Event Listeners - Handles favorite/unfavorite actions
 function attachFavoriteListeners() {
+    // Remove existing listeners to prevent duplicates
     document.querySelectorAll('.favorite-button, .add-to-favorites-button').forEach(button => {
-        // Rimuovo eventuali listener esistenti
-        button.replaceWith(button.cloneNode(true));
+        button.replaceWith(button.cloneNode(true)); // Clone node to remove existing listeners
     });
 
+    // Add new event listeners to all favorite buttons
     document.querySelectorAll('.favorite-button, .add-to-favorites-button').forEach(button => {
         button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const docId = this.dataset.docId;
-            fetch(`/view/toggle_favorite/${docId}`, {
+            e.preventDefault(); // Prevent default button behavior
+            const docId = this.dataset.docId; // Get document ID from data attribute
+            fetch(`/view/toggle_favorite/${docId}`, { // Make AJAX request to toggle favorite
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             })
-            .then(response => response.json())
+            .then(response => response.json()) // Parse response
             .then(() => {
-                updateFavoritesList();
-                updateResultStars();
+                updateFavoritesList(); // Update favorites list display
+                updateResultStars(); // Update star states in search results
             })
             .catch(error => {
-                console.error('Error toggling favorite:', error);
+                console.error('Error toggling favorite:', error); // Log any errors
             });
         });
     });
 }
 
+// Attach Preview Button Event Listeners - Handles document preview modal
 function attachPreviewListeners() {
-    const previewButtons = document.querySelectorAll('.preview-button');
-    const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
-    const previewFrame = document.getElementById('documentPreviewFrame');
-    const downloadButton = document.getElementById('previewDownloadButton');
-    const fullscreenButton = document.getElementById('fullscreenButton');
-    const previewModalDialog = document.querySelector('#previewModal .modal-dialog');
+    const previewButtons = document.querySelectorAll('.preview-button'); // Get all preview buttons
+    const previewModal = new bootstrap.Modal(document.getElementById('previewModal')); // Initialize Bootstrap modal
+    const previewFrame = document.getElementById('documentPreviewFrame'); // Get preview iframe
+    const downloadButton = document.getElementById('previewDownloadButton'); // Get download button
+    const fullscreenButton = document.getElementById('fullscreenButton'); // Get fullscreen button
+    const previewModalDialog = document.querySelector('#previewModal .modal-dialog'); // Get modal dialog
 
+    // Add click event listeners to all preview buttons
     previewButtons.forEach(button => {
         button.addEventListener('click', function() {
-            const docId = this.dataset.docId;
-            // Reset modal to non-fullscreen and reset button text/icon
+            const docId = this.dataset.docId; // Get document ID from data attribute
+            // Reset modal to non-fullscreen state
             previewModalDialog.classList.remove('modal-fullscreen-mode');
             fullscreenButton.innerHTML = '<i class="fas fa-expand me-2"></i>Full Screen';
 
-            const previewUrl = `/view/preview/${docId}`;
-            previewFrame.src = previewUrl;
-            downloadButton.href = `/view/download/${docId}`;
-            previewModal.show();
+            const previewUrl = `/view/preview/${docId}`; // Construct preview URL
+            previewFrame.src = previewUrl; // Set iframe source
+            downloadButton.href = `/view/download/${docId}`; // Set download link
+            previewModal.show(); // Show the modal
         });
     });
 
-    // Gestione chiusura modal
+    // Handle modal close event
     const modal = document.getElementById('previewModal');
     modal.addEventListener('hidden.bs.modal', function () {
-        previewFrame.src = '';
-        downloadButton.href = '#';
-        // Rimuovo eventuali classi di backdrop
+        previewFrame.src = ''; // Clear iframe source
+        downloadButton.href = '#'; // Reset download link
+        // Clean up modal backdrop and body classes
         document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
         document.body.classList.remove('modal-open');
         document.body.style.overflow = '';
@@ -340,53 +398,58 @@ function attachPreviewListeners() {
     });
 }
 
+// Update Result Stars Function - Synchronizes favorite star states in search results
 function updateResultStars() {
-    fetch('/view/api/favorites')
+    fetch('/view/api/favorites') // Fetch current favorites
         .then(response => response.json())
         .then(favorites => {
-            const favoriteIds = favorites.map(doc => doc.id.toString());
+            const favoriteIds = favorites.map(doc => doc.id.toString()); // Extract favorite IDs
+            // Update button states based on favorite status
             document.querySelectorAll('.favorite-button, .add-to-favorites-button').forEach(button => {
-        const docId = button.dataset.docId;
+        const docId = button.dataset.docId; // Get document ID
                 if (favoriteIds.includes(docId)) {
+                    // Document is favorited - show filled star
                     button.classList.add('favorite-button', 'favorited');
                     button.classList.remove('add-to-favorites-button', 'btn-outline-primary');
                     button.classList.add('btn-outline-secondary');
                     button.innerHTML = '<i class="fas fa-star"></i>';
                     button.title = "Remove from favorites";
                 } else {
+                    // Document is not favorited - show add button
                     button.classList.remove('favorite-button', 'favorited', 'btn-outline-secondary');
                     button.classList.add('add-to-favorites-button', 'btn-outline-primary');
                     button.innerHTML = 'Add to Favorites';
                     button.title = "Add to favorites";
                 }
             });
-            attachFavoriteListeners();
+            attachFavoriteListeners(); // Reattach listeners after updating buttons
         })
         .catch(error => {
-            console.error('Error updating stars:', error);
+            console.error('Error updating stars:', error); // Log any errors
         });
 }
 
+// Document Ready Event Handler - Initialize all functionality when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    attachFavoriteListeners();
-    updateFavoritesList();
-    updateResultStars();
-    attachPreviewListeners();
+    attachFavoriteListeners(); // Initialize favorite button listeners
+    updateFavoritesList(); // Load and display favorites
+    updateResultStars(); // Update star states
+    attachPreviewListeners(); // Initialize preview button listeners
 
-    // Handle Full Screen button click
+    // Fullscreen Toggle Functionality for Preview Modal
     const fullscreenButton = document.getElementById('fullscreenButton');
     const previewModalDialog = document.querySelector('#previewModal .modal-dialog');
 
     fullscreenButton.addEventListener('click', function() {
-        previewModalDialog.classList.toggle('modal-fullscreen-mode');
+        previewModalDialog.classList.toggle('modal-fullscreen-mode'); // Toggle fullscreen class
         if (previewModalDialog.classList.contains('modal-fullscreen-mode')) {
-            this.innerHTML = '<i class="fas fa-compress me-2"></i>Exit Full Screen';
+            this.innerHTML = '<i class="fas fa-compress me-2"></i>Exit Full Screen'; // Update button text
         } else {
-            this.innerHTML = '<i class="fas fa-expand me-2"></i>Full Screen';
+            this.innerHTML = '<i class="fas fa-expand me-2"></i>Full Screen'; // Update button text
         }
     });
 
-    // Add CSS for fullscreen mode
+    // Dynamic CSS Injection for Fullscreen Mode
     const style = document.createElement('style');
     style.innerHTML = `
         .modal-fullscreen-mode {
@@ -417,8 +480,8 @@ document.addEventListener('DOMContentLoaded', function() {
          .modal-fullscreen-mode .modal-footer {
             flex-shrink: 0;
          }
-    `;
-    document.head.appendChild(style);
+    `; // CSS rules for fullscreen modal mode
+    document.head.appendChild(style); // Add styles to document head
 });
 </script>
 {% endblock %}

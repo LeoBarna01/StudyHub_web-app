@@ -1,46 +1,83 @@
-<footer class="footer">
-  <div class="container">
-    <div class="footer-content d-flex flex-wrap justify-content-between">
+{#
+    STUDYHUB WEB APPLICATION - FOOTER PARTIAL TEMPLATE
+    ================================================================
+    
+    PURPOSE:
+    - Provides consistent footer component for all pages
+    - Displays company information and contact details
+    - Contains resource links and site navigation
+    - Shows copyright and legal information
+    
+    FEATURES:
+    - Responsive three-column layout
+    - About section with platform description
+    - Resource links (Help, Guidelines, Terms, Privacy, FAQ)
+    - Contact information with icons (email, phone, address)
+    - Copyright section with dynamic year
+    - Bootstrap Icons integration
+    - Conditional column alignment based on user authentication
+    
+    SECTIONS:
+    - About StudyHub: Platform description and mission
+    - Resources: Links to help and legal pages
+    - Contact Us: Email, phone, and physical address
+    - Copyright: Legal footer with current year
+    
+    DEPENDENCIES:
+    - Bootstrap 5 for responsive layout
+    - Bootstrap Icons for contact icons
+    - Flask url_for() for dynamic link generation
+    - Current year variable for copyright
+    
+    AUTHOR: StudyHub Development Team
+    LAST MODIFIED: 2024
+#}
+
+<!-- filepath: /Users/leo_barna/Documents/UNIVERSITA'/3° YEAR/ELECTIVE courses/Lab of Web Technologies/GitHub/StudyHub_web-app/templates/view/partials/footer.html -->
+<footer class="footer"> <!-- Main footer container with custom styling -->
+  <div class="container"> <!-- Bootstrap container for proper spacing -->
+    <div class="footer-content d-flex flex-wrap justify-content-between"> <!-- Responsive flexbox layout for footer sections -->
       <!-- About Section -->
-      <div class="footer-section">
-        <h3>About StudyHub</h3>
-        <p class="about-text">A platform dedicated to university students for sharing study resources and collaboration.</p>
+      <div class="footer-section"> <!-- About section container -->
+        <h3>About StudyHub</h3> <!-- Section header -->
+        <p class="about-text">A platform dedicated to university students for sharing study resources and collaboration.</p> <!-- Platform description -->
       </div>
 
       <!-- Resources -->
-      <div class="footer-section col-6 col-md-3 {% if not current_user.is_authenticated %} ms-md-auto {% endif %}">
-        <h6 class="fw-semibold">Resources</h6>
-        <ul class="list-unstyled small">         <li><a href="{{ url_for('main.error') }}" class="text-light text-decoration-none">Help Center</a></li>
-         <li><a href="{{ url_for('main.error') }}" class="text-light text-decoration-none">Guidelines</a></li>
-         <li><a href="{{ url_for('main.error') }}" class="text-light text-decoration-none">Terms of Service</a></li>
-         <li><a href="{{ url_for('main.error') }}" class="text-light text-decoration-none">Privacy Policy</a></li>
-         <li><a href="{{ url_for('main.error') }}" class="text-light text-decoration-none">FAQ</a></li>
+      <div class="footer-section col-6 col-md-3 {% if not current_user.is_authenticated %} ms-md-auto {% endif %}"> <!-- Resources section with conditional alignment -->
+        <h6 class="fw-semibold">Resources</h6> <!-- Section header -->
+        <ul class="list-unstyled small"> <!-- Unstyled list with small text -->
+          <li><a href="{{ url_for('main.error') }}" class="text-light text-decoration-none">Help Center</a></li> <!-- Help center link -->
+          <li><a href="{{ url_for('main.error') }}" class="text-light text-decoration-none">Guidelines</a></li> <!-- Guidelines link -->
+          <li><a href="{{ url_for('main.error') }}" class="text-light text-decoration-none">Terms of Service</a></li> <!-- Terms link -->
+          <li><a href="{{ url_for('main.error') }}" class="text-light text-decoration-none">Privacy Policy</a></li> <!-- Privacy policy link -->
+          <li><a href="{{ url_for('main.error') }}" class="text-light text-decoration-none">FAQ</a></li> <!-- FAQ link -->
         </ul>
       </div>
 
       <!-- Contact Us -->
-      <div class="footer-section col-12 col-md-3 {% if not current_user.is_authenticated %} me-md-auto {% endif %}">
-        <h6 class="fw-semibold">Contact Us</h6>
-        <ul class="list-unstyled small">
-          <li class="d-flex align-items-center mb-2">
-            <i class="bi bi-envelope-fill text-warning me-2"></i>
-            <span>contact@studyhub.com</span>
+      <div class="footer-section col-12 col-md-3 {% if not current_user.is_authenticated %} me-md-auto {% endif %}"> <!-- Contact section with conditional alignment -->
+        <h6 class="fw-semibold">Contact Us</h6> <!-- Section header -->
+        <ul class="list-unstyled small"> <!-- Unstyled contact list -->
+          <li class="d-flex align-items-center mb-2"> <!-- Email contact item -->
+            <i class="bi bi-envelope-fill text-warning me-2"></i> <!-- Email icon with warning color -->
+            <span>contact@studyhub.com</span> <!-- Contact email -->
           </li>
-          <li class="d-flex align-items-center mb-2">
-            <i class="bi bi-telephone-fill text-warning me-2"></i>
-            <span>H-Farm</span>
+          <li class="d-flex align-items-center mb-2"> <!-- Phone contact item -->
+            <i class="bi bi-telephone-fill text-warning me-2"></i> <!-- Phone icon with warning color -->
+            <span>H-Farm</span> <!-- Phone information -->
           </li>
-          <li class="d-flex align-items-start">
-            <i class="bi bi-geo-alt-fill text-warning me-2 mt-1"></i>
-            <span>Via Adriano Olivetti, 1, 31056 Roncade TV</span>
+          <li class="d-flex align-items-start"> <!-- Address contact item -->
+            <i class="bi bi-geo-alt-fill text-warning me-2 mt-1"></i> <!-- Location icon with warning color -->
+            <span>Via Adriano Olivetti, 1, 31056 Roncade TV</span> <!-- Physical address -->
           </li>
         </ul>
       </div>
-    </div>
+    </div> <!-- End footer content sections -->
 
     <!-- Bottom copyright -->
-    <div class="text-center small border-top border-secondary pt-4 mt-4 footer-copyright">
-      &copy; {{ current_year }} StudyHub. All rights reserved.
+    <div class="text-center small border-top border-secondary pt-4 mt-4 footer-copyright"> <!-- Copyright section with top border -->
+      &copy; {{ current_year }} StudyHub. All rights reserved. <!-- Dynamic copyright with current year -->
     </div>
-  </div>
-</footer>
+  </div> <!-- End container -->
+</footer> <!-- End footer -->

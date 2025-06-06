@@ -1,24 +1,32 @@
+/* StudyHub Authenticated User Styles
+ * This CSS file contains styles specifically for authenticated users to revert
+ * the dark/custom theme back to a clean, professional white theme for better
+ * usability in the dashboard and authenticated sections of the application.
+ */
+
+/* Color scheme variables for authenticated users - reverts to standard Bootstrap colors */
 /* Styles to revert to original color scheme for authenticated users */
 body.authenticated-user {
-    --background: #FFFFFF; /* White */
-    --text: #212529; /* Bootstrap default dark text color */
-    --text-light: #6c757d; /* Bootstrap default muted text color */
-    --border: #dee2e6; /* Bootstrap default border color */
-    --card-bg: #FFFFFF; /* White */
+    --background: #FFFFFF; /* White background for clean interface */
+    --text: #212529; /* Bootstrap default dark text color for readability */
+    --text-light: #6c757d; /* Bootstrap default muted text color for secondary content */
+    --border: #dee2e6; /* Bootstrap default border color for consistency */
+    --card-bg: #FFFFFF; /* White card backgrounds for content separation */
     
-    /* Revert Neutral Colors */
-    --gray-50: #f8f9fa;
-    --gray-100: #e9ecef;
-    --gray-200: #dee2e6;
-    --gray-300: #ced4da;
-    --gray-400: #adb5bd;
-    --gray-500: #6c757d;
-    --gray-600: #495057;
-    --gray-700: #343a40;
-    --gray-800: #212529;
-    --gray-900: #000000; /* Black */
+    /* Revert Neutral Colors - standard Bootstrap gray palette */
+    --gray-50: #f8f9fa;   /* Lightest gray for subtle backgrounds */
+    --gray-100: #e9ecef;  /* Light gray for section backgrounds */
+    --gray-200: #dee2e6;  /* Border gray for form elements */
+    --gray-300: #ced4da;  /* Medium-light gray for inactive elements */
+    --gray-400: #adb5bd;  /* Medium gray for placeholders */
+    --gray-500: #6c757d;  /* Medium gray for secondary text */
+    --gray-600: #495057;  /* Medium-dark gray for labels */
+    --gray-700: #343a40;  /* Dark gray for primary text */
+    --gray-800: #212529;  /* Very dark gray for headings */
+    --gray-900: #000000;  /* Black for maximum contrast */
 }
 
+/* Typography styles for authenticated users */
 /* Revert specific element colors if needed within authenticated section */
 body.authenticated-user h1, 
 body.authenticated-user h2, 
@@ -26,99 +34,116 @@ body.authenticated-user h3,
 body.authenticated-user h4, 
 body.authenticated-user h5, 
 body.authenticated-user h6 {
-    color: var(--gray-900);
+    color: var(--gray-900); /* Dark headings for strong hierarchy */
 }
 
 body.authenticated-user p {
-    color: var(--text);
+    color: var(--text); /* Standard text color for body content */
 }
 
+/* Card component styles for authenticated users */
 body.authenticated-user .card-title {
-    color: var(--gray-900);
+    color: var(--gray-900); /* Dark card titles for emphasis */
 }
 
 body.authenticated-user .card-text {
-    color: var(--text-light);
+    color: var(--text-light); /* Muted text for card descriptions */
 }
 
 body.authenticated-user .card-footer {
-    background-color: var(--gray-50);
+    background-color: var(--gray-50); /* Light footer background */
 }
 
+/* Navigation bar styles for authenticated users */
 body.authenticated-user .navbar {
-    background-color: #FFFFFF; /* White */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    background-color: #FFFFFF; /* White navbar background */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
 }
 
+/* Scrolled navbar state for authenticated users */
 body.authenticated-user .navbar.scrolled {
-    background-color: #FFFFFF; /* White */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    background-color: #FFFFFF; /* Maintain white background when scrolled */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Enhanced shadow on scroll */
 }
 
+/* Navigation link styles for authenticated users */
 body.authenticated-user .nav-link {
-    color: var(--gray-700) !important;
+    color: var(--gray-700) !important; /* Dark gray for navigation links */
 }
 
+/* Navigation link hover and active states */
 body.authenticated-user .nav-link:hover,
 body.authenticated-user .nav-link:focus,
 body.authenticated-user .nav-link.active {
-    color: var(--gray-900) !important;
-    background-color: var(--gray-100);
+    color: var(--gray-900) !important; /* Darker color on interaction */
+    background-color: var(--gray-100); /* Light background highlight */
 }
 
+/* Dropdown menu styles for authenticated users */
 body.authenticated-user .dropdown-menu {
-     border: 1px solid var(--border);
-     box-shadow: var(--shadow-lg);
+     border: 1px solid var(--border); /* Standard border styling */
+     box-shadow: var(--shadow-lg); /* Elevated dropdown appearance */
 }
 
+/* Dropdown item styles */
 body.authenticated-user .dropdown-item {
-    color: var(--gray-700);
+    color: var(--gray-700); /* Consistent text color for dropdown items */
 }
 
+/* Dropdown item hover and focus states */
 body.authenticated-user .dropdown-item:hover,
 body.authenticated-user .dropdown-item:focus {
-    background-color: var(--gray-50);
-    color: var(--primary);
+    background-color: var(--gray-50); /* Light hover background */
+    color: var(--primary); /* Primary color highlight on interaction */
 }
 
+/* Dropdown divider styling */
 body.authenticated-user .dropdown-divider {
-    border-top-color: var(--border);
+    border-top-color: var(--border); /* Consistent divider color */
 }
 
+/* Footer styles for authenticated users */
 body.authenticated-user .footer {
-    background-color: var(--gray-100);
-    color: var(--gray-600);
+    background-color: var(--gray-100); /* Light gray footer background */
+    color: var(--gray-600); /* Medium gray footer text */
 }
 
+/* Footer section headings */
 body.authenticated-user .footer-section h3 {
-     color: var(--gray-900);
+     color: var(--gray-900); /* Dark footer headings for contrast */
 }
 
+/* Footer about section text */
 body.authenticated-user .footer-about p {
-     color: var(--gray-700);
+     color: var(--gray-700); /* Readable footer paragraph text */
 }
 
+/* Footer links and contact information styling */
 body.authenticated-user .footer-links a,
 body.authenticated-user .contact-info li,
 body.authenticated-user .footer-bottom p,
 body.authenticated-user .footer-bottom a {
-    color: var(--gray-700) !important;
+    color: var(--gray-700) !important; /* Consistent footer link colors */
 }
 
+/* Footer link hover states */
 body.authenticated-user .footer-links a:hover,
 body.authenticated-user .footer-bottom a:hover {
-    color: var(--gray-900) !important;
+    color: var(--gray-900) !important; /* Darker color on footer link hover */
 }
 
+/* Footer bottom section border */
 body.authenticated-user .footer-bottom {
-     border-top-color: #dee2e6 !important;
+     border-top-color: #dee2e6 !important; /* Light border above footer bottom */
 }
 
+/* Form styling for authenticated users */
 body.authenticated-user .form-label {
-    color: var(--text);
+    color: var(--text); /* Standard form label color for readability */
 }
 
+/* Background color utilities for authenticated users */
 /* Revert specific background colors if needed within authenticated section */
 body.authenticated-user .bg-primary {
-    background-color: var(--primary) !important;
+    background-color: var(--primary) !important; /* Maintain primary brand color */
 }

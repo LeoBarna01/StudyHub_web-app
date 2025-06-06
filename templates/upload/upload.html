@@ -1,94 +1,131 @@
-{% extends 'main/base.html' %}
-{% block title %}Upload Document - StudyHub{% endblock %}
+{#
+    STUDYHUB WEB APPLICATION - DOCUMENT UPLOAD TEMPLATE
+    ================================================================
+    
+    PURPOSE:
+    - Provides document upload form interface for authenticated users
+    - Handles file upload with metadata (title, institute, course, subject)
+    - Validates file formats and displays upload guidelines
+    - Integrates with Flask-WTF forms and CSRF protection
+    
+    FEATURES:
+    - Multi-field document metadata form
+    - File format validation (PDF, DOC, DOCX, PPT, PPTX)
+    - Real-time form validation with error display
+    - Upload guidelines and terms of service
+    - Responsive card-based layout
+    - Bootstrap styling integration
+    
+    FORM FIELDS:
+    - title: Document title (required)
+    - institute: Academic institution
+    - year: Academic year
+    - course: Course name
+    - subject: Subject area
+    - description: Document description
+    - file: Document file upload (required)
+    
+    DEPENDENCIES:
+    - Flask-WTF for form handling and CSRF protection
+    - Bootstrap for responsive styling
+    - base.html template for layout structure
+    
+    AUTHOR: StudyHub Development Team
+    LAST MODIFIED: 2024
+#}
 
-{% block content %}
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h2 class="card-title text-center mb-4">Upload new document</h2>
+<!-- filepath: /Users/leo_barna/Documents/UNIVERSITA'/3° YEAR/ELECTIVE courses/Lab of Web Technologies/GitHub/StudyHub_web-app/templates/upload/upload.html -->
+{% extends 'main/base.html' %} <!-- Extend base template for consistent layout -->
+{% block title %}Upload Document - StudyHub{% endblock %} <!-- Set page title for browser tab -->
+
+{% block content %} <!-- Main content block for upload form interface -->
+<div class="container py-5"> <!-- Container with vertical padding for spacing -->
+    <div class="row justify-content-center"> <!-- Centered row layout -->
+        <div class="col-md-8 col-lg-6"> <!-- Responsive column sizing for form card -->
+            <div class="card shadow-sm"> <!-- Bootstrap card with subtle shadow -->
+                <div class="card-body"> <!-- Card body container -->
+                    <h2 class="card-title text-center mb-4">Upload new document</h2> <!-- Centered page title -->
 
                     <!-- INTRO with brief description -->
-                    <p class="lead text-center mb-4">Share your study materials with the community!</p>
+                    <p class="lead text-center mb-4">Share your study materials with the community!</p> <!-- Motivational subtitle -->
 
                     <!-- Guidelines -->
-                    <div class="mb-4 bg-warning p-4 rounded">
-                        <h5 class="text-white">Guidelines for uploading:</h5>
-                        <ul class="text-white">
-                            <li>Ensure your document is in an allowed format (PDF, DOC, DOCX, PPT, PPTX).</li>
-                            <li>Provide a clear and descriptive title.</li>
-                            <li>Include relevant information like academic institute, course, and subject.</li>
-                            <li>Add tags to help others find your document easily.</li>
+                    <div class="mb-4 bg-warning p-4 rounded"> <!-- Warning-styled guidelines section -->
+                        <h5 class="text-white">Guidelines for uploading:</h5> <!-- Guidelines header -->
+                        <ul class="text-white"> <!-- White text list for visibility on warning background -->
+                            <li>Ensure your document is in an allowed format (PDF, DOC, DOCX, PPT, PPTX).</li> <!-- File format requirement -->
+                            <li>Provide a clear and descriptive title.</li> <!-- Title requirement -->
+                            <li>Include relevant information like academic institute, course, and subject.</li> <!-- Metadata requirement -->
+                            <li>Add tags to help others find your document easily.</li> <!-- Discoverability requirement -->
                         </ul>
-                         <p class="text-white">By uploading, you agree to our <a href="{{ url_for('main.error') }}" class="text-white fw-bold text-decoration-none">terms of service</a>.</p>
+                         <p class="text-white">By uploading, you agree to our <a href="{{ url_for('main.error') }}" class="text-white fw-bold text-decoration-none">terms of service</a>.</p> <!-- Terms of service link -->
                     </div>
 
                     <!-- Upload Form -->
-                    <form method="post" enctype="multipart/form-data">
-                        {{ form.hidden_tag() }}
+                    <form method="post" enctype="multipart/form-data"> <!-- Form with POST method and file upload encoding -->
+                        {{ form.hidden_tag() }} <!-- CSRF protection token -->
 
-                        <div class="mb-3">
-                            {{ form.title.label(class="form-label") }}
-                            {{ form.title(class="form-control", required=true) }}
-                             {% for error in form.title.errors %}
-                                <span class="text-danger">[{{ error }}]</span>
+                        <div class="mb-3"> <!-- Document title field -->
+                            {{ form.title.label(class="form-label") }} <!-- Title field label -->
+                            {{ form.title(class="form-control", required=true) }} <!-- Title input field with validation -->
+                             {% for error in form.title.errors %} <!-- Display title validation errors -->
+                                <span class="text-danger">[{{ error }}]</span> <!-- Error message styling -->
                             {% endfor %}
                         </div>
 
-                        <div class="mb-3">
-                            {{ form.institute.label(class="form-label") }}
-                            {{ form.institute(class="form-control") }}
-                             {% for error in form.institute.errors %}
-                                <span class="text-danger">[{{ error }}]</span>
+                        <div class="mb-3"> <!-- Academic institute field -->
+                            {{ form.institute.label(class="form-label") }} <!-- Institute field label -->
+                            {{ form.institute(class="form-control") }} <!-- Institute input field -->
+                             {% for error in form.institute.errors %} <!-- Display institute validation errors -->
+                                <span class="text-danger">[{{ error }}]</span> <!-- Error message styling -->
                             {% endfor %}
                         </div>
 
-                         <div class="mb-3">
-                            {{ form.year.label(class="form-label") }}
-                            {{ form.year(class="form-control") }}
-                             {% for error in form.year.errors %}
-                                <span class="text-danger">[{{ error }}]</span>
+                         <div class="mb-3"> <!-- Academic year field -->
+                            {{ form.year.label(class="form-label") }} <!-- Year field label -->
+                            {{ form.year(class="form-control") }} <!-- Year input field -->
+                             {% for error in form.year.errors %} <!-- Display year validation errors -->
+                                <span class="text-danger">[{{ error }}]</span> <!-- Error message styling -->
                             {% endfor %}
                         </div>
 
-                        <div class="mb-3">
-                            {{ form.course.label(class="form-label") }}
-                            {{ form.course(class="form-control") }}
-                             {% for error in form.course.errors %}
-                                <span class="text-danger">[{{ error }}]</span>
+                        <div class="mb-3"> <!-- Course name field -->
+                            {{ form.course.label(class="form-label") }} <!-- Course field label -->
+                            {{ form.course(class="form-control") }} <!-- Course input field -->
+                             {% for error in form.course.errors %} <!-- Display course validation errors -->
+                                <span class="text-danger">[{{ error }}]</span> <!-- Error message styling -->
                             {% endfor %}
                         </div>
 
-                        <div class="mb-3">
-                            {{ form.subject.label(class="form-label") }}
-                            {{ form.subject(class="form-control") }}
-                             {% for error in form.subject.errors %}
-                                <span class="text-danger">[{{ error }}]</span>
+                        <div class="mb-3"> <!-- Subject area field -->
+                            {{ form.subject.label(class="form-label") }} <!-- Subject field label -->
+                            {{ form.subject(class="form-control") }} <!-- Subject input field -->
+                             {% for error in form.subject.errors %} <!-- Display subject validation errors -->
+                                <span class="text-danger">[{{ error }}]</span> <!-- Error message styling -->
                             {% endfor %}
                         </div>
 
-                        <div class="mb-3">
-                            {{ form.description.label(class="form-label") }}
-                            {{ form.description(class="form-control", rows="3") }}
-                             {% for error in form.description.errors %}
-                                <span class="text-danger">[{{ error }}]</span>
+                        <div class="mb-3"> <!-- Document description field -->
+                            {{ form.description.label(class="form-label") }} <!-- Description field label -->
+                            {{ form.description(class="form-control", rows="3") }} <!-- Multi-line description textarea -->
+                             {% for error in form.description.errors %} <!-- Display description validation errors -->
+                                <span class="text-danger">[{{ error }}]</span> <!-- Error message styling -->
                             {% endfor %}
                         </div>
 
-                         <div class="mb-3">
-                            {{ form.file.label(class="form-label") }}
-                            {{ form.file(class="form-control", required=true) }}
-                             {% for error in form.file.errors %}
-                                <span class="text-danger">[{{ error }}]</span>
+                         <div class="mb-3"> <!-- File upload field -->
+                            {{ form.file.label(class="form-label") }} <!-- File field label -->
+                            {{ form.file(class="form-control", required=true) }} <!-- File input with validation -->
+                             {% for error in form.file.errors %} <!-- Display file validation errors -->
+                                <span class="text-danger">[{{ error }}]</span> <!-- Error message styling -->
                             {% endfor %}
                         </div>
 
-                        {{ form.submit(class="btn btn-primary w-100") }}
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-{% endblock %}
+                        {{ form.submit(class="btn btn-primary w-100") }} <!-- Full-width submit button -->
+                    </form> <!-- End upload form -->
+                </div> <!-- End card body -->
+            </div> <!-- End card -->
+        </div> <!-- End column -->
+    </div> <!-- End row -->
+</div> <!-- End container -->
+{% endblock %} <!-- End content block -->

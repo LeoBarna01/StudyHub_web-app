@@ -1,103 +1,141 @@
-<nav class="navbar navbar-expand-lg navbar-light shadow-sm fixed-top">
-  <div class="container">
+{#
+    STUDYHUB WEB APPLICATION - NAVIGATION BAR PARTIAL TEMPLATE
+    ================================================================
+    
+    PURPOSE:
+    - Provides main navigation bar component for all pages
+    - Implements responsive navigation with mobile menu
+    - Handles authenticated and non-authenticated user states
+    - Displays user profile information and actions
+    
+    FEATURES:
+    - Fixed-top responsive Bootstrap navbar
+    - Brand logo with home page linking
+    - Conditional navigation menu based on authentication
+    - Dynamic active link highlighting
+    - User avatar display with fallback to initials
+    - Mobile-friendly collapsible menu
+    - Auto-close mobile menu functionality
+    
+    NAVIGATION ITEMS:
+    - Home: Always visible
+    - Upload: Authenticated users only
+    - Browse: Authenticated users only  
+    - Form: Authenticated users only
+    - Profile: Authenticated users (with avatar)
+    - Login/Sign Up: Non-authenticated users only
+    
+    DEPENDENCIES:
+    - Bootstrap 5 for responsive design
+    - Font Awesome for navigation icons
+    - Flask authentication system
+    - JavaScript for mobile menu functionality
+    
+    AUTHOR: StudyHub Development Team
+    LAST MODIFIED: 2024
+#}
+
+<!-- filepath: /Users/leo_barna/Documents/UNIVERSITA'/3° YEAR/ELECTIVE courses/Lab of Web Technologies/GitHub/StudyHub_web-app/templates/view/partials/navbar.html -->
+<nav class="navbar navbar-expand-lg navbar-light shadow-sm fixed-top"> <!-- Fixed-top responsive navbar with shadow -->
+  <div class="container"> <!-- Bootstrap container for proper spacing -->
     <!-- Brand / Logo -->
-    <a class="navbar-brand" href="{{ url_for('main.index') }}">
-      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="StudyHub Logo" height="40" class="d-inline-block align-text-top">
+    <a class="navbar-brand" href="{{ url_for('main.index') }}"> <!-- Brand logo linking to homepage -->
+      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="StudyHub Logo" height="40" class="d-inline-block align-text-top"> <!-- StudyHub logo image -->
     </a>
     
     <!-- Mobile menu button -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <!-- Mobile hamburger menu button -->
+      <span class="navbar-toggler-icon"></span> <!-- Hamburger icon -->
     </button>
     
     <!-- Navigation Links -->
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link {{ 'active' if request.endpoint == 'main.index' or request.endpoint == 'main.dashboard' }}" href="{{ url_for('main.index') }}">
-            <i class="fas fa-home me-1"></i> Home
+    <div class="collapse navbar-collapse" id="navbarNav"> <!-- Collapsible navigation menu -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0"> <!-- Left-aligned navigation items -->
+        <li class="nav-item"> <!-- Home navigation item -->
+          <a class="nav-link {{ 'active' if request.endpoint == 'main.index' or request.endpoint == 'main.dashboard' }}" href="{{ url_for('main.index') }}"> <!-- Home link with dynamic active state -->
+            <i class="fas fa-home me-1"></i> Home <!-- Home icon and text -->
           </a>
         </li>
-        {% if current_user.is_authenticated %}
-        <li class="nav-item">
-          <a class="nav-link {{ 'active' if request.endpoint == 'upload.upload_document' }}" href="{{ url_for('upload.upload_document') }}">
-            <i class="fas fa-upload me-1"></i> Upload
+        {% if current_user.is_authenticated %} <!-- Conditional navigation for authenticated users -->
+        <li class="nav-item"> <!-- Upload navigation item -->
+          <a class="nav-link {{ 'active' if request.endpoint == 'upload.upload_document' }}" href="{{ url_for('upload.upload_document') }}"> <!-- Upload link with active state -->
+            <i class="fas fa-upload me-1"></i> Upload <!-- Upload icon and text -->
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link {{ 'active' if request.endpoint == 'view.search' }}" href="{{ url_for('view.search') }}">
-            <i class="fas fa-search me-1"></i> Browse
+        <li class="nav-item"> <!-- Browse navigation item -->
+          <a class="nav-link {{ 'active' if request.endpoint == 'view.search' }}" href="{{ url_for('view.search') }}"> <!-- Browse link with active state -->
+            <i class="fas fa-search me-1"></i> Browse <!-- Search icon and text -->
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link {{ 'active' if request.endpoint == 'form.ask_question' }}" href="{{ url_for('form.ask_question') }}">
-            <i class="fas fa-comments me-1"></i> Form
+        <li class="nav-item"> <!-- Form navigation item -->
+          <a class="nav-link {{ 'active' if request.endpoint == 'form.ask_question' }}" href="{{ url_for('form.ask_question') }}"> <!-- Form link with active state -->
+            <i class="fas fa-comments me-1"></i> Form <!-- Comments icon and text -->
           </a>
         </li>
-        {% endif %}
-      </ul>
+        {% endif %} <!-- End authenticated user navigation -->
+      </ul> <!-- End left navigation items -->
       
       <!-- User Actions -->
-      <ul class="navbar-nav ms-auto">
-        {% if current_user.is_authenticated %}
-          <li class="nav-item">
-            <a class="nav-link d-flex align-items-center" href="{{ url_for('auth.profile') }}">
-              {% if current_user.avatar_url %}
-                <div class="avatar me-2">
+      <ul class="navbar-nav ms-auto"> <!-- Right-aligned user action items -->
+        {% if current_user.is_authenticated %} <!-- Authenticated user profile section -->
+          <li class="nav-item"> <!-- Profile navigation item -->
+            <a class="nav-link d-flex align-items-center" href="{{ url_for('auth.profile') }}"> <!-- Profile link with flex alignment -->
+              {% if current_user.avatar_url %} <!-- Check if user has custom avatar -->
+                <div class="avatar me-2"> <!-- Avatar container with spacing -->
                   <img src="{{ current_user.avatar_url }}" 
                        class="avatar-img" alt="Profile"
-                       onerror="handleAvatarError(this)">
+                       onerror="handleAvatarError(this)"> <!-- User avatar image with error handling -->
                 </div>
-              {% else %}
-                <div class="avatar me-2">
-                  {{ current_user.first_name[0]|upper }}{{ current_user.last_name[0]|upper }}
+              {% else %} <!-- Fallback to user initials if no avatar -->
+                <div class="avatar me-2"> <!-- Initials avatar container -->
+                  {{ current_user.first_name[0]|upper }}{{ current_user.last_name[0]|upper }} <!-- User initials in uppercase -->
                 </div>
-              {% endif %}
-              <span class="d-md-inline">Profile</span>
+              {% endif %} <!-- End avatar conditional -->
+              <span class="d-md-inline">Profile</span> <!-- Profile text visible on medium+ screens -->
             </a>
           </li>
-        {% else %}
-          <li class="nav-item">
-            <a class="nav-link {{ 'active' if request.endpoint == 'auth.login' }}" href="{{ url_for('auth.login') }}">
-              <i class="fas fa-sign-in-alt me-1"></i> Login
+        {% else %} <!-- Non-authenticated user options -->
+          <li class="nav-item"> <!-- Login navigation item -->
+            <a class="nav-link {{ 'active' if request.endpoint == 'auth.login' }}" href="{{ url_for('auth.login') }}"> <!-- Login link with active state -->
+              <i class="fas fa-sign-in-alt me-1"></i> Login <!-- Login icon and text -->
             </a>
           </li>
-          <li class="nav-item d-flex align-items-center ms-2">
-            <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-sm rounded-pill px-3">
+          <li class="nav-item d-flex align-items-center ms-2"> <!-- Sign up button container -->
+            <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-sm rounded-pill px-3"> <!-- Styled sign up button -->
               Sign Up
             </a>
           </li>
-        {% endif %}
-      </ul>
-    </div>
-  </div>
-</nav>
+        {% endif %} <!-- End authentication conditional -->
+      </ul> <!-- End user action items -->
+    </div> <!-- End collapsible navigation -->
+  </div> <!-- End container -->
+</nav> <!-- End navigation bar -->
 
 <!-- Add padding to body to account for fixed navbar -->
 <style>
   body {
-    padding-top: 76px;
+    padding-top: 76px; /* Padding for desktop navbar height */
   }
-  @media (max-width: 991.98px) {
+  @media (max-width: 991.98px) { /* Mobile responsive padding */
     body {
-      padding-top: 56px;
+      padding-top: 56px; /* Reduced padding for mobile navbar */
     }
   }
 </style>
 
 <!-- Auto-close mobile menu on click -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() { // Wait for DOM to load
   // Close mobile menu when a nav link is clicked
-  document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-      const navbarCollapse = document.querySelector('.navbar-collapse');
-      if (navbarCollapse.classList.contains('show')) {
-        const bsCollapse = new bootstrap.Collapse(navbarCollapse, {toggle: false});
-        bsCollapse.hide();
+  document.querySelectorAll('.navbar-nav .nav-link').forEach(link => { // Select all navigation links
+    link.addEventListener('click', () => { // Add click event listener
+      const navbarCollapse = document.querySelector('.navbar-collapse'); // Get collapsible menu
+      if (navbarCollapse.classList.contains('show')) { // Check if menu is open
+        const bsCollapse = new bootstrap.Collapse(navbarCollapse, {toggle: false}); // Create Bootstrap collapse instance
+        bsCollapse.hide(); // Hide the mobile menu
       }
     });
   });
-});
-</script>
+}); // End DOM ready function
+</script> <!-- End mobile menu auto-close script -->

@@ -1,92 +1,102 @@
+<!-- 
+  StudyHub Base Template
+  Main layout template that serves as the foundation for all pages in the StudyHub application.
+  Includes common HTML structure, meta tags, stylesheets, navigation, footer, and JavaScript dependencies.
+  Conditionally loads authenticated user styles and provides blocks for content and script extension.
+-->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"> <!-- Set document language for accessibility -->
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="StudyHub - A collaborative platform for university students to share and discover study materials.">
-    <title>{% block title %}StudyHub - Study Smarter, Together{% endblock %}</title>
+    <!-- Essential meta tags for responsive design and character encoding -->
+    <meta charset="UTF-8"> <!-- Character encoding for proper text display -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsive viewport settings -->
+    <meta name="description" content="StudyHub - A collaborative platform for university students to share and discover study materials."> <!-- SEO meta description -->
+    <title>{% block title %}StudyHub - Study Smarter, Together{% endblock %}</title> <!-- Dynamic page title with default fallback -->
     
-    <!-- Favicon -->
-    <link rel="icon" href="{{ url_for('static', filename='images/logo.svg') }}" type="image/svg+xml">
+    <!-- Favicon for browser tab icon -->
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.svg') }}" type="image/svg+xml"> <!-- SVG favicon for scalability -->
     
-    <!-- Preconnect to external domains -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <!-- Performance optimization: preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"> <!-- Preconnect to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <!-- Preconnect to Google Fonts CDN -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net"> <!-- Preconnect to jsDelivr CDN -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com"> <!-- Preconnect to Cloudflare CDN -->
     
-    <!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS framework for responsive design and UI components -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" 
-          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous"> <!-- Bootstrap 5.3.0 CSS with integrity hash -->
     
-    <!-- Font Awesome -->
+    <!-- Font Awesome icons library for scalable vector icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
           integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
+          crossorigin="anonymous" referrerpolicy="no-referrer" /> <!-- Font Awesome 6.4.0 with security headers -->
     
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts for typography enhancement -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"> <!-- Inter and Poppins fonts with multiple weights -->
     
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+    <!-- Custom application stylesheets -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"> <!-- Main application styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}"> <!-- Custom component styles -->
     
+    <!-- Conditional stylesheet for authenticated users -->
     {% if current_user.is_authenticated %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/authenticated_styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/authenticated_styles.css') }}"> <!-- Clean white theme for authenticated users -->
     {% endif %}
     
-    {% block head %}{% endblock %}
+    {% block head %}{% endblock %} <!-- Block for additional head content in child templates -->
 </head>
-<body class="d-flex flex-column min-vh-100{% if current_user.is_authenticated %} authenticated-user{% endif %}">
+<body class="d-flex flex-column min-vh-100{% if current_user.is_authenticated %} authenticated-user{% endif %}"> <!-- Flexbox layout with full viewport height and conditional authenticated class -->
 
-  <!-- Navbar -->
-  {% include 'view/partials/navbar.html' %}
+  <!-- Navigation bar component inclusion -->
+  {% include 'view/partials/navbar.html' %} <!-- Include reusable navigation bar partial -->
 
-  <!-- Flash messages -->
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      <div class="container mt-3">
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-            {{ message|safe }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  <!-- Flash message system for user feedback -->
+  {% with messages = get_flashed_messages(with_categories=true) %} <!-- Get flash messages with their categories -->
+    {% if messages %} <!-- Only display if messages exist -->
+      <div class="container mt-3"> <!-- Container for flash messages with top margin -->
+        {% for category, message in messages %} <!-- Loop through each flash message -->
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert"> <!-- Bootstrap alert with dynamic category -->
+            {{ message|safe }} <!-- Display message content (safe filter allows HTML) -->
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> <!-- Dismissible close button -->
           </div>
         {% endfor %}
       </div>
     {% endif %}
   {% endwith %}
 
-  <!-- Main content -->
-  <main class="container my-4">
-    {% block content %}{% endblock %}
+  <!-- Main content area for page-specific content -->
+  <main class="container my-4"> <!-- Bootstrap container with vertical margins -->
+    {% block content %}{% endblock %} <!-- Content block for child templates to override -->
   </main>
 
-  <!-- Footer -->
-  {% include 'view/partials/footer.html' %}
+  <!-- Footer component inclusion -->
+  {% include 'view/partials/footer.html' %} <!-- Include reusable footer partial -->
 
-  <!-- jQuery (optional, if using Bootstrap 5 JS components that require it) -->
+  <!-- JavaScript dependencies and libraries -->
+  
+  <!-- jQuery library for DOM manipulation and AJAX support -->
   <script
-    src="https://code.jquery.com/jquery-3.6.0.min.js"
-  ></script>
+    src="https://code.jquery.com/jquery-3.6.0.min.js"> <!-- jQuery 3.6.0 for compatibility with older plugins -->
+  </script>
 
-  <!-- Bootstrap Bundle JS (includes Popper) -->
+  <!-- Bootstrap JavaScript bundle with Popper.js for interactive components -->
   <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-  ></script>
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"> <!-- Bootstrap 5.3.0 JS with integrated Popper -->
+  </script>
 
-  <!-- Back to Top Button -->
-  <button type="button" class="back-to-top" aria-label="Back to top">
-    <i class="fas fa-arrow-up"></i>
+  <!-- Back to top navigation button -->
+  <button type="button" class="back-to-top" aria-label="Back to top"> <!-- Accessibility-friendly back to top button -->
+    <i class="fas fa-arrow-up"></i> <!-- Font Awesome up arrow icon -->
   </button>
 
-  <!-- Custom JS -->
-  <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+  <!-- Custom application JavaScript -->
+  <script src="{{ url_for('static', filename='js/custom.js') }}"></script> <!-- Custom interactive functionality -->
 
-  {% block scripts %}{% endblock %}
+  {% block scripts %}{% endblock %} <!-- Block for additional scripts in child templates -->
   
-  <!-- Scroll Indicator -->
-  <div class="scroll-indicator hidden" id="scrollIndicator">
-    <i class="fas fa-chevron-down"></i>
+  <!-- Scroll indicator for user guidance -->
+  <div class="scroll-indicator hidden" id="scrollIndicator"> <!-- Hidden scroll indicator for page navigation guidance -->
+    <i class="fas fa-chevron-down"></i> <!-- Font Awesome down chevron icon -->
   </div>
 </body>
 </html>

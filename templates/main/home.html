@@ -1,119 +1,134 @@
-{% extends 'main/base.html' %}
+<!-- 
+  StudyHub Home Page Template
+  Landing page for the StudyHub application featuring hero section, feature overview,
+  and call-to-action sections. Includes dynamic content loading and responsive design
+  for showcasing the platform's capabilities to both new and existing users.
+-->
+{% extends 'main/base.html' %} <!-- Inherit from base template -->
 
-{% block title %}Home - StudyHub{% endblock %}
+{% block title %}Home - StudyHub{% endblock %} <!-- Set page title -->
 
 {% block content %}
-<!-- Hero Section -->
-<section class="hero">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-8 text-center">
-        <h1 class="display-4 fw-bold mb-4">Your ultimate study companion</h1>
-        <p class="lead mb-2 fs-5">Access thousands of study materials, share your notes, and collaborate with students from around the world.</p>
-        <p class="lead mt-5 mb-4 fw-bolder fs-4"><strong>Study smarter, not harder.</strong></p>
-        <div class="d-flex gap-3 justify-content-center">
-          <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">Get Started</a>
-          <a href="#how-studyhub-works" class="btn btn-outline-primary btn-lg">Learn More</a>
+<!-- Hero Section: Primary landing area with main value proposition -->
+<section class="hero"> <!-- Main hero section for first impression -->
+  <div class="container"> <!-- Bootstrap container for content alignment -->
+    <div class="row justify-content-center"> <!-- Centered row layout -->
+      <div class="col-lg-8 text-center"> <!-- Centered column with responsive width -->
+        <h1 class="display-4 fw-bold mb-4">Your ultimate study companion</h1> <!-- Main headline with large display text -->
+        <p class="lead mb-2 fs-5">Access thousands of study materials, share your notes, and collaborate with students from around the world.</p> <!-- Primary value proposition -->
+        <p class="lead mt-5 mb-4 fw-bolder fs-4"><strong>Study smarter, not harder.</strong></p> <!-- Emphasized tagline -->
+        <div class="d-flex gap-3 justify-content-center"> <!-- Action buttons container with gap -->
+          <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">Get Started</a> <!-- Primary CTA button -->
+          <a href="#how-studyhub-works" class="btn btn-outline-primary btn-lg">Learn More</a> <!-- Secondary CTA button with anchor link -->
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Features Section -->
-{% if not current_user.is_authenticated %}
-<section class="overview py-5" id="how-studyhub-works">
-  <div class="container">
-    <h2 class="text-center fw-bold mb-5">How StudyHub works</h2>
-    <div class="row justify-content-center">
-      <div class="col-md-4 mb-4">
-        <div class="card h-100 text-center">
-          <div class="card-body">
-            <div class="icon mb-3">
-              <i class="bi bi-cloud-arrow-up-fill display-4 text-primary"></i>
+<!-- Features Section: Platform capabilities overview for unauthenticated users -->
+{% if not current_user.is_authenticated %} <!-- Only show features to non-logged-in users -->
+<section class="overview py-5" id="how-studyhub-works"> <!-- Features section with anchor ID for navigation -->
+  <div class="container"> <!-- Bootstrap container for content width -->
+    <h2 class="text-center fw-bold mb-5">How StudyHub works</h2> <!-- Section heading -->
+    <div class="row justify-content-center"> <!-- Centered responsive grid -->
+      
+      <!-- Feature 1: Upload Resources -->
+      <div class="col-md-4 mb-4"> <!-- Responsive column with bottom margin -->
+        <div class="card h-100 text-center"> <!-- Full-height card with center alignment -->
+          <div class="card-body"> <!-- Card content area -->
+            <div class="icon mb-3"> <!-- Icon container with bottom margin -->
+              <i class="bi bi-cloud-arrow-up-fill display-4 text-primary"></i> <!-- Bootstrap icon for upload -->
             </div>
-            <img src="{{ url_for('static', filename='images/Upload_Resources.jpg') }}" alt="Upload Resources" class="img-fluid rounded mb-3" style="width: 100%;">
-            <h5 class="card-title">Upload resources</h5>
-            <p class="card-text">Easily share your study materials, notes, and assignments with the community. Help others learn and contribute to a growing knowledge base.</p>
+            <img src="{{ url_for('static', filename='images/Upload_Resources.jpg') }}" alt="Upload Resources" class="img-fluid rounded mb-3" style="width: 100%;"> <!-- Feature illustration image -->
+            <h5 class="card-title">Upload resources</h5> <!-- Feature title -->
+            <p class="card-text">Easily share your study materials, notes, and assignments with the community. Help others learn and contribute to a growing knowledge base.</p> <!-- Feature description -->
           </div>
         </div>
       </div>
-      <div class="col-md-4 mb-4">
-        <div class="card h-100 text-center">
-          <div class="card-body">
-            <div class="icon mb-3">
-              <i class="bi bi-search display-4 text-primary"></i>
+      
+      <!-- Feature 2: Browse & Discover -->
+      <div class="col-md-4 mb-4"> <!-- Responsive column with bottom margin -->
+        <div class="card h-100 text-center"> <!-- Full-height card with center alignment -->
+          <div class="card-body"> <!-- Card content area -->
+            <div class="icon mb-3"> <!-- Icon container with bottom margin -->
+              <i class="bi bi-search display-4 text-primary"></i> <!-- Bootstrap icon for search -->
             </div>
-            <img src="{{ url_for('static', filename='images/Browse&Discover.jpg') }}" alt="Browse and Discover" class="img-fluid rounded mb-3" style="width: 100%;">
-            <h5 class="card-title">Browse & Discover</h5>
-            <p class="card-text">Explore a vast library of documents uploaded by students worldwide. Find materials relevant to your courses, subjects, and university.</p>
+            <img src="{{ url_for('static', filename='images/Browse&Discover.jpg') }}" alt="Browse and Discover" class="img-fluid rounded mb-3" style="width: 100%;"> <!-- Feature illustration image -->
+            <h5 class="card-title">Browse & Discover</h5> <!-- Feature title -->
+            <p class="card-text">Explore a vast library of documents uploaded by students worldwide. Find materials relevant to your courses, subjects, and university.</p> <!-- Feature description -->
           </div>
         </div>
       </div>
-      <div class="col-md-4 mb-4">
-        <div class="card h-100 text-center">
-          <div class="card-body">
-            <div class="icon mb-3">
-              <i class="bi bi-question-circle-fill display-4 text-primary"></i>
+      
+      <!-- Feature 3: Seek Help -->
+      <div class="col-md-4 mb-4"> <!-- Responsive column with bottom margin -->
+        <div class="card h-100 text-center"> <!-- Full-height card with center alignment -->
+          <div class="card-body"> <!-- Card content area -->
+            <div class="icon mb-3"> <!-- Icon container with bottom margin -->
+              <i class="bi bi-question-circle-fill display-4 text-primary"></i> <!-- Bootstrap icon for questions -->
             </div>
-            <img src="{{ url_for('static', filename='images/Ask&Discuss.jpg') }}" alt="Ask and Discuss" class="img-fluid rounded mb-3" style="width: 100%;">
-            <h5 class="card-title">Seek help</h5>
-            <p class="card-text">Solve any kind of question, doubt or problem with us. We are here ready to help you whenever you need it!</p>
+            <img src="{{ url_for('static', filename='images/Ask&Discuss.jpg') }}" alt="Ask and Discuss" class="img-fluid rounded mb-3" style="width: 100%;"> <!-- Feature illustration image -->
+            <h5 class="card-title">Seek help</h5> <!-- Feature title -->
+            <p class="card-text">Solve any kind of question, doubt or problem with us. We are here ready to help you whenever you need it!</p> <!-- Feature description -->
           </div>
         </div>
       </div>
     </div>
   </div>
 </section>
-{% endif %}
+{% endif %} <!-- End conditional features section -->
 
-<!-- CTA Section -->
-<section class="py-5 bg-primary text-white">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-8 text-center">
-    <h2 class="fw-bold mb-4">Ready to boost your study game?</h2>
-    <p class="lead mb-4">Join thousands of students already using StudyHub to enhance their learning experience.</p>
-    <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg px-4">Sign Up for Free</a>
+<!-- Call-to-Action Section: Final conversion opportunity -->
+<section class="py-5 bg-primary text-white"> <!-- CTA section with primary background and white text -->
+  <div class="container"> <!-- Bootstrap container for content alignment -->
+    <div class="row justify-content-center"> <!-- Centered row layout -->
+      <div class="col-lg-8 text-center"> <!-- Centered column with responsive width -->
+        <h2 class="fw-bold mb-4">Ready to boost your study game?</h2> <!-- CTA heading -->
+        <p class="lead mb-4">Join thousands of students already using StudyHub to enhance their learning experience.</p> <!-- Social proof and value proposition -->
+        <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg px-4">Sign Up for Free</a> <!-- Final CTA button with light styling -->
       </div>
     </div>
   </div>
 </section>
 
-{% endblock %}
+{% endblock %} <!-- End content block -->
 
-{% block scripts %}
-{{ super() }}
+{% block scripts %} <!-- Scripts block for page-specific JavaScript -->
+{{ super() }} <!-- Include parent template scripts -->
 <script>
-  // Example of loading recent uploads via AJAX
+  // Dynamic Content Loading: Recent uploads simulation
+  // Demonstrates AJAX-style content loading for enhanced user experience
   document.addEventListener('DOMContentLoaded', function() {
-    // This would be an actual API call in production
+    // Mock API call simulation - would be replaced with actual endpoint in production
     setTimeout(function() {
+      // Sample data structure for recent uploads display
       const recentUploads = [
         {
-          title: 'Introduction to Computer Science',
-          course: 'CS101',
-          university: 'University of Example',
-          date: '2 hours ago',
-          type: 'Lecture Notes'
+          title: 'Introduction to Computer Science', // Document title
+          course: 'CS101', // Course identifier
+          university: 'University of Example', // Institution name
+          date: '2 hours ago', // Relative upload time
+          type: 'Lecture Notes' // Document category
         },
         {
-          title: 'Advanced Calculus',
-          course: 'MATH201',
-          university: 'Technical University',
-          date: '5 hours ago',
-          type: 'Practice Problems'
+          title: 'Advanced Calculus', // Document title
+          course: 'MATH201', // Course identifier
+          university: 'Technical University', // Institution name
+          date: '5 hours ago', // Relative upload time
+          type: 'Practice Problems' // Document category
         },
         {
-          title: 'World History',
-          course: 'HIST105',
-          university: 'State College',
-          date: '1 day ago',
-          type: 'Study Guide'
+          title: 'World History', // Document title
+          course: 'HIST105', // Course identifier
+          university: 'State College', // Institution name
+          date: '1 day ago', // Relative upload time
+          type: 'Study Guide' // Document category
         }
       ];
       
-      const container = document.getElementById('recent-uploads');
+      // Dynamic HTML generation for recent uploads
+      const container = document.getElementById('recent-uploads'); // Get container element
       container.innerHTML = recentUploads.map(item => `
         <div class="col-md-4">
           <div class="card h-100 text-center">
@@ -130,8 +145,8 @@
             </div>
           </div>
         </div>
-      `).join('');
-    }, 1000);
+      `).join(''); // Generate and insert HTML for each upload item
+    }, 1000); // 1 second delay to simulate network request
   });
 </script>
-{% endblock %}
+{% endblock %} <!-- End scripts block -->

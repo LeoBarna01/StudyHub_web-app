@@ -1,29 +1,62 @@
-{% extends 'main/base.html' %}
-{% block title %}Your Favorites – StudyHub{% endblock %}
+{#
+  StudyHub - User Favorites Template
+  
+  Purpose: Display and manage user's favorite documents in a dedicated page
+  Features:
+  - Dedicated favorites page with comprehensive document listing
+  - Interactive document cards with preview and unfavorite functionality
+  - Document preview modal with fullscreen capability
+  - Dynamic favorites management via AJAX
+  - Responsive grid layout for optimal viewing across devices
+  - Empty state handling when no favorites exist
+  
+  Document Information Displayed:
+  - Title, course, institute, year, subject
+  - Author information and upload statistics
+  - Category classification
+  - Download count tracking
+  
+  Interactive Features:
+  - Preview button: Opens document in modal viewer
+  - Favorite button: Remove from favorites with filled star icon
+  - Fullscreen toggle: Expand preview to full browser window
+  - Real-time updates: Dynamic content updates without page refresh
+  
+  Dependencies: Flask favorites views, Bootstrap modal, Font Awesome icons, base template
+#}
 
-{% block content %}
-<div class="container py-5 d-flex flex-column flex-grow-1">
-    <h2 class="mb-4 text-center">Your Favorite Documents</h2>
-    <div class="row g-4" id="yourFavoritesList">
-        {% if favorites %}
-            {% for doc in favorites %}
-                <div class="col-md-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <strong>{{ doc.title }}</strong><br>
-                                    <small class="text-muted">
-                                        {{ doc.course }}{% if doc.institute %} @ {{ doc.institute }}{% endif %}{% if doc.year %}, {{ doc.year }}{% endif %}
-                                        {% if doc.subject %} • {{ doc.subject }}{% endif %}
-                                        {% if doc.author %} • Uploaded by {{ doc.author.first_name }} {{ doc.author.last_name }}{% endif %}
-                                        {% if doc.category %} • {{ doc.category.name }}{% endif %}
+{% extends 'main/base.html' %} {# Inherit from base template for consistent layout #}
+{% block title %}Your Favorites – StudyHub{% endblock %} {# Set browser tab title #}
+
+{% block content %} {# Main content block #}
+<div class="container py-5 d-flex flex-column flex-grow-1"> {# Main container with flex layout and vertical padding #}
+    <h2 class="mb-4 text-center">Your Favorite Documents</h2> {# Page title with bottom margin #}
+    
+    {# Favorites Grid Container - Dynamic content updated via JavaScript #}
+    <div class="row g-4" id="yourFavoritesList"> {# Grid container with gap spacing and unique ID for JavaScript targeting #}
+        {% if favorites %} {# Display favorites if user has any #}
+            {% for doc in favorites %} {# Loop through each favorite document #}
+                <div class="col-md-6"> {# Responsive column - 2 cards per row on medium+ screens #}
+                    <div class="card h-100"> {# Card with full height for consistent layout #}
+                        <div class="card-body"> {# Card body for padding and structure #}
+                            <div class="row"> {# Internal row for two-column layout #}
+                                {# Document Information Column #}
+                                <div class="col-md-8"> {# 8/12 columns for document details #}
+                                    <strong>{{ doc.title }}</strong><br> {# Document title in bold #}
+                                    <small class="text-muted"> {# Document metadata in smaller, muted text #}
+                                        {{ doc.course }}{% if doc.institute %} @ {{ doc.institute }}{% endif %}{% if doc.year %}, {{ doc.year }}{% endif %} {# Course, institute, and year #}
+                                        {% if doc.subject %} • {{ doc.subject }}{% endif %} {# Subject if available #}
+                                        {% if doc.author %} • Uploaded by {{ doc.author.first_name }} {{ doc.author.last_name }}{% endif %} {# Author information #}
+                                        {% if doc.category %} • {{ doc.category.name }}{% endif %} {# Category if available #}
                                     </small>
                                 </div>
-                                <div class="col-md-4 d-flex flex-column align-items-end justify-content-center">
-                                    <div class="d-flex gap-2 mt-2 mt-md-0">
-                                        <button class="btn btn-sm btn-outline-secondary preview-button" data-doc-id="{{ doc.id }}">Preview</button>
-                                        <button class="btn btn-sm btn-outline-secondary favorite-button favorited" data-doc-id="{{ doc.id }}" title="Remove from favorites"><i class="fas fa-star"></i></button>
+                                {# Action Buttons Column #}
+                                <div class="col-md-4 d-flex flex-column align-items-end justify-content-center"> {# 4/12 columns for buttons, right-aligned and centered #}
+                                    <div class="d-flex gap-2 mt-2 mt-md-0"> {# Button container with gap spacing #}
+                                        {# Document Preview Button #}
+                                        <button class="btn btn-sm btn-outline-secondary preview-button" data-doc-id="{{ doc.id }}">Preview</button> {# Preview button with document ID data attribute #}
+                                        {# Remove from Favorites Button #}
+                                        <button class="btn btn-sm btn-outline-secondary favorite-button favorited" data-doc-id="{{ doc.id }}" title="Remove from favorites"><i class="fas fa-star"></i></button> {# Unfavorite button with filled star icon #}
                                     </div>
                                 </div>
                             </div>
@@ -32,10 +65,11 @@
                 </div>
             {% endfor %}
         {% else %}
-            <div class="col-12">
-                <div class="card h-100">
-                    <div class="card-body text-muted text-center">
-                        No favorite documents yet.
+            {# Empty State - No Favorites #}
+            <div class="col-12"> {# Full-width column for empty state #}
+                <div class="card h-100"> {# Card container for consistent styling #}
+                    <div class="card-body text-muted text-center"> {# Centered muted text for empty state #}
+                        No favorite documents yet. {# Empty state message #}
                     </div>
                 </div>
             </div>
@@ -43,25 +77,29 @@
     </div>
 </div>
 
+{# Document Preview Modal - Full-screen document viewer with download and fullscreen functionality #}
 <!-- Document Preview Modal -->
-<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title w-100 text-center" id="previewModalLabel">Document Preview</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true"> {# Bootstrap modal for document preview #}
+  <div class="modal-dialog modal-xl modal-dialog-centered"> {# Extra large centered modal dialog #}
+    <div class="modal-content"> {# Modal content container #}
+      {# Modal Header with Title and Close Button #}
+      <div class="modal-header"> {# Modal header section #}
+        <h5 class="modal-title w-100 text-center" id="previewModalLabel">Document Preview</h5> {# Centered modal title #}
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> {# Bootstrap close button #}
       </div>
-      <div class="modal-body">
-        <div class="embed-responsive embed-responsive-16by9">
-          <iframe id="documentPreviewFrame" class="embed-responsive-item" style="width: 100%; height: 500px;" src="" frameborder="0" allowfullscreen></iframe>
+      {# Modal Body with Document Iframe #}
+      <div class="modal-body"> {# Modal body for content #}
+        <div class="embed-responsive embed-responsive-16by9"> {# Responsive embed container #}
+          <iframe id="documentPreviewFrame" class="embed-responsive-item" style="width: 100%; height: 500px;" src="" frameborder="0" allowfullscreen></iframe> {# Document preview iframe #}
         </div>
-         <p class="text-muted mt-3 text-center">If the preview is not working, try downloading the document.</p>
+         <p class="text-muted mt-3 text-center">If the preview is not working, try downloading the document.</p> {# Fallback message for preview issues #}
       </div>
-       <div class="modal-footer d-flex justify-content-between">
-            <div class="w-100 text-center">
-                <button type="button" class="btn btn-secondary" id="fullscreenButton">Full Screen</button>
+      {# Modal Footer with Action Buttons #}
+       <div class="modal-footer d-flex justify-content-between"> {# Footer with button layout #}
+            <div class="w-100 text-center"> {# Centered fullscreen button container #}
+                <button type="button" class="btn btn-secondary" id="fullscreenButton">Full Screen</button> {# Fullscreen toggle button #}
             </div>
-            <a href="#" id="previewDownloadButton" class="btn btn-primary position-absolute end-0 me-3">Download</a>
+            <a href="#" id="previewDownloadButton" class="btn btn-primary position-absolute end-0 me-3">Download</a> {# Positioned download button #}
         </div>
     </div>
   </div>
@@ -69,79 +107,88 @@
 
 {% endblock %}
 
+{# JavaScript Block for Favorites Page Interactive Functionality #}
 {% block scripts %}
 <script>
+// Attach Favorite Button Event Listeners - Handles favorite/unfavorite actions
 function attachFavoriteListeners() {
+    // Remove existing listeners to prevent duplicates
     document.querySelectorAll('.favorite-button, .add-to-favorites-button').forEach(button => {
-        button.replaceWith(button.cloneNode(true));
+        button.replaceWith(button.cloneNode(true)); // Clone node to remove existing listeners
     });
+    // Add new event listeners to all favorite buttons
     document.querySelectorAll('.favorite-button, .add-to-favorites-button').forEach(button => {
         button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const docId = this.dataset.docId;
-            fetch(`/view/toggle_favorite/${docId}`, {
+            e.preventDefault(); // Prevent default button behavior
+            const docId = this.dataset.docId; // Get document ID from data attribute
+            fetch(`/view/toggle_favorite/${docId}`, { // Make AJAX request to toggle favorite
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             })
-            .then(response => response.json())
+            .then(response => response.json()) // Parse JSON response
             .then(() => {
-                updateFavoritesList();
+                updateFavoritesList(); // Refresh the favorites list display
             })
             .catch(error => {
-                console.error('Error toggling favorite:', error);
+                console.error('Error toggling favorite:', error); // Log any errors
             });
         });
     });
 }
 
+// Attach Preview Button Event Listeners - Handles document preview modal
 function attachPreviewListeners() {
-    const previewButtons = document.querySelectorAll('.preview-button');
+    const previewButtons = document.querySelectorAll('.preview-button'); // Get all preview buttons
+    // Add click event listeners to all preview buttons
     previewButtons.forEach(button => {
         button.addEventListener('click', function() {
-            const docId = this.dataset.docId;
-            const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
-            const previewFrame = document.getElementById('documentPreviewFrame');
-            const downloadButton = document.getElementById('previewDownloadButton');
-            const fullscreenButton = document.getElementById('fullscreenButton');
-            const previewModalDialog = document.querySelector('#previewModal .modal-dialog');
+            const docId = this.dataset.docId; // Get document ID from data attribute
+            const previewModal = new bootstrap.Modal(document.getElementById('previewModal')); // Initialize Bootstrap modal
+            const previewFrame = document.getElementById('documentPreviewFrame'); // Get preview iframe
+            const downloadButton = document.getElementById('previewDownloadButton'); // Get download button
+            const fullscreenButton = document.getElementById('fullscreenButton'); // Get fullscreen button
+            const previewModalDialog = document.querySelector('#previewModal .modal-dialog'); // Get modal dialog
 
-            // Reset modal to non-fullscreen and reset button text/icon
+            // Reset modal to non-fullscreen state and reset button text
             previewModalDialog.classList.remove('modal-fullscreen-mode');
             fullscreenButton.innerHTML = '<i class="fas fa-expand me-2"></i>Full Screen';
 
-            previewFrame.src = `/view/preview/${docId}`;
-            downloadButton.href = `/view/download/${docId}`;
-            previewModal.show();
+            // Set iframe source and download link
+            previewFrame.src = `/view/preview/${docId}`; // Set preview URL
+            downloadButton.href = `/view/download/${docId}`; // Set download URL
+            previewModal.show(); // Show the modal
 
-            // Rimuovo eventuali listener precedenti
+            // Remove existing fullscreen button listeners and add new one
             const newFullscreenButton = fullscreenButton.cloneNode(true);
             fullscreenButton.parentNode.replaceChild(newFullscreenButton, fullscreenButton);
             newFullscreenButton.addEventListener('click', function() {
-                previewModalDialog.classList.toggle('modal-fullscreen-mode');
+                previewModalDialog.classList.toggle('modal-fullscreen-mode'); // Toggle fullscreen class
                 if (previewModalDialog.classList.contains('modal-fullscreen-mode')) {
-                    this.innerHTML = '<i class="fas fa-compress me-2"></i>Exit Full Screen';
+                    this.innerHTML = '<i class="fas fa-compress me-2"></i>Exit Full Screen'; // Update button text
                 } else {
-                    this.innerHTML = '<i class="fas fa-expand me-2"></i>Full Screen';
+                    this.innerHTML = '<i class="fas fa-expand me-2"></i>Full Screen'; // Update button text
                 }
             });
 
-            // Reset modal on close
+            // Handle modal close event - cleanup and reset
             document.getElementById('previewModal').addEventListener('hidden.bs.modal', function () {
-                previewFrame.src = '';
-                downloadButton.href = '#';
+                previewFrame.src = ''; // Clear iframe source
+                downloadButton.href = '#'; // Reset download link
+                // Clean up modal backdrop and body classes
                 document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
                 document.body.classList.remove('modal-open');
                 document.body.style.overflow = '';
                 document.body.style.paddingRight = '';
                 previewModalDialog.classList.remove('modal-fullscreen-mode');
                 newFullscreenButton.innerHTML = '<i class="fas fa-expand me-2"></i>Full Screen';
-            }, { once: true });
+            }, { once: true }); // Use once option to prevent multiple listeners
         });
     });
-    // Add CSS for fullscreen mode solo una volta
+    
+    // Add CSS for fullscreen mode - only inject once
     if (!document.getElementById('fullscreen-style')) {
         const style = document.createElement('style');
-        style.id = 'fullscreen-style';
+        style.id = 'fullscreen-style'; // Set unique ID to prevent duplicate injection
         style.innerHTML = `
             .modal-fullscreen-mode {
                 width: 100vw !important;
@@ -171,18 +218,21 @@ function attachPreviewListeners() {
             .modal-fullscreen-mode .modal-footer {
                 flex-shrink: 0;
             }
-        `;
-        document.head.appendChild(style);
+        `; // CSS rules for fullscreen modal mode
+        document.head.appendChild(style); // Add styles to document head
     }
 }
 
+// Update Favorites List Function - Fetches and displays user's favorite documents
 function updateFavoritesList() {
-    fetch('/view/api/favorites')
-        .then(response => response.json())
-        .then(favorites => {
-            const favoritesList = document.getElementById('yourFavoritesList');
-            if (!favoritesList) return;
-            favoritesList.innerHTML = '';
+    fetch('/view/api/favorites') // Make AJAX request to favorites API endpoint
+        .then(response => response.json()) // Parse JSON response
+        .then(favorites => { // Process favorites data
+            const favoritesList = document.getElementById('yourFavoritesList'); // Get favorites container element
+            if (!favoritesList) return; // Exit if element not found
+            favoritesList.innerHTML = ''; // Clear existing content
+            
+            // Handle empty favorites state
             if (favorites.length === 0) {
                 favoritesList.innerHTML = `<div class="col-12">
                     <div class="card h-100">
@@ -190,12 +240,14 @@ function updateFavoritesList() {
                             No favorite documents yet.
                         </div>
                     </div>
-                </div>`;
+                </div>`; // Display empty state message
                 return;
             }
+            
+            // Generate HTML for each favorite document
             favorites.forEach(doc => {
-                const card = document.createElement('div');
-                card.className = 'col-md-6';
+                const card = document.createElement('div'); // Create card container
+                card.className = 'col-md-6'; // Set responsive column class
                 card.innerHTML = `
                     <div class="card h-100">
                         <div class="card-body">
@@ -219,20 +271,22 @@ function updateFavoritesList() {
                             </div>
                         </div>
                     </div>
-                `;
-                favoritesList.appendChild(card);
+                `; // Set card HTML with document data including download count
+                favoritesList.appendChild(card); // Add card to favorites list
             });
-            attachFavoriteListeners();
-            attachPreviewListeners();
+            // Re-attach event listeners to newly created elements
+            attachFavoriteListeners(); // Reattach favorite button listeners
+            attachPreviewListeners(); // Reattach preview button listeners
         })
         .catch(error => {
-            console.error('Error fetching favorites:', error);
+            console.error('Error fetching favorites:', error); // Log any errors
         });
 }
 
+// Document Ready Event Handler - Initialize all functionality when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    attachFavoriteListeners();
-    attachPreviewListeners();
+    attachFavoriteListeners(); // Initialize favorite button listeners
+    attachPreviewListeners(); // Initialize preview button listeners
 });
 </script>
 {% endblock %} 

@@ -1,154 +1,172 @@
+/* StudyHub Custom JavaScript
+ * This file contains interactive functionality and custom features for the StudyHub
+ * web application including scroll indicators, navigation enhancements, form validation,
+ * and various UI improvements for better user experience.
+ */
+
 /**
  * StudyHub - Custom JavaScript
  * Handles interactive elements and custom functionality
  */
 
-// Initialize scroll indicator
+// Scroll Indicator Component Initialization
+// Initializes and manages the scroll-down indicator functionality
 function initScrollIndicator() {
-    const scrollIndicator = document.getElementById('scrollIndicator');
-    const backToTopButton = document.querySelector('.back-to-top');
+    const scrollIndicator = document.getElementById('scrollIndicator'); // Get scroll indicator element
+    const backToTopButton = document.querySelector('.back-to-top'); // Get back-to-top button element
     
-    if (!scrollIndicator) return;
+    if (!scrollIndicator) return; // Exit if scroll indicator not found
     
     // Function to check if user is at the bottom of the page
     function isAtBottom() {
-        return window.innerHeight + window.scrollY >= document.body.offsetHeight - 100; // 100px threshold
+        return window.innerHeight + window.scrollY >= document.body.offsetHeight - 100; // 100px threshold for bottom detection
     }
     
-    // Function to handle scroll events
+    // Function to handle scroll events and update indicator visibility
     function handleScroll() {
-        if (isAtBottom() || window.scrollY > 1000) {
-            scrollIndicator.classList.add('hidden');
+        if (isAtBottom() || window.scrollY > 1000) { // Hide if at bottom or scrolled far
+            scrollIndicator.classList.add('hidden'); // Add hidden class to fade out
         } else {
             // Only show scroll indicator if we're not at the top and not at the bottom
-            scrollIndicator.classList.remove('hidden');
+            scrollIndicator.classList.remove('hidden'); // Remove hidden class to show
         }
     }
     
-    // Add click event to scroll down
+    // Add click event to scroll down smoothly
     scrollIndicator.addEventListener('click', function(e) {
-        e.preventDefault();
+        e.preventDefault(); // Prevent default link behavior
         window.scrollBy({
             top: window.innerHeight * 0.8, // Scroll 80% of viewport height
-            behavior: 'smooth'
+            behavior: 'smooth' // Smooth scrolling animation
         });
     });
     
-    // Initial check
+    // Initial check for scroll position
     handleScroll();
     
     // Throttle scroll events for better performance
-    let isScrolling;
+    let isScrolling; // Timeout variable for throttling
     window.addEventListener('scroll', function() {
-        window.clearTimeout(isScrolling);
-        isScrolling = setTimeout(handleScroll, 50);
+        window.clearTimeout(isScrolling); // Clear previous timeout
+        isScrolling = setTimeout(handleScroll, 50); // Set new timeout with 50ms delay
     });
 }
 
+// DOM Content Loaded Event Handler
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize scroll indicator
+    // Initialize scroll indicator functionality
     initScrollIndicator();
     
-    // Initialize tooltips
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        // Bootstrap Tooltips Initialization
+    // Initialize tooltips for all elements with data-bs-toggle="tooltip"
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]')); // Get all tooltip triggers
     tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
+        return new bootstrap.Tooltip(tooltipTriggerEl); // Initialize Bootstrap tooltip for each element
     });
 
-    // Initialize popovers
-    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+    // Bootstrap Popovers Initialization  
+    // Initialize popovers for all elements with data-bs-toggle="popover"
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]')); // Get all popover triggers
     popoverTriggerList.map(function (popoverTriggerEl) {
-        return new bootstrap.Popover(popoverTriggerEl);
+        return new bootstrap.Popover(popoverTriggerEl); // Initialize Bootstrap popover for each element
     });
 
-    // Back to top button
-    var backToTopButton = document.querySelector('.back-to-top');
+    // Back to Top Button Functionality
+    // Manages visibility and behavior of the back-to-top button
+    var backToTopButton = document.querySelector('.back-to-top'); // Get back-to-top button element
     if (backToTopButton) {
+        // Show/hide button based on scroll position
         window.addEventListener('scroll', function() {
-            if (window.pageYOffset > 300) {
-                backToTopButton.classList.add('show');
+            if (window.pageYOffset > 300) { // Show after scrolling 300px
+                backToTopButton.classList.add('show'); // Add show class for visibility
             } else {
-                backToTopButton.classList.remove('show');
+                backToTopButton.classList.remove('show'); // Remove show class to hide
             }
         });
 
+        // Smooth scroll to top when button is clicked
         backToTopButton.addEventListener('click', function(e) {
-            e.preventDefault();
+            e.preventDefault(); // Prevent default behavior
             window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
+                top: 0, // Scroll to top of page
+                behavior: 'smooth' // Smooth scrolling animation
             });
         });
     }
 
-    // Mobile menu close on click
-    var navLinks = document.querySelectorAll('.nav-link');
-    var menuToggle = document.getElementById('navbarNav');
+    // Mobile Navigation Menu Handling
+    // Auto-close mobile menu when navigation links are clicked
+    var navLinks = document.querySelectorAll('.nav-link'); // Get all navigation links
+    var menuToggle = document.getElementById('navbarNav'); // Get mobile menu toggle element
     if (menuToggle) {
-        var bsCollapse = new bootstrap.Collapse(menuToggle, {toggle: false});
+        var bsCollapse = new bootstrap.Collapse(menuToggle, {toggle: false}); // Initialize Bootstrap collapse
         
         navLinks.forEach(function(l) {
             l.addEventListener('click', function() {
-                if (window.innerWidth < 992) { // Only for mobile
-                    bsCollapse.toggle();
+                if (window.innerWidth < 992) { // Only for mobile viewport (< 992px)
+                    bsCollapse.toggle(); // Toggle mobile menu visibility
                 }
             });
         });
     }
 
-    // Smooth scrolling for anchor links
+    // Smooth Scrolling for Anchor Links
+    // Enables smooth scrolling for internal page anchors
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
+                anchor.addEventListener('click', function (e) {
+            const targetId = this.getAttribute('href'); // Get target anchor href
+            if (targetId === '#') return; // Skip if href is just "#"
             
-            const targetElement = document.querySelector(targetId);
+            const targetElement = document.querySelector(targetId); // Find target element
             if (targetElement) {
-                e.preventDefault();
-                const headerOffset = 90; // Height of your fixed header
-                const elementPosition = targetElement.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                e.preventDefault(); // Prevent default anchor behavior
+                const headerOffset = 90; // Height of your fixed header for offset calculation
+                const elementPosition = targetElement.getBoundingClientRect().top; // Get element position
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset; // Calculate scroll position
                 
                 window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
+                    top: offsetPosition, // Scroll to calculated position
+                    behavior: 'smooth' // Smooth scrolling animation
                 });
             }
         });
     });
 
-    // Form validation
-    var forms = document.querySelectorAll('.needs-validation');
+    // Form Validation Enhancement
+    // Adds Bootstrap validation styling to forms
+    var forms = document.querySelectorAll('.needs-validation'); // Get all forms requiring validation
     Array.prototype.slice.call(forms).forEach(function(form) {
         form.addEventListener('submit', function(event) {
-            if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
+            if (!form.checkValidity()) { // Check if form is valid
+                event.preventDefault(); // Prevent form submission
+                event.stopPropagation(); // Stop event propagation
             }
             
-            form.classList.add('was-validated');
+            form.classList.add('was-validated'); // Add Bootstrap validation classes
         }, false);
     });
 
-    // Initialize AOS (Animate On Scroll) if available
+    // AOS (Animate On Scroll) Library Initialization
+    // Initialize AOS animations if library is available
     if (typeof AOS !== 'undefined') {
         AOS.init({
-            duration: 800,
-            easing: 'ease-in-out',
-            once: true,
-            mirror: false
+            duration: 800, // Animation duration in milliseconds
+            easing: 'ease-in-out', // Animation easing function
+            once: true, // Animation occurs only once
+            mirror: false // Don't animate elements out while scrolling past them
         });
     }
 });
 
-// Debounce function for scroll/resize events
+// Utility Functions
+// Debounce function for scroll/resize events to improve performance
 function debounce(func, wait, immediate) {
-    var timeout;
+    var timeout; // Timeout variable for debouncing
     return function() {
-        var context = this, args = arguments;
+        var context = this, args = arguments; // Preserve context and arguments
         var later = function() {
-            timeout = null;
-            if (!immediate) func.apply(context, args);
+            timeout = null; // Clear timeout
+            if (!immediate) func.apply(context, args); // Execute function if not immediate
         };
         var callNow = immediate && !timeout;
         clearTimeout(timeout);
