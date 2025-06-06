@@ -25,7 +25,6 @@
 # AUTHOR: StudyHub Development Team
 # LAST MODIFIED: 2024
 
-# filepath: /Users/leo_barna/Documents/UNIVERSITA'/3° YEAR/ELECTIVE courses/Lab of Web Technologies/GitHub/StudyHub_web-app/.flaskenv
 FLASK_APP=run.py                    # Entry point file for Flask application
 FLASK_ENV=development               # Set Flask environment to development mode
 FLASK_DEBUG=1                       # Enable debug mode for detailed error messages and auto-reload
